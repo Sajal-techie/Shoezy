@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+{% block navbar %}{% include 'navbar.html' %}{% endblock navbar %}]
+{% block maincontent %}
+
+<section class="login_part padding_top">
+    <div class="container">
+      <!-- login side left -->
+        <div class="row align-items-center">
+            <div class="col-lg-6 col-md-6">
+                <div class="login_part_text text-center">
+                    <div class="login_part_text_iner">
+                        <h2 class="text-dark">Existing user ?</h2>
+                        <p class="text-dark">Step into Elegance, Stride in Confidence! Log in to Discover the Latest in Footwear Fashion – Your Feet, Your Style Statement.</p>
+                        <a href="/login/" class="text-dark btn btn_3 bg-warning">Login to Account</a>
+                    </div>
+                </div>
+            </div>
+            <!-- register  -->
+            <div class="col-lg-6 col-md-6">
+                <div class="login_part_form">
+                    <div class="login_part_form_iner">
+                        <h3>Welcome ! <br>
+                            Register with  the details</h3>
+                      <form class="row contact_form" action="/register/" method="post" novalidate="novalidate">
+                        {% csrf_token %}
+                            <div class="col-md-12 form-group p_star">
+                                <input type="text" class="form-control" id="fname" name="fname" value=""
+                                    placeholder="First name" required>
+                            </div>
+                            <div class="col-md-12 form-group p_star">
+                                <input type="text" class="form-control" id="lname" name="lname" value=""
+                                    placeholder="Last name" required>
+                            </div>
+                            <div class="col-md-12 form-group p_star">
+                                <input type="email" class="form-control" id="email" name="email" value=""
+                                    placeholder="email" required>
+                            </div>
+                            <div class="col-md-12 form-group p_star">
+                                <input type="password" class="form-control" id="password" name="password" value=""
+                                    placeholder="password" required>
+                            </div>
+                            <div class="col-md-12 form-group p_star">
+                                <input  type="password" class="form-control" id="password1" name="password1" value=""
+                                    placeholder="confrim password" required >
+                            </div>
+                            <div class="col-md-12 form-group">
+                                 <div class="creat_account d-flex align-items-center">
+                                    <input type="checkbox" id="f-option" name="selector">
+                                    <label for="f-option">I agree to the terms and conditions</label>
+                                </div> 
+                                 <button type="button" value="submit" class="btn_3 border-dark lgn" data-toggle="modal" data-target="#otpModal"> {% comment %}submit/button {% endcomment %}
+                                    Register
+                                 </button>
+                            </div>
+                        
+                         </div>
+                        
+                      </form>
+                                <!-- Modal -->
+                              <div class="modal fade" id="otpModal" tabindex="-1" role="dialog" aria-labelledby="otpModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                  <div class="modal-content">
+                                    <div class="modal-header">
+                                      <h5 class="modal-title text-center" id="otpModalLabel">OTP Verification</h5>
+                                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                      </button>
+                                    </div>
+                                    <div class="modal-body">
+                                      <!-- modal content  -->
+                                      <div class="d-flex justify-content-center align-items-center container kk">
+                                        <form method="post" action="/register/">
+                                            {% csrf_token %}
+                                            
+                                                <div class="card py-5 px-3">
+                                                  <span class="mobile-text text-center h5">
+                                                    4 digit Verification code send into your email<br>
+                                                    <b class="bbb">Check mail !!</b>
+                                                  </span>
+                                                  
+                                                  <div class="d-flex flex-row mt-5">
+                                                    <input type="text" maxlength="1" class="form-control" autofocus="" />
+                                                    <input type="text" maxlength="1" class="form-control" />
+                                                    <input type="text" maxlength="1" class="form-control" />
+                                                    <input type="text" maxlength="1" class="form-control" />
+                                                  </div>
+                                                  <div class="m-4 text-center">
+                                                    {% comment %} <a class="btn-custom btn-light px-5 py-3 validate ">Cancel</a>  {% endcomment %}
+                                                    <button class="px-5 py-3  validate1" type="button">Verify</button>
+                                                  </div>
+                                                  <div class="text-center mt-5 bbb">
+                                                    <span class="d-block mobile-text" id="countdown"></span>
+                                                    <span class="d-block mobile-text" id="resend"></span>
+                                                  </div>
+                                                </div>
+                                            </div>
+                                          </form>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                              <!-- modal end -->
+                              
+                      </div>
+            </div>
+        </div>
+    </div>
+</section>
+<script>
+  $(document).ready(function () {
+    // Function to show the modal when the button is clicked
+    $('#otpModalBtn').click(function () {
+      $('#otpModal').modal('show');
+    });
+  });
+</script>
+{% include 'footer.html' %}
+{% endblock maincontent %}

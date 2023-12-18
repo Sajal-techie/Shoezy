@@ -6617,7 +6617,9 @@ button.bg-dark:focus {
 .m-5 {
   margin: 3rem !important; }
 
-.mt-5,
+.mt-5{
+  margin-top: 0rem !important;
+}
 .my-5 {
   margin-top: 3rem !important; }
 
@@ -6625,7 +6627,9 @@ button.bg-dark:focus {
 .mx-5 {
   margin-right: 3rem !important; }
 
-.mb-5,
+.mb-5{
+  margin-bottom: 0rem !important;
+}
 .my-5 {
   margin-bottom: 3rem !important; }
 
@@ -8813,11 +8817,12 @@ h1, h2, h3, h4, h5,
   position: relative;
   z-index: 0;
   background: #fff;
-  -moz-transition: all 0.3s ease;
+  /* -moz-transition: all 0.3s ease;
   -o-transition: all 0.3s ease;
   -webkit-transition: all 0.3s ease;
   -ms-transition: all 0.3s ease;
-  transition: all 0.3s ease; }
+  transition: all 0.3s ease; */
+ }
   @media (max-width: 991.98px) {
     .product {
       margin-bottom: 30px; } }
@@ -8831,6 +8836,7 @@ h1, h2, h3, h4, h5,
     background: #fff;
     z-index: 1; }
     .product .img-prod .overlay {
+
       position: absolute;
       top: 50%;
       left: 0;
@@ -8839,9 +8845,9 @@ h1, h2, h3, h4, h5,
       content: '';
       opacity: 0;
       z-index: -1;
-      -webkit-transform: translateY(-50%);
+      /* -webkit-transform: translateY(-50%);
       -ms-transform: translateY(-50%);
-      transform: translateY(-50%);
+      transform: translateY(-50%); */
       background: #dbcc8f;
       width: 230px;
       height: 230px;
@@ -8850,11 +8856,12 @@ h1, h2, h3, h4, h5,
       -moz-border-radius: 50%;
       -ms-border-radius: 50%;
       border-radius: 50%;
-      -moz-transition: all 0.3s ease;
+      /* -moz-transition: all 0.3s ease;
       -o-transition: all 0.3s ease;
       -webkit-transition: all 0.3s ease;
       -ms-transition: all 0.3s ease;
-      transition: all 0.3s ease; }
+      transition: all 0.3s ease;  */
+}
     .product .img-prod span.status {
       padding: 10px 1px;
       color: #000000;
@@ -8892,6 +8899,7 @@ h1, h2, h3, h4, h5,
     display: block;
     height: 500px; }
   .product .icon {
+
     width: 60px;
     height: 60px;
     background: #fff;
@@ -8900,11 +8908,12 @@ h1, h2, h3, h4, h5,
     -moz-border-radius: 50%;
     -ms-border-radius: 50%;
     border-radius: 50%;
-    -moz-transition: all 0.3s ease;
+    /* -moz-transition: all 0.3s ease;
     -o-transition: all 0.3s ease;
     -webkit-transition: all 0.3s ease;
     -ms-transition: all 0.3s ease;
-    transition: all 0.3s ease; }
+    transition: all 0.3s ease;  */
+}
     .product .icon span {
       color: #000000; }
   .product:hover .icon {
@@ -8928,6 +8937,10 @@ h1, h2, h3, h4, h5,
       .product .text p.price span.price-dc {
         text-decoration: line-through;
         color: #b3b3b3; }
+   .ppp  p.price  span.price-dc {
+  text-decoration: line-through;
+  color: #b3b3b3;
+}
       .product .text p.price span.price-sale {
         color: #000000; }
     .product .text .cat, .product .text .rating {
@@ -10658,3 +10671,232 @@ textarea.form-control {
     display: none;
   }
    }
+
+   .login_part .login_part_text, .login_part .login_part_form {
+    padding: 10px 70px;
+    height: 600px;
+    display: table;
+  }
+  
+  @media (max-width: 991px) {
+    /* line 1884, ../../01 cl html template/03_jun 2019/188_Aranoz shop_html/sass/_product.scss */
+    .login_part .login_part_text, .login_part .login_part_form {
+      padding: 30px;
+      height: 400px;
+    }
+  }
+  
+  @media only screen and (min-width: 992px) and (max-width: 1200px) {
+    /* line 1884, ../../01 cl html template/03_jun 2019/188_Aranoz shop_html/sass/_product.scss */
+    .login_part .login_part_text, .login_part .login_part_form {
+      padding: 20px;
+      height: 400px;
+    }
+  }
+  
+  /* line 1896, ../../01 cl html template/03_jun 2019/188_Aranoz shop_html/sass/_product.scss */
+  .login_part .login_part_text .login_part_text_iner, .login_part .login_part_text .login_part_form_iner, .login_part .login_part_form .login_part_text_iner, .login_part .login_part_form .login_part_form_iner {
+    display: table-cell;
+    vertical-align: middle;
+  }
+  
+  /* line 1901, ../../01 cl html template/03_jun 2019/188_Aranoz shop_html/sass/_product.scss */
+  .login_part .login_part_text {
+    background-image: -moz-linear-gradient(125deg, #DBCC8F 0%, #fff 64%, #E3CB6E 100%);
+    background-image: -webkit-linear-gradient(125deg, #DBCC8F 0%, #ffffff 64%, #E3CB6E 100%);
+    background-image: -ms-linear-gradient(125deg, #DBCC8F 0%, #ffffff 64%, #E3CB6E 100%);
+    background-size: 200% auto;
+  }
+  
+  /* line 1906, ../../01 cl html template/03_jun 2019/188_Aranoz shop_html/sass/_product.scss */
+  .login_part .login_part_text h2 {
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 35px;
+    color: #fff;
+    margin-bottom: 17px;
+  }
+.lgn{
+  background-color: #E3CB6E;
+} 
+  /* line 1913, ../../01 cl html template/03_jun 2019/188_Aranoz shop_html/sass/_product.scss */
+  .login_part .login_part_text p {
+    color: #fff;
+    line-height: 25px;
+  }
+  
+  /* line 1917, ../../01 cl html template/03_jun 2019/188_Aranoz shop_html/sass/_product.scss */
+  .login_part .login_part_text .btn_3 {
+    border: 1px solid #ffc2d2;
+    background-color: transparent;
+    font-size: 14px;
+    margin-top: 28px;
+  }
+  
+  /* line 1922, ../../01 cl html template/03_jun 2019/188_Aranoz shop_html/sass/_product.scss */
+  .login_part .login_part_text .btn_3:hover {
+    background-color: #fff;
+    color: #ff3368;
+  }
+  
+  @media (max-width: 991px) {
+    /* line 1928, ../../01 cl html template/03_jun 2019/188_Aranoz shop_html/sass/_product.scss */
+    .login_part .login_part_form {
+      padding: 0;
+    }
+  }
+  
+  /* line 1932, ../../01 cl html template/03_jun 2019/188_Aranoz shop_html/sass/_product.scss */
+  .login_part .login_part_form h3 {
+    font-size: 26px;
+    line-height: 36px;
+    font-weight: 700;
+    margin-bottom: 50px;
+  }
+  
+  @media (max-width: 991px) {
+    /* line 1932, ../../01 cl html template/03_jun 2019/188_Aranoz shop_html/sass/_product.scss */
+    .login_part .login_part_form h3 {
+      margin-bottom: 20px;
+    }
+  }
+  
+  @media only screen and (min-width: 992px) and (max-width: 1200px) {
+    /* line 1932, ../../01 cl html template/03_jun 2019/188_Aranoz shop_html/sass/_product.scss */
+    .login_part .login_part_form h3 {
+      margin-bottom: 20px;
+    }
+  }
+  
+  /* line 1944, ../../01 cl html template/03_jun 2019/188_Aranoz shop_html/sass/_product.scss */
+  .login_part .login_part_form .form-control {
+    border: 0px solid transparent;
+    border-bottom: 1px solid #dddddd;
+    border-radius: 0;
+  }
+  
+  /* line 1948, ../../01 cl html template/03_jun 2019/188_Aranoz shop_html/sass/_product.scss */
+  .login_part .login_part_form .form-control ::placeholder {
+    color: #c3c3c3;
+  }
+  
+  /* line 1954, ../../01 cl html template/03_jun 2019/188_Aranoz shop_html/sass/_product.scss */
+  .login_part .creat_account {
+    margin-top: 11px;
+  }
+  
+  /* line 1956, ../../01 cl html template/03_jun 2019/188_Aranoz shop_html/sass/_product.scss */
+  .login_part .creat_account label {
+    color: #777777;
+    font-size: 14px;
+    margin-bottom: 0;
+    margin-left: 10px;
+  }
+  
+  /* line 1964, ../../01 cl html template/03_jun 2019/188_Aranoz shop_html/sass/_product.scss */
+  .login_part .form-group .btn_3 {
+    display: block;
+    width: 100%;
+    margin: 30px 0 17px;
+  }
+  
+  /* line 1970, ../../01 cl html template/03_jun 2019/188_Aranoz shop_html/sass/_product.scss */
+  .login_part .lost_pass {
+    color: #777777;
+    text-align: right;
+    float: right;
+    text-transform: capitalize;
+  }
+
+  .card {
+    width: 500px;
+    padding: 10px;
+    border-radius: 20px;
+    background: #DBCC8F;
+    border: 1px solid black;
+    position: relative;
+  }
+
+  .form-control {
+    margin-right: 12px;
+    margin-left: 10px;
+  }
+  .form-control:focus {
+    color: #495057;
+    background-color: #d4efdf;
+    border-color: #c0392b;
+    outline: 0;
+    box-shadow: none;
+  }
+  .cursor {
+    cursor: pointer;
+  }
+  
+.bbb{
+  color: #000;
+}
+.validate1{
+
+  border-radius: 0px;
+  height: 53px;
+  background-color: #DBCC8F;
+  border: 1px solid black;
+  width: 143px;
+}
+/* .validate{
+  background-color: #DBCC8F;
+  border: 1px solid black;
+
+  cursor: pointer;
+} */
+.validate1:hover{
+  color: #DBCC8F;
+  background-color: black;
+  border: 2px solid #ffffff;
+}
+.image-zoom-container {
+  overflow: hidden;
+  position: relative;
+}
+.image-zoom-container {
+  cursor: -webkit-zoom-in;
+  cursor: -moz-zoom-in;
+  cursor: zoom-in; }
+#zoom-image {
+  width: 100%;
+
+  transition: transform 0.3s ease-out;
+  transform-origin: 0% 0%; /* Set the transform origin to the top-left corner */
+}
+
+.image-zoom-container:hover #zoom-image  {
+  transform: scale(2); /* Adjust the scale factor as needed */
+}
+.thumbnail-container {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.thumbnail {
+  width: 100px;
+  height: 100px;
+  cursor: pointer;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.thumbnail:hover {
+  opacity: 0.7;
+}
+.prd1{
+  height: 100vh;
+}
+.imgsiz{
+max-height: 460px;
+overflow: hidden;
+}
+.imgsiz img{
+  object-fit: cover;
+width: 100%;
+height: 100%;
+}

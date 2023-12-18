@@ -1,68 +1,14 @@
+{% extends 'base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <title>Shoezy</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800" rel="stylesheet">
 
-    <link rel="stylesheet" href={% static 'css/open-iconic-bootstrap.min.css' %}>
-    <link rel="stylesheet" href={% static 'css/animate.css' %}>
-    
-    <link rel="stylesheet" href={% static 'css/owl.carousel.min.css' %}>
-    <link rel="stylesheet" href={% static 'css/owl.theme.default.min.css' %}>
-    <link rel="stylesheet" href={% static 'css/magnific-popup.css' %}>
-
-    <link rel="stylesheet" href={% static 'css/aos.css' %}>
-
-    <link rel="stylesheet" href={% static 'css/ionicons.min.css' %}>
-
-    <link rel="stylesheet" href={% static 'css/bootstrap-datepicker.css' %}>
-    <link rel="stylesheet" href={% static 'css/jquery.timepicker.css' %}>
-
-    
-    <link rel="stylesheet" href={% static 'css/flaticon.css' %}>
-    <link rel="stylesheet" href={% static 'css/icomoon.css' %}>
-    <link rel="stylesheet" href={% static 'css/style.css' %}>
-  </head>
   <body class="goto-here">
 	<!-- navbar start -->
-    <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
-	    <div class="container">
-	      <a class="navbar-brand" href="">SHOEZY</a>
-	      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
-	        <span class="oi oi-menu"></span> Menu
-	      </button>
-
-	      <div class="collapse navbar-collapse" id="ftco-nav">
-	        <ul class="navbar-nav ml-auto">
-	          <li class="nav-item active"><a href="" class="nav-link">Home</a></li>
-              <li class="nav-item"><a href="shop.html" class="nav-link">Shop</a></li>
-	          <li class="nav-item"><a href="about.html" class="nav-link">About</a></li>
-			<li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" id="dropdown04" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Name</a>
-              <div class="dropdown-menu" aria-labelledby="dropdown04">
-              	<a class="dropdown-item" href="shop.html">Profile</a>
-                <a class="dropdown-item" href="product-single.html">Order history</a>
-                <a class="dropdown-item" href="cart.html">Logout</a>
-                <!-- <a class="dropdown-item" href="checkout.html">Checkout</a> -->
-            </li>
-			  <!-- <li class="nav-item"><a href="blog.html" class="nav-link">Name</a></li> -->
-			  <li class="nav-item"><a href="search.html" class="nav-link"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
-				<path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
-			  </svg></a></li>
-			  <li class="nav-item  cta cta-colored"><a href="wishlist" class="nav-link"><img class="heart1" src={% static 'images/heart.svg' %} alt="wishlist">[0]</a></li> 
-	          <li class="nav-item cta cta-colored"><a href="cart.html" class="nav-link"><span class="icon-shopping_cart"></span>[0]</a></li>
-
-	        </ul>
-	      </div>
-	    </div>
-	  </nav>
+	{% block navbar %}
+    {% include 'navbar.html' %}
+	{% endblock navbar %}
     <!-- END nav -->
-	
-<div style="height: 90px;" id="visibdiv"></div>
+{% block maincontent %} 	
+
 
 
 <!-- banner start -->
@@ -148,12 +94,12 @@
     		<div class="row">
     			<div class="col-sm-12 col-md-6 col-lg-3 ftco-animate d-flex">
     				<div class="product d-flex flex-column">
-    					<a href="#" class="img-prod"><img class="img-fluid" src={% static 'images/pumashoee.jpg' %} alt="puma shoe">
+    					<a href="/singleproduct/" class="img-prod"><img class="img-fluid" src={% static 'images/pumashoee.jpg' %} alt="puma shoe">
 							<span class="status">50% Off</span>
 						<div class="overlay"></div>
     					</a>
     					<div class="text py-3 pb-4 px-3">
-    						<h3><a href="#">Puma Vegas high top</a></h3>
+    						<h3><a href="/singleproduct/">Puma Vegas high top</a></h3>
     						<div class="pricing">
 	    						<p class="price"><span class="mr-2 price-dc">₹2000</span><span class="price-sale">₹1000</span></p>
 	    					</div>
@@ -166,7 +112,7 @@
     			</div>
     			<div class="col-sm-12 col-md-6 col-lg-3 ftco-animate d-flex">
     				<div class="product d-flex flex-column">
-    					<a href="#" class="img-prod"><img class="img-fluid" src={% static 'images/product-1.png' %} alt="Colorlib Template">
+    					<a href="#" class="img-prod"><img class="img-fluid" src={% static 'images/product-1.jpg' %} alt="Colorlib Template">
     						<span class="status">33% Off</span>
     						<div class="overlay"></div>
     					</a>
@@ -361,165 +307,6 @@
     </section>
 <!-- category end  -->
 
-<!-- deal of the month  -->
-
-    <!-- <section class="ftco-section ftco-deal bg-primary">
-    	<div class="container">
-    		<div class="row">
-    			<div class="col-md-6">
-    				<img src={% static 'images/prod-1.png' %} class="img-fluid" alt="">
-    			</div>
-    			<div class="col-md-6">
-    				<div class="heading-section heading-section-white">
-    					<span class="subheading">Deal of the month</span>
-	            <h2 class="mb-3">Deal of the month</h2>
-	          </div>
-    				<div id="timer" class="d-flex mb-4">
-						  <div class="time" id="days"></div>
-						  <div class="time pl-4" id="hours"></div>
-						  <div class="time pl-4" id="minutes"></div>
-						  <div class="time pl-4" id="seconds"></div>
-						</div>
-						<div class="text-deal">
-							<h2><a href="#">Nike Free RN 2019 iD</a></h2>
-							<p class="price"><span class="mr-2 price-dc">$120.00</span><span class="price-sale">$80.00</span></p>
-							<ul class="thumb-deal d-flex mt-4">
-								<li class="img" style="background-image: url({% static 'images/product-6.png' %});"></li>
-								<li class="img" style="background-image: url({% static 'images/product-2.png' %});"></li>
-								<li class="img" style="background-image: url('{% static 'images/product-4.png' %}');"></li>
-							</ul>
-						</div>
-    			</div>
-    		</div>
-    	</div>
-    </section> -->
-
-<!-- review display -->
-    <!-- <section class="ftco-section testimony-section">
-      <div class="container">
-        <div class="row">
-        	<div class="col-lg-5">
-        		<div class="services-flow">
-        			<div class="services-2 p-4 d-flex ftco-animate">
-        				<div class="icon">
-        					<span class="flaticon-bag"></span>
-        				</div>
-        				<div class="text">
-	        				<h3>Free Shipping</h3>
-	        				<p class="mb-0">Separated they live in. A small river named Duden flows</p>
-        				</div>
-        			</div>
-        			<div class="services-2 p-4 d-flex ftco-animate">
-        				<div class="icon">
-        					<span class="flaticon-heart-box"></span>
-        				</div>
-        				<div class="text">
-	        				<h3>Valuable Gifts</h3>
-	        				<p class="mb-0">Separated they live in. A small river named Duden flows</p>
-	        			</div>
-        			</div>
-        			<div class="services-2 p-4 d-flex ftco-animate">
-        				<div class="icon">
-        					<span class="flaticon-payment-security"></span>
-        				</div>
-        				<div class="text">
-	        				<h3>All Day Support</h3>
-	        				<p class="mb-0">Separated they live in. A small river named Duden flows</p>
-	        			</div>
-        			</div>
-        			<div class="services-2 p-4 d-flex ftco-animate">
-        				<div class="icon">
-        					<span class="flaticon-customer-service"></span>
-        				</div>
-        				<div class="text">
-	        				<h3>All Day Support</h3>
-	        				<p class="mb-0">Separated they live in. A small river named Duden flows</p>
-	        			</div>
-        			</div>
-        		</div>
-        	</div>
-          <div class="col-lg-7">
-          	<div class="heading-section ftco-animate mb-5">
-	            <h2 class="mb-4">Our satisfied customer says</h2>
-	            <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts. Separated they live in</p>
-	          </div>
-            <div class="carousel-testimony owl-carousel">
-              <div class="item">
-                <div class="testimony-wrap">
-                  <div class="user-img mb-4" style="background-image: url({% static 'images/person_1.jpg' %})">
-                    <span class="quote d-flex align-items-center justify-content-center">
-                      <i class="icon-quote-left"></i>
-                    </span>
-                  </div>
-                  <div class="text">
-                    <p class="mb-4 pl-4 line">Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
-                    <p class="name">Garreth Smith</p>
-                    <span class="position">Marketing Manager</span>
-                  </div>
-                </div>
-              </div>
-              <div class="item">
-                <div class="testimony-wrap">
-                  <div class="user-img mb-4" style="background-image: url({% static 'images/person_2.jpg' %})">
-                    <span class="quote d-flex align-items-center justify-content-center">
-                      <i class="icon-quote-left"></i>
-                    </span>
-                  </div>
-                  <div class="text">
-                    <p class="mb-4 pl-4 line">Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
-                    <p class="name">Garreth Smith</p>
-                    <span class="position">Interface Designer</span>
-                  </div>
-                </div>
-              </div>
-              <div class="item">
-                <div class="testimony-wrap">
-                  <div class="user-img mb-4" style="background-image: url({% static 'images/person_3.jpg' %})">
-                    <span class="quote d-flex align-items-center justify-content-center">
-                      <i class="icon-quote-left"></i>
-                    </span>
-                  </div>
-                  <div class="text">
-                    <p class="mb-4 pl-4 line">Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
-                    <p class="name">Garreth Smith</p>
-                    <span class="position">UI Designer</span>
-                  </div>
-                </div>
-              </div>
-              <div class="item">
-                <div class="testimony-wrap">
-                  <div class="user-img mb-4" style="background-image: url({% static 'images/person_1.jpg' %})">
-                    <span class="quote d-flex align-items-center justify-content-center">
-                      <i class="icon-quote-left"></i>
-                    </span>
-                  </div>
-                  <div class="text">
-                    <p class="mb-4 pl-4 line">Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
-                    <p class="name">Garreth Smith</p>
-                    <span class="position">Web Developer</span>
-                  </div>
-                </div>
-              </div>
-              <div class="item">
-                <div class="testimony-wrap">
-                  <div class="user-img mb-4" style="background-image: url({% static 'images/person_1.jpg' %})">
-                    <span class="quote d-flex align-items-center justify-content-center">
-                      <i class="icon-quote-left"></i>
-                    </span>
-                  </div>
-                  <div class="text">
-                    <p class="mb-4 pl-4 line">Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
-                    <p class="name">Garreth Smith</p>
-                    <span class="position">System Analyst</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section> -->
-
 <!-- follow start  -->
     <section class="ftco-gallery">
     	<div class="container">
@@ -579,99 +366,13 @@
     </section>
 
 <!-- foooter start -->
-
-    <footer class="ftco-footer ftco-section">
-      <div class="container">
-      	<div class="row">
-      		<div class="mouse">
-						<a href="#" class="mouse-icon">
-							<div class="mouse-wheel"><span class="ion-ios-arrow-up"></span></div>
-						</a>
-					</div>
-      	</div>
-        <div class="row mb-5">
-          <div class="col-md">
-            <div class="ftco-footer-widget mb-4">
-              <h2 class="ftco-heading-2">Shoezy</h2>
-              <p>Discover Endless Styles, Explore Limitless Choices. Your One-Stop Destination for Fashion, Quality, and More</p>
-              <ul class="ftco-footer-social list-unstyled float-md-left float-lft mt-5">
-                <li class="ftco-animate"><a href="#"><span class="icon-facebook"></span></a></li>
-                <li class="ftco-animate"><a href="#"><span class="icon-instagram"></span></a></li>
-                <li class="ftco-animate"><a href="#"><span class="icon-reddit"></span></a></li>
-              </ul>
-            </div>
-          </div>
-          <div class="col-md">
-            <div class="ftco-footer-widget mb-4 ml-md-5">
-              <h2 class="ftco-heading-2">Menu</h2>
-              <ul class="list-unstyled">
-                <li><a href="#" class="py-2 d-block">Home</a></li>
-                <li><a href="#" class="py-2 d-block">Shop</a></li>
-                <li><a href="#" class="py-2 d-block">About us</a></li>
-                <li><a href="#" class="py-2 d-block">Contact Us</a></li>
-              </ul>
-            </div>
-          </div>
-          <div class="col-md-4">
-             <div class="ftco-footer-widget mb-4">
-              <h2 class="ftco-heading-2">Help</h2>
-              <div class="d-flex">
-	              <ul class="list-unstyled mr-l-5 pr-l-3 mr-4">
-	                <li><a href="#" class="py-2 d-block">Contact</a></li>
-	                <li><a href="#" class="py-2 d-block">Returns &amp; Exchange</a></li>
-	                <li><a href="#" class="py-2 d-block">Terms &amp; Conditions</a></li>
-	                <li><a href="#" class="py-2 d-block">Privacy Policy</a></li>
-	              </ul>
-	            </div>
-            </div>
-          </div>
-          <div class="col-md">
-            <div class="ftco-footer-widget mb-4">
-            	<h2 class="ftco-heading-2">Have a Questions?</h2>
-            	<div class="block-23 mb-3">
-	              <ul>
-	                <li><span class="icon icon-map-marker"></span><span class="text">Shoezy near highlight mall , Panthirankavu ,Koyikode,Kerala,India</span></li>
-	                <li><a href="#"><span class="icon icon-phone"></span><span class="text">+91 7510875454</span></a></li>
-	                <li><a href="#"><span class="icon icon-envelope"></span><span class="text">shoezymain@gmail.com</span></a></li>
-	              </ul>
-	            </div>
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-12 text-center">
-
-            <p><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-						  Copyright &copy; 2023 All rights reserved | This template is made  by <a href="https://colorlib.com" target="_blank">Sajal</a>
-						  <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-						</p>
-          </div>
-        </div>
-      </div>
-    </footer>
-    <!-- footer end -->
+{% include 'footer.html' %}
+<!-- footer end -->
   
 
   <!-- loader -->
   <div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px"><circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/><circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00"/></svg></div> 
 
-
-  <script src={% static 'js/jquery.min.js' %}></script>
-  <script src={% static 'js/jquery-migrate-3.0.1.min.js' %}></script>
-  <script src={% static 'js/popper.min.js' %}></script>
-  <script src={% static 'js/bootstrap.min.js' %}></script>
-  <script src={% static 'js/jquery.easing.1.3.js' %}></script>
-  <script src={% static 'js/jquery.waypoints.min.js' %}></script>
-  <script src={% static 'js/jquery.stellar.min.js' %}></script>
-  <script src={% static 'js/owl.carousel.min.js' %}></script>
-  <script src={% static 'js/jquery.magnific-popup.min.js' %}></script>
-  <script src={% static 'js/aos.js' %}></script>
-  <script src={% static 's/jquery.animateNumber.min.js' %}></script>
-  <script src={% static 'js/bootstrap-datepicker.js' %}></script>
-  <script src={% static 'js/scrollax.min.js' %}></script>
-  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>
-  <script src={% static 'js/google-map.js' %}></script>
-  <script src={% static 'js/main.js' %}></script>
-    
+  {% endblock maincontent %}
   </body>
 </html>

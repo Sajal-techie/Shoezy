@@ -1,0 +1,323 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+    {% block navbar %} {% include 'navbar.html' %} {% endblock navbar %} 
+    {% block maincontent %} 
+    <body class="goto-here">
+ <!-- <h1 class="mb-0 bread text-center">Shop</h1> -->
+    <section class="ftco-section">
+    	<div class="container">
+    		<div class="row">
+    			<div class="col-lg-6 mb-5 ftco-animate prd1">
+                    <div>
+                        <div class="image-zoom-container imgsiz" id="product-container">
+                        <img src="{% static 'images/pumashoelow.jpg' %}" class="img-fluid" alt="Product Image" id="zoom-image">
+                        </div>
+                        <div class="thumbnail-container">
+                            <img src="{% static 'images/pumashoelow.jpg' %}" class="thumbnail" alt="Thumbnail 1" onclick="changeImage(this)">
+                            <img src="{% static 'images/pumashoelow.jpg' %}" class="thumbnail" alt="Thumbnail 2" onclick="changeImage(this)">
+                            <img src="{% static 'images/pumashoelow.jpg' %}" class="thumbnail" alt="Thumbnail 3" onclick="changeImage(this)">
+                            <img src="{% static 'images/pumashoelow.jpg' %}" class="thumbnail" alt="Thumbnail 4" onclick="changeImage(this)">
+                        </div>
+                    </div>
+                </div>
+            
+    			<div class="col-lg-6 product-details pl-md-5 ftco-animate">
+    				<h3>Puma Vegas high top</h3>
+    				<!-- <div class="rating d-flex">
+							<p class="text-left mr-4">
+								<a href="#" class="mr-2">5.0</a>
+								<a href="#"><span class="ion-ios-star-outline"></span></a>
+								<a href="#"><span class="ion-ios-star-outline"></span></a>
+								<a href="#"><span class="ion-ios-star-outline"></span></a>
+								<a href="#"><span class="ion-ios-star-outline"></span></a>
+								<a href="#"><span class="ion-ios-star-outline"></span></a>
+							</p>
+							<p class="text-left mr-4">
+								<a href="#" class="mr-2" style="color: #000;">100 <span style="color: #bbb;">Rating</span></a>
+							</p>
+							<p class="text-left">
+								<a href="#" class="mr-2" style="color: #000;">500 <span style="color: #bbb;">Sold</span></a>
+							</p>
+						</div> -->
+                        <div class="ppp"><p class="price"><span class="mr-2 price-dc">₹2000</span><span class="price-sale">₹1000</span></p></div>
+						<p>
+                            Brand : Puma <br>
+                            Name : Vegas high top <br>
+                            Catergory : Men <br>
+                            Color : Green  <br>
+                        </p>
+						<div class="row mt-4">
+							<div class="col-md-6">
+								<div class="form-group d-flex">
+                                    <div class="select-wrap">
+                                    <div class="icon"><span class="ion-ios-arrow-down"></span></div>
+                                    <select name="" id="" class="form-control">
+                                        <option value="">Small</option>
+                                        <option value="">Medium</option>
+                                        <option value="">Large</option>
+                                        <option value="">Extra Large</option>
+                                    </select>
+                                    </div>
+                                </div>
+							</div>
+						<div class="w-100"></div>
+					<div class="input-group col-md-6 d-flex mb-3">
+                                <span class="input-group-btn mr-2">
+                                    <button type="button" class="quantity-left-minus btn"  data-type="minus" data-field="">
+                                        <i class="ion-ios-remove"></i>
+                                    </button>
+                                </span>
+                                <input type="text" id="quantity" name="quantity" class="quantity form-control input-number" value="1" min="1" max="100">
+                                <span class="input-group-btn ml-2">
+                                    <button type="button" class="quantity-right-plus btn" data-type="plus" data-field="">
+                                        <i class="ion-ios-add"></i>
+                                </button>
+                                </span>
+	          	    </div>
+	          	<div class="w-100"></div>
+	          	<div class="col-md-12">
+	          		<p style="color: #2d2d2d;"> only 80 left</p>
+	          	</div>
+          	</div>
+          	<p><a href="cart.html" class="btn btn-black py-3 px-5 mr-2">Add to Cart</a><a href="cart.html" class="btn btn-primary py-3 px-5 " style="color: black;">Buy now</a></p>
+    			</div>
+    		</div>
+            <div class="col-lg-6">
+                <!-- <div class="thumbnail-container">
+                    <img src="{% static 'images/nikeair1.jpg' %}" class="thumbnail" alt="Thumbnail 1" onclick="changeImage(this)">
+                    <img src="{% static 'images/pumashoee.jpg' %}" class="thumbnail" alt="Thumbnail 2" onclick="changeImage(this)">
+                    <img src="{% static 'images/pumashoee.jpg' %}" class="thumbnail" alt="Thumbnail 3" onclick="changeImage(this)">
+                    <img src="{% static 'images/pumashoee.jpg' %}" class="thumbnail" alt="Thumbnail 4" onclick="changeImage(this)">
+                </div> -->
+            </div> 
+    		<div class="row mt-5">
+          <div class="col-md-12 nav-link-wrap">
+            <div class="nav nav-pills d-flex text-center" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+              <a class="nav-link ftco-animate active mr-lg-1" id="v-pills-1-tab" data-toggle="pill" href="#v-pills-1" role="tab" aria-controls="v-pills-1" aria-selected="true">Description</a>
+
+              <a class="nav-link ftco-animate mr-lg-1" id="v-pills-2-tab" data-toggle="pill" href="#v-pills-2" role="tab" aria-controls="v-pills-2" aria-selected="false">Manufacturer</a>
+
+              <a class="nav-link ftco-animate" id="v-pills-3-tab" data-toggle="pill" href="#v-pills-3" role="tab" aria-controls="v-pills-3" aria-selected="false">Reviews</a>
+
+            </div>
+          </div>
+          <div class="col-md-12 tab-wrap">
+            
+            <div class="tab-content bg-light" id="v-pills-tabContent">
+
+              <div class="tab-pane fade show active" id="v-pills-1" role="tabpanel" aria-labelledby="day-1-tab">
+              	<div class="p-4">
+	              	<h3 class="mb-4">Puma Vegas High top </h3>
+	              	<p>The Puma Vegas High Top is a fusion of sporty style and street-ready flair. With a sleek and modern design, these high-top sneakers offer a fashion-forward look that effortlessly transitions from the court to the urban landscape. Crafted with Puma's renowned attention to comfort and performance, these high tops feature a supportive ankle design, cushioned insoles, and the iconic Puma logo. Whether you're hitting the streets or making a statement on the court, the Puma Vegas High Top combines athletic functionality with trendsetting aesthetics</p>
+              	</div>
+              </div>
+
+              <div class="tab-pane fade" id="v-pills-2" role="tabpanel" aria-labelledby="v-pills-day-2-tab">
+              	<div class="p-4">
+	              	<h3 class="mb-4">Manufactured By Nike</h3>
+	              	<p>
+                        Puma, a prominent shoe manufacturer, is recognized for its commitment to quality craftsmanship and innovative shoe designs. Leveraging cutting-edge technology, Puma's shoe manufacturing process integrates performance-driven features with contemporary aesthetics. The brand's expertise spans various athletic disciplines, with a focus on creating footwear that not only meets the demands of sports enthusiasts but also reflects current fashion trends. Puma's dedication to sustainability is evident in its responsible sourcing of materials and eco-friendly manufacturing practices. Through a combination of heritage and forward-thinking, Puma continues to shape the landscape of shoe manufacturing, producing a diverse range of athletic and lifestyle footwear that resonates with a global audience.</p>
+              	</div>
+              </div>
+              <div class="tab-pane fade" id="v-pills-3" role="tabpanel" aria-labelledby="v-pills-day-3-tab">
+              	<div class="row p-4">
+						   		<div class="col-md-7">
+						   			<h3 class="mb-4">23 Reviews</h3>
+						   			<div class="review">
+								   		<div class="user-img" style="background-image: url(images/person_1.jpg)"></div>
+								   		<div class="desc">
+								   			<h4>
+								   				<span class="text-left">Jacob Webb</span>
+								   				<span class="text-right">14 March 2018</span>
+								   			</h4>
+								   			<p class="star">
+								   				<span>
+								   					<i class="ion-ios-star-outline"></i>
+								   					<i class="ion-ios-star-outline"></i>
+								   					<i class="ion-ios-star-outline"></i>
+								   					<i class="ion-ios-star-outline"></i>
+								   					<i class="ion-ios-star-outline"></i>
+							   					</span>
+							   					<span class="text-right"><a href="#" class="reply"><i class="icon-reply"></i></a></span>
+								   			</p>
+								   			<p>When she reached the first hills of the Italic Mountains, she had a last view back on the skyline of her hometown Bookmarksgrov</p>
+								   		</div>
+								   	</div>
+								   	<div class="review">
+								   		<div class="user-img" style="background-image: url(images/person_2.jpg)"></div>
+								   		<div class="desc">
+								   			<h4>
+								   				<span class="text-left">Jacob Webb</span>
+								   				<span class="text-right">14 March 2018</span>
+								   			</h4>
+								   			<p class="star">
+								   				<span>
+								   					<i class="ion-ios-star-outline"></i>
+								   					<i class="ion-ios-star-outline"></i>
+								   					<i class="ion-ios-star-outline"></i>
+								   					<i class="ion-ios-star-outline"></i>
+								   					<i class="ion-ios-star-outline"></i>
+							   					</span>
+							   					<span class="text-right"><a href="#" class="reply"><i class="icon-reply"></i></a></span>
+								   			</p>
+								   			<p>When she reached the first hills of the Italic Mountains, she had a last view back on the skyline of her hometown Bookmarksgrov</p>
+								   		</div>
+								   	</div>
+								   	<div class="review">
+								   		<div class="user-img" style="background-image: url(images/person_3.jpg)"></div>
+								   		<div class="desc">
+								   			<h4>
+								   				<span class="text-left">Jacob Webb</span>
+								   				<span class="text-right">14 March 2018</span>
+								   			</h4>
+								   			<p class="star">
+								   				<span>
+								   					<i class="ion-ios-star-outline"></i>
+								   					<i class="ion-ios-star-outline"></i>
+								   					<i class="ion-ios-star-outline"></i>
+								   					<i class="ion-ios-star-outline"></i>
+								   					<i class="ion-ios-star-outline"></i>
+							   					</span>
+							   					<span class="text-right"><a href="#" class="reply"><i class="icon-reply"></i></a></span>
+								   			</p>
+								   			<p>When she reached the first hills of the Italic Mountains, she had a last view back on the skyline of her hometown Bookmarksgrov</p>
+								   		</div>
+								   	</div>
+						   		</div>
+						   		<!-- <div class="col-md-4">
+						   			<div class="rating-wrap">
+							   			<h3 class="mb-4">Give a Review</h3>
+							   			<p class="star">
+							   				<span>
+							   					<i class="ion-ios-star-outline"></i>
+							   					<i class="ion-ios-star-outline"></i>
+							   					<i class="ion-ios-star-outline"></i>
+							   					<i class="ion-ios-star-outline"></i>
+							   					<i class="ion-ios-star-outline"></i>
+							   					(98%)
+						   					</span>
+						   					<span>20 Reviews</span>
+							   			</p>
+							   			<p class="star">
+							   				<span>
+							   					<i class="ion-ios-star-outline"></i>
+							   					<i class="ion-ios-star-outline"></i>
+							   					<i class="ion-ios-star-outline"></i>
+							   					<i class="ion-ios-star-outline"></i>
+							   					<i class="ion-ios-star-outline"></i>
+							   					(85%)
+						   					</span>
+						   					<span>10 Reviews</span>
+							   			</p>
+							   			<p class="star">
+							   				<span>
+							   					<i class="ion-ios-star-outline"></i>
+							   					<i class="ion-ios-star-outline"></i>
+							   					<i class="ion-ios-star-outline"></i>
+							   					<i class="ion-ios-star-outline"></i>
+							   					<i class="ion-ios-star-outline"></i>
+							   					(98%)
+						   					</span>
+						   					<span>5 Reviews</span>
+							   			</p>
+							   			<p class="star">
+							   				<span>
+							   					<i class="ion-ios-star-outline"></i>
+							   					<i class="ion-ios-star-outline"></i>
+							   					<i class="ion-ios-star-outline"></i>
+							   					<i class="ion-ios-star-outline"></i>
+							   					<i class="ion-ios-star-outline"></i>
+							   					(98%)
+						   					</span>
+						   					<span>0 Reviews</span>
+							   			</p>
+							   			<p class="star">
+							   				<span>
+							   					<i class="ion-ios-star-outline"></i>
+							   					<i class="ion-ios-star-outline"></i>
+							   					<i class="ion-ios-star-outline"></i>
+							   					<i class="ion-ios-star-outline"></i>
+							   					<i class="ion-ios-star-outline"></i>
+							   					(98%)
+						   					</span>
+						   					<span>0 Reviews</span>
+							   			</p>
+							   		</div>
+						   		</div> -->
+						   	</div>
+              </div>
+            </div>
+          </div>
+        </div>
+    	</div>
+    </section>
+{% include 'footer.html' %}
+
+   
+    
+  
+
+  <!-- loader -->
+  <div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px"><circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/><circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00"/></svg></div>
+
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+  <script>
+		$(document).ready(function(){
+
+		var quantity=0;
+		   $('.quantity-right-plus').click(function(e){
+		        
+		        // Stop acting like a button
+		        e.preventDefault();
+		        // Get the field name
+		        var quantity = parseInt($('#quantity').val());
+		        
+		        // If is not undefined
+		            
+		            $('#quantity').val(quantity + 1);
+
+		          
+		            // Increment
+		        
+		    });
+
+		     $('.quantity-left-minus').click(function(e){
+		        // Stop acting like a button
+		        e.preventDefault();
+		        // Get the field name
+		        var quantity = parseInt($('#quantity').val());
+		        
+		        // If is not undefined
+		      
+		            // Increment
+		            if(quantity>0){
+		            $('#quantity').val(quantity - 1);
+		            }
+		    });
+		    
+		});
+var mainImage = document.getElementById('zoom-image');
+var thumbnailContainer = document.querySelector('.thumbnail-container');
+
+function changeImage(thumbnail) {
+    mainImage.src = thumbnail.src;
+   // resetZoom();
+}
+
+// function resetZoom() {
+   // mainImage.style.transform = 'scale(1)';
+   // mainImage.style.transformOrigin = '0% 0%';
+//}
+
+thumbnailContainer.addEventListener('mouseover', function () {
+    resetZoom();
+});
+
+
+	</script>
+    
+  </body>
+  {% endblock maincontent %} 
