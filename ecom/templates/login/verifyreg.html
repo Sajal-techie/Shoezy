@@ -1,41 +1,44 @@
 {% extends "base.html" %}
 {% block navbar %}{% include 'navbar.html' %}{% endblock navbar %}
 {% block maincontent %}
-<form method="post" action="/login/">
+
+<form method="post" >
 {% csrf_token %}
 <div class="d-flex justify-content-center align-items-center container kk">
     <div class="card py-5 px-3">
       <h5 class="m-0 text-center h4"><b>OTP Verification</b></h5> 
       <span class="mobile-text text-center h5">
-        4 digit Verification code send into your email<br>
+        6 digit Verification code send into your email<br>
         <b class="bbb">Check mail !!</b>
       </span>
-       
-      <div class="d-flex flex-row mt-5">
-        <input type="text" maxlength="1" class="form-control" autofocus="" />
-        <input type="text" maxlength="1" class="form-control" />
-        <input type="text" maxlength="1" class="form-control" />
-        <input type="text" maxlength="1" class="form-control" />
+        {% if messages %}
+       {% for message in messages %}
+              <h3 class="text-center text-danger"> {{ message }} </h3>
+            {% endfor %}
+        {% endif %}
+      <div class="d-flex flex-row mt-5 p-5 mx-5 text-center" >
+        <input type="number" name="otp" class="form-control" autofocus="" />
+    
       </div>
-      <div class="m-4 text-center">
+      <div class=" text-center">
         {% comment %} <a class="btn-custom btn-light px-5 py-3 validate ">Cancel</a>  {% endcomment %}
-        <button class="px-5 py-3  validate1" type="button" data-toggle="modal" data-target="#otpModal">Verify</button>
+        <button class="px-5 py-3  validate1" type="submit">Verify</button>
       </div>
-       <div class="text-center mt-5 bbb">
+       <div class="text-center mt-5 bbb ">
         <span class="d-block mobile-text" id="countdown"></span>
-        <span class="d-block mobile-text" id="resend"></span>
+        <a href="/resendotp/{{ userid }}" class="text-danger"><span class="d-block mobile-text" id="resend"></span></a>
        </div>
     </div>
 </div>
 </form>
 <!-- modal  -->
-<div class="modal fade" id="otpModal" tabindex="-1" role="dialog" aria-labelledby="otpModalLabel" aria-hidden="true">
+<!-- <div class="modal fade" id="otpModal" tabindex="-1" role="dialog" aria-labelledby="otpModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-body">
-        <!-- modal content  -->
+
         <div class="d-flex justify-content-center align-items-center container kk">
-          <form method="post" action="/login/">        <!--  ?????????  -->
+          <form method="post" action="/login/">       
               {% csrf_token %}
               
                   <div class="card py-5 px-3">
@@ -62,7 +65,33 @@
         </div>
       </div>
     </div>
-  </div>
-</div>
+  </div> 
+</div> -->
+
+<script>let timerOn = true;
+  function timer(remaining) {
+    var m = Math.floor(remaining / 10);
+    var s = remaining % 10;
+    m = m < 10 ? "0" + m : m;
+    s = s < 10 ? "0" + s : s;
+    document.getElementById("countdown").innerHTML = `Time left: ${m} : ${s}`;
+    remaining -= 1;
+    if (remaining >= 0 && timerOn) {
+      setTimeout(function () {
+        timer(remaining);
+      }, 1000);
+      document.getElementById("resend").innerHTML = `
+      `;
+      return;
+    }
+    if (!timerOn) {
+      return;
+    }
+    document.getElementById("resend").innerHTML = `Don't receive the code? 
+    <span class="font-weight-bold text-color cursor" onclick="timer(60)">Resend
+    </span>`;
+  }
+  timer(10);
+  </script>
 {% include 'footer.html' %}
 {% endblock maincontent %}

@@ -79,8 +79,12 @@ WSGI_APPLICATION = 'ecom.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'shoezy',
+        'USER': 'postgres',
+        'PASSWORD': '12345678',
+        'HOST': 'localhost',  # Set to your PostgreSQL server's address
+        'PORT': '5432',      # Set to your PostgreSQL server's port
     }
 }
 
@@ -127,3 +131,10 @@ STATICFILES_DIRS = [
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'shoezyofficials@gmail.com'
+EMAIL_HOST_PASSWORD = 'zkvw nyfx qlqc xuwz'
+EMAIL_USE_TLS = True  

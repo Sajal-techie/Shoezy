@@ -19,6 +19,11 @@
                     <div class="login_part_form_iner">
                         <h3>Welcome Back ! <br>
                             Please Sign in now</h3>
+                            {% if messages %}
+                                    {% for message in messages %}
+                                        <h6 class=" text-danger"> {{ message }} </h6>
+                                    {% endfor %}
+                            {% endif %}
                         <form class="row contact_form" action="/login/" method="post" novalidate="novalidate">
                         {% csrf_token %}
                             <div class="col-md-12 form-group p_star">

@@ -4,7 +4,11 @@ urlpatterns = [
     path('', views.home ,name='home'),
     path('login/', views.login ,name='login'),
     path('register/', views.register ,name='register'),
-    path('verifyreg/', views.verifyreg ,name='verifyreg'),
+    path('verifyreg/<str:id>', views.verifyreg ,name='verifyreg'),
+    path('resendotp/<str:id>', views.resendotp ,name='resendotp'),
+
+    path('logout/', views.logout ,name='logout'),
+
 
 
 ]

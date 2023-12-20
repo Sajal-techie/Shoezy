@@ -13,18 +13,32 @@
           <li class="nav-item"><a href="/shop/" class="nav-link">Shop</a></li>
           <li class="nav-item"><a href="about.html" class="nav-link">About</a></li>
         <li class="nav-item dropdown">
+          {%  if 'users' in request.session %}
+          <a class="nav-link dropdown-toggle" href="/login/" id="dropdown04" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{username}}</a>
+          {% else %}
           <a class="nav-link dropdown-toggle" href="/login/" id="dropdown04" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Login</a>
+          {% endif %} 
           <div class="dropdown-menu" aria-labelledby="dropdown04">
+            {%  if 'users' in request.session %}            
+            <a class="dropdown-item" href="/logout/">Profile</a>
+            <a class="dropdown-item" href="/logout/">order details</a>
+            <a class="dropdown-item" href="/logout/">order details</a>
+            <a class="dropdown-item" href="/logout/">Logout</a>
+            {% else %}
               <a class="dropdown-item" href="/login/">Login</a>
             <a class="dropdown-item" href="/register/">Register</a>
-            {% comment %} <a class="dropdown-item" href="cart.html">Logout</a> {% endcomment %}
+
+            
+            {% endif %} 
             <!-- <a class="dropdown-item" href="checkout.html">Checkout</a> -->
         </li>
           <!-- <li class="nav-item"><a href="blog.html" class="nav-link">Name</a></li> -->
           <li class="nav-item"><a href="search.html" class="nav-link"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
             <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
           </svg></a></li>
+          {%  if 'users' in request.session %}
           <li class="nav-item  cta cta-colored"><a href="wishlist" class="nav-link"><img class="heart1" src={% static 'images/heart.svg' %} alt="wishlist">[0]</a></li> 
+          {% endif %} 
           <li class="nav-item cta cta-colored"><a href="cart.html" class="nav-link"><span class="icon-shopping_cart"></span>[0]</a></li>
 
         </ul>

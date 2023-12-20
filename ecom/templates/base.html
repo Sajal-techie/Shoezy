@@ -26,6 +26,12 @@
     <link rel="stylesheet" href={% static 'css/flaticon.css' %}>
     <link rel="stylesheet" href={% static 'css/icomoon.css' %}>
     <link rel="stylesheet" href={% static 'css/style.css' %}>
+    <style>
+      input[type="number"]::-webkit-outer-spin-button,
+      input[type="number"]::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+      }
+  </style>
   </head>
 <body>
 {% block navbar %}{% endblock navbar %}

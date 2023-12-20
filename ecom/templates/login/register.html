@@ -20,7 +20,12 @@
                 <div class="login_part_form">
                     <div class="login_part_form_iner">
                         <h3>Welcome ! <br>
-                            Register with  the details</h3>
+                            Register with  the details</h3>  
+                            {% if messages %}
+                            {% for message in messages %}
+                            <h6 class=" text-danger"> {{ message }} </h6>
+                          {% endfor %}
+                          {% endif %}
                       <form class="row contact_form" action="/register/" method="post" novalidate="novalidate">
                         {% csrf_token %}
                             <div class="col-md-12 form-group p_star">
@@ -48,16 +53,16 @@
                                     <input type="checkbox" id="f-option" name="selector">
                                     <label for="f-option">I agree to the terms and conditions</label>
                                 </div> 
-                                 <button type="button" value="submit" class="btn_3 border-dark lgn" data-toggle="modal" data-target="#otpModal"> {% comment %}submit/button {% endcomment %}
+                                 <button type="submit" value="submit" class="btn_3 border-dark lgn">
                                     Register
                                  </button>
                             </div>
                         
                          </div>
                         
-                      </form>
+                       </form>
                                 <!-- Modal -->
-                              <div class="modal fade" id="otpModal" tabindex="-1" role="dialog" aria-labelledby="otpModalLabel" aria-hidden="true">
+                              <!-- <div class="modal fade" id="otpModal" tabindex="-1" role="dialog" aria-labelledby="otpModalLabel" aria-hidden="true">
                                 <div class="modal-dialog" role="document">
                                   <div class="modal-content">
                                     <div class="modal-header">
@@ -67,7 +72,7 @@
                                       </button>
                                     </div>
                                     <div class="modal-body">
-                                      <!-- modal content  -->
+              
                                       <div class="d-flex justify-content-center align-items-center container kk">
                                         <form method="post" action="/register/">
                                             {% csrf_token %}
@@ -83,6 +88,9 @@
                                                     <input type="text" maxlength="1" class="form-control" />
                                                     <input type="text" maxlength="1" class="form-control" />
                                                     <input type="text" maxlength="1" class="form-control" />
+                                                    <input type="text" maxlength="1" class="form-control" />
+                                                    <input type="text" maxlength="1" class="form-control" />
+
                                                   </div>
                                                   <div class="m-4 text-center">
                                                     {% comment %} <a class="btn-custom btn-light px-5 py-3 validate ">Cancel</a>  {% endcomment %}
@@ -99,7 +107,7 @@
                                     </div>
                                   </div>
                                 </div>
-                              </div>
+                              </div> -->
                               <!-- modal end -->
                               
                       </div>
@@ -107,13 +115,13 @@
         </div>
     </div>
 </section>
-<script>
+<!-- <script>
   $(document).ready(function () {
     // Function to show the modal when the button is clicked
     $('#otpModalBtn').click(function () {
       $('#otpModal').modal('show');
     });
   });
-</script>
+</script> -->
 {% include 'footer.html' %}
 {% endblock maincontent %}
