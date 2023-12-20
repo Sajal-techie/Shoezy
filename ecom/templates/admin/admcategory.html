@@ -11,77 +11,50 @@
     
 </head>
 {% block content1 %}
-<div class="container tbd1">
+<div class="container tbd1" style="width: 60%;">
     <div class="table-wrapper">
         <div class="table-title">
             <div class="row">
                 <div class="col-sm-6">
-                    <b><h2>Category Management</b></h2>
+                    <b><h2>Brand details</b></h2>
                 </div>
                 <div class="col-sm-6">
-                    <a href="#addEmployeeModal" class="btn btn-success" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Add New Product</span></a>
+                    <a href="#addEmployeeModal" class="btn btn-success" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Add New brand</span></a>
                     <!-- <a href="#deleteEmployeeModal" class="btn btn-danger" data-toggle="modal"><i class="material-icons">&#xE15C;</i> <span>Delete</span></a>						 -->
                 </div>
             </div>
         </div>
+        <form action="/search_brand/">
         <div class="row input-group ">
-            <input type="search" class="form-control rounded offset-1 col-lg-8 col-sm-4 " placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
-            <button type="button" class="btn btn-outline-primary btn-primary col-lg-2 col-sm-3 " data-mdb-ripple-init>search</button>
+            <input type="search" name="name" class="form-control rounded offset-1 col-lg-8 col-sm-4 " placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
+            <button type="submit" class="btn btn-outline-primary btn-primary col-lg-2 col-sm-3 " data-mdb-ripple-init>search</button>
           </div>
-        <table class="table table-striped table-hover ms-3">
+        </form>
+        <table class="table table-striped table-hover ms-3 ">
             <thead>
                 <tr>
                    
-                    <th>Name</th>
+                    <th>Brand Name</th>
                     <th>Action</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody >
+            {% for br in brand %}
                 <tr>
-                    <td>Nike air jordan </td>
+                    <td>{{br.brand_name}} </td>
 
                     <td >
-                        <a href="#editEmployeeModal" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
-                        <a href="#listEmployeeModal" class="delete" data-toggle="modal"><i class="fa-solid fa-eye  fa-lg" style="color: #ffd500;"></i></a>
-                        <a href="#deleteEmployeeModal" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
+                        <a href="#editEmployeeModal-{{forloop.counter}}" class="edit" data-toggle="modal" title="edit brand"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
+                        {% if not br.is_listed  %}
+                        <a href="#listEmployeeModal-{{forloop.counter}}" class="delete" data-toggle="modal" title="unlist brand"><i class="fa-solid fa-eye  fa-lg" style="color: #35ef61;"></i></a>
+                        {% else %}
+                        <a href="#listEmployeeModal-{{forloop.counter}}" class="delete" data-toggle="modal" title="list brand"><i class="fa-solid fa-eye-slash fa-sm" style="color: #00ff6e;"></i></a>
+                        {% endif %}
+                        <a href="#deleteEmployeeModal-{{forloop.counter}}" class="delete" data-toggle="modal" title="delete brand"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
                     </td>
                 </tr>
-                <tr>
-                    <td>Nike air jordan </td>
-        
-                    <td >
-                        <a href="#editEmployeeModal" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
-                        <a href="#listEmployeeModal" class="delete" data-toggle="modal"><i class="fa-solid fa-eye  fa-lg" style="color: #ffd500;"></i></a>
-                        <a href="#deleteEmployeeModal" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
-                    </td>
-                </tr>
-                <tr>
-                    <td>Nike air jordan </td>
-                    
-                    <td >
-                        <a href="#editEmployeeModal" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
-                        <a href="#listEmployeeModal" class="delete" data-toggle="modal"><i class="fa-solid fa-eye  fa-lg" style="color: #ffd500;"></i></a>
-                        <a href="#deleteEmployeeModal" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
-                    </td>
-                </tr>
-                <tr>
-                    <td>Nike air jordan </td>
-                  
-                    <td >
-                        <a href="#editEmployeeModal" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
-                        <a href="#listEmployeeModal" class="delete" data-toggle="modal"><i class="fa-solid fa-eye  fa-lg" style="color: #ffd500;"></i></a>
-                        <a href="#deleteEmployeeModal" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
-                    </td>
-                </tr>				
-                <tr>
-                    <td>Nike air jordan </td>
-                  
-                    <td >
-                        <a href="#editEmployeeModal" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
-                        <a href="#listEmployeeModal" class="delete" data-toggle="modal"><i class="fa-solid fa-eye  fa-lg" style="color: #ffd500;"></i></a>
-                        <a href="#deleteEmployeeModal" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
-                    </td>
-                </tr>
+            {% endfor %}
+                
             </tbody>
         </table>
         <div class="clearfix">
@@ -102,7 +75,8 @@
 <div id="addEmployeeModal" class="modal fade">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form>
+            <form method="post" action="/add_brand/">
+            {% csrf_token %}
                 <div class="modal-header">						
                     <h4 class="modal-title">Add Brand</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -110,7 +84,7 @@
                 <div class="modal-body">					
                     <div class="form-group">
                         <label>Brand Name</label>
-                        <input type="text" class="form-control" required>
+                        <input type="text"  name="name" class="form-control" required>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -122,10 +96,12 @@
     </div>
 </div>
 <!-- Edit Modal HTML -->
-<div id="editEmployeeModal" class="modal fade">
+{% for i in brand %}
+<div id="editEmployeeModal-{{forloop.counter}}" class="modal fade">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form>
+            <form method="POST" action="/edit_brand/{{i.id}}">
+            {% csrf_token %}
                 <div class="modal-header">						
                     <h4 class="modal-title">Edit Brand</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -133,7 +109,7 @@
                 <div class="modal-body">					
                     <div class="form-group">
                         <label>Brand Name</label>
-                        <input type="text" class="form-control" required>
+                        <input type="text" name="name" value="{{i.brand_name}}" class="form-control" required>
                     </div>
                     			
                 </div>
@@ -145,32 +121,38 @@
         </div>
     </div>
 </div>
-<!-- list product -->
-<div id="listEmployeeModal" class="modal fade">
+{% endfor %}
+<!-- list brand -->
+{% for i in brand %}
+<div id="listEmployeeModal-{{forloop.counter}}" class="modal fade">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form>
+            <form method="POST" action="/list_brand/{{i.id}}">
+                {% csrf_token %}
                 <div class="modal-header">						
                     <h4 class="modal-title">list Brand</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 </div>
                 <div class="modal-body">					
-                    <p>Are you sure you want to list these Brand?</p>
-                    <p class="text-warning"><small>This action can be reversed.</small></p>
+                    <p>Are you sure you want to {% if i.is_listed %} unlist {% else %} list {% endif %} <b>{{i.brand_name}}</b>?</p>
+                    <!-- <p class="text-warning"><small>This action can be reversed.</small></p> -->
                 </div>
                 <div class="modal-footer">
                     <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
-                    <input type="submit" class="btn btn-danger" value="List">
+                    <input type="submit" class="btn btn-warning" value="List">
                 </div>
             </form>
         </div>
     </div>
 </div>
+{% endfor %}
 <!-- Delete Modal HTML -->
-<div id="deleteEmployeeModal" class="modal fade">
+{% for i in brand %}
+<div id="deleteEmployeeModal-{{forloop.counter}}" class="modal fade">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form>
+            <form method="POST" action="/delete_brand/{{i.id}}">
+                {% csrf_token %}
                 <div class="modal-header">						
                     <h4 class="modal-title">Delete Brand</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -187,6 +169,7 @@
         </div>
     </div>
 </div>
+{% endfor %}
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 <script src="https://kit.fontawesome.com/412a20d28b.js" crossorigin="anonymous"></script>
 {% endblock content1 %}

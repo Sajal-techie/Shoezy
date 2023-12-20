@@ -10,4 +10,9 @@ class Customuser(models.Model):
     password = models.CharField(max_length = 255)
     is_verified = models.BooleanField(default = False)
     is_listed = models.BooleanField(default = True)
+    is_blocked = models.BooleanField(default = False)
     otp = models.CharField(max_length = 6, null = True, blank = True)
+
+    
+    def __str__(self) -> str:
+        return self.first_name

@@ -3,20 +3,27 @@ from . models import Customuser
 from django.utils import timezone
 from django.contrib import messages
 from . signals import send_otp
+from django.views.decorators.cache import never_cache
 
 # Create your views here.
-
+@never_cache
 def home(request):
     if 'users' in request.session:
         usm = request.session.get('users')
         username = Customuser.objects.get(email = usm)
         username.otp = None
         username.save()
-        return render (request, 'home1.html',{'username': username.first_name})
-    
+        if not username.is_blocked: 
+            return render (request, 'home1.html',{'username': username.first_name})
+        else:
+            if 'users' in request.session:
+                request.session.flush()
+            messages.error(request,'you are blocked ')
+            return redirect('login')
     return render (request, 'home1.html')
 
 
+@never_cache
 def login(request):
     if 'users' in request.session:
         return redirect('home')
@@ -28,6 +35,10 @@ def login(request):
         except Customuser.DoesNotExist or Customuser.MultipleObjectsReturned:
             user = None
         if user is not None:
+            if user.is_blocked == True:
+                messages.error(request,'you are blocked ')
+                return redirect('login')
+            
             if  user.is_verified == True:
                 request.session['users'] = email
                 return redirect('home')
@@ -42,7 +53,7 @@ def login(request):
     print('return')
     return render(request, 'login/login.html')
 
-
+@never_cache
 def register(request):
     if request.method == "POST":
         fname = request.POST['fname']
@@ -62,7 +73,7 @@ def register(request):
         
     return render(request, 'login/register.html')
 
-
+@never_cache
 def verifyreg(request,id):
     context={
             'userid':id
@@ -83,11 +94,12 @@ def verifyreg(request,id):
 
     return render(request, 'login/verifyreg.html',context)
 
-
+@never_cache
 def resendotp(request,id):
     user = Customuser.objects.get(id = id)
     send_otp(user)
     return redirect('verifyreg',id = user.id)
+
 
 def logout(request):
     if 'users' in request.session:

@@ -41,6 +41,8 @@ INSTALLED_APPS = [
     'home',
     'shop',
     'adminhome',
+    'categorymanagement',
+    'productmanagement',
 ]
 
 MIDDLEWARE = [
@@ -58,7 +60,9 @@ ROOT_URLCONF = 'ecom.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['templates'],
+        'DIRS': ['templates',
+                 'productmanagement/templates'
+                 ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
