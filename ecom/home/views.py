@@ -4,23 +4,37 @@ from django.utils import timezone
 from django.contrib import messages
 from . signals import send_otp
 from django.views.decorators.cache import never_cache
+from productmanagement.models import Product,ProductImages
+from categorymanagement.models import Brand
+
+
 
 # Create your views here.
 @never_cache
 def home(request):
+    products = Product.objects.filter(is_listed = True, brand_id__is_listed = True).order_by('-id')[:8]
+    brands = Brand.objects.filter(is_listed = True)
+    # multiple = ProductImages.objects.all()
+    
+    context = {
+        'product' : products,
+        'brand' : brands,
+    }
     if 'users' in request.session:
         usm = request.session.get('users')
         username = Customuser.objects.get(email = usm)
         username.otp = None
         username.save()
-        if not username.is_blocked: 
-            return render (request, 'home1.html',{'username': username.first_name})
+
+        
+        if not username.is_blocked:  
+            return render (request, 'home1.html',{'username': username.first_name,'product' : products, 'brand' : brands,})
         else:
             if 'users' in request.session:
                 request.session.flush()
             messages.error(request,'you are blocked ')
             return redirect('login')
-    return render (request, 'home1.html')
+    return render (request, 'home1.html',context)
 
 
 @never_cache
@@ -103,5 +117,5 @@ def resendotp(request,id):
 
 def logout(request):
     if 'users' in request.session:
-        request.session.flush()
+        del request.session['users']
     return redirect('home')

@@ -10,15 +10,19 @@
                     <div class="login_part_form_iner">
                         <h3>Welcome Admin <br>
                             Login </h3>
-                        <form class="row contact_form" action="/admlogin/" method="post" novalidate="novalidate">
+                        <form class="row contact_form" action="/admlogin/" method="POST" >
                         {% csrf_token %}
+                        {% for message in messages %}
+                            <h5 class="text-center text-danger">{{message}} </h5>
+                        
+                        {% endfor %}
                             <div class="col-md-12 form-group p_star">
-                                <input type="email" class="form-control" id="email" name="email" value=""
-                                    placeholder="email">
+                                <input type="text" class="form-control" id="email" name="name" value=""
+                                    placeholder="user name" required>
                             </div>
                             <div class="col-md-12 form-group p_star">
                                 <input type="password" class="form-control" id="password" name="password" value=""
-                                    placeholder="password">
+                                    placeholder="password" required>
                             </div>
                             <div class="col-md-12 form-group">
                                 {% comment %} <div class="creat_account d-flex align-items-center">
@@ -29,7 +33,6 @@
                                     Login
                                 </button>
                                 </form>
-                                <!-- <a class="lost_pass"   href="/verifyreg/">forget password?</a> -->
                     </div>
                         
                 </div>

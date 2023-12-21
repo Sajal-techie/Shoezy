@@ -16,6 +16,7 @@
     		<div class="row">
     			<div class="col-md-8 col-lg-10 order-md-last">
     				<div class="row">
+						{% for prod in product %}
 		    			<div class="col-sm-12 col-md-12 col-lg-4  d-flex">
 		    				<div class="product d-flex flex-column">
                                 <a href="/singleproduct/" class="img-prod"><img class="img-fluid" src={% static 'images/pumashoee.jpg' %} alt="puma shoe">
@@ -33,11 +34,10 @@
     							        <a href="#" class="buy-now text-center py-2">Add to wish<span><i class="ion-ios-heart ml-1"></i></span></a>
 		    						</p>
 		    					</div>
-
-
 		    				</div>
 		    			</div>
-		    			<div class="col-sm-12 col-md-12 col-lg-4  d-flex">
+						{% endfor %}
+		    			<!-- <div class="col-sm-12 col-md-12 col-lg-4  d-flex">
 		    				<div class="product d-flex flex-column">
                                 <a href="#" class="img-prod"><img class="img-fluid" src={% static 'images/product-1.jpg' %} alt="Colorlib Template">
                                     <span class="status">33% Off</span>		    					
@@ -181,7 +181,7 @@
 		    						</p>
 		    					</div>
 		    				</div>
-		    			</div>
+		    			</div> -->
 		    		</div>
 		    		<div class="row mt-5">
 		          <div class="col text-center">
