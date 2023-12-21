@@ -92,16 +92,23 @@
     	</div>
     	<div class="container">
     		<div class="row">
+				{% for prod in product %}
     			<div class="col-sm-12 col-md-6 col-lg-3 ftco-animate d-flex">
     				<div class="product d-flex flex-column">
-    					<a href="/singleproduct/" class="img-prod"><img class="img-fluid" src={% static 'images/pumashoee.jpg' %} alt="puma shoe">
-							<span class="status">50% Off</span>
+    					<a href="/singleproduct/" class="img-prod"><img class="img-fluid" src="{{ prod.image1.url }}" alt=" shoes pic">
+							<!-- {% if prod.original_price and prod.selling_price and prod.original_price > 0 %} -->
+							<!-- {% with discount1=prod.original_price  discount2=prod.selling_price %} -->
+							<span class="status">50%%</span>
+							<!-- {% endwith %} -->
+							<!-- {% endif %} -->
 						<div class="overlay"></div>
     					</a>
     					<div class="text py-3 pb-4 px-3">
-    						<h3><a href="/singleproduct/">Puma Vegas high top</a></h3>
+							
+    						<h3><a href="/singleproduct/">{% for brad in brand  %}{% if prod.brand_id == brad.id %}{{brad.brand_name}}{% endif %}{% endfor %} &nbsp; {{prod.name}}</a></h3>
+							
     						<div class="pricing">
-	    						<p class="price"><span class="mr-2 price-dc">₹2000</span><span class="price-sale">₹1000</span></p>
+	    						<p class="price"><span class="mr-2 price-dc">₹{{prod.original_price}}</span><span class="price-sale">₹{{prod.selling_price}}</span></p>
 	    					</div>
 	    					<p class="bottom-area d-flex px-3">
     							<a href="#" class="add-to-cart text-center py-2 mr-1"><span>Add to cart <i class="ion-ios-cart ml-1"></i></span></a>
@@ -110,137 +117,7 @@
     					</div>
     				</div>
     			</div>
-    			<div class="col-sm-12 col-md-6 col-lg-3 ftco-animate d-flex">
-    				<div class="product d-flex flex-column">
-    					<a href="#" class="img-prod"><img class="img-fluid" src={% static 'images/product-1.jpg' %} alt="Colorlib Template">
-    						<span class="status">33% Off</span>
-    						<div class="overlay"></div>
-    					</a>
-    					<div class="text py-3 pb-4 px-3">
-    						<h3><a href="#">Nike Free RN 2019 iD</a></h3>
-  							<div class="pricing">
-	    						<p class="price"><span class="mr-2 price-dc">₹1500</span><span class="price-sale">₹1000</span></p>
-	    					</div>
-	    					<p class="bottom-area d-flex px-3">
-    							<a href="#" class="add-to-cart text-center py-2 mr-1"><span>Add to cart <i class="ion-ios-cart ml-1"></i></span></a>
-    							<a href="#" class="buy-now text-center py-2">Add to wish<span><i class="ion-ios-heart ml-1"></i></span></a>
-    						</p>
-    					</div>
-    				</div>
-    			</div>
-    			<div class="col-sm-12 col-md-6 col-lg-3 ftco-animate d-flex">
-    				<div class="product">
-    					<a href="#" class="img-prod"><img class="img-fluid" src={% static 'images/adidass1.jpg' %} alt="Colorlib Template">
-							<span class="status">50% Off</span>
-	    					<div class="overlay"></div>
-	    				</a>
-    					<div class="text py-3 pb-4 px-3">
-    						<h3><a href="#">Adidas Duvento M Running Shoes</a></h3>
-  							<div class="pricing">
-	    						<p class="price"><span class="mr-2 price-dc">₹2000</span><span class="price-sale">₹1000</span></p>
-	    					</div>
-	    					<p class="bottom-area d-flex px-3">
-    							<a href="#" class="add-to-cart text-center py-2 mr-1"><span>Add to cart <i class="ion-ios-cart ml-1"></i></span></a>
-    							<a href="#" class="buy-now text-center py-2">Add to wish<span><i class="ion-ios-heart ml-1"></i></span></a>
-    						</p>
-    					</div>
-    				</div>
-    			</div>
-    			<div class="col-sm-12 col-md-6 col-lg-3 ftco-animate d-flex">
-    				<div class="product">
-    					<a href="#" class="img-prod"><img class="img-fluid" src={% static 'images/woodlandc1.jpg' %} alt="Colorlib Template">
-							<span class="status">16% Off</span>
-    						<div class="overlay"></div>
-    					</a>
-    					<div class="text py-3 pb-4 px-3">
-    						<h3><a href="#">Woodland Camel casual shoe</a></h3>
-  							<div class="pricing">
-	    						<p class="price"><span class="mr-2 price-dc">₹3000</span><span class="price-sale">₹2500</span></p>
-	    					</div>
-	    					<p class="bottom-area d-flex px-3">
-    							<a href="#" class="add-to-cart text-center py-2 mr-1"><span>Add to cart <i class="ion-ios-cart ml-1"></i></span></a>
-    							<a href="#" class="buy-now text-center py-2">Add to wish<span><i class="ion-ios-heart ml-1"></i></span></a>
-    						</p>
-    					</div>
-    				</div>
-    			</div>
-
-    			<div class="col-sm-12 col-md-6 col-lg-3 ftco-animate d-flex">
-    				<div class="product d-flex flex-column">
-    					<a href="#" class="img-prod"><img class="img-fluid" src={% static 'images/fila11.jpg' %} alt="Colorlib Template">
-							<span class="status">25% Off</span>
-    						<div class="overlay"></div>
-    					</a>
-    					<div class="text py-3 pb-4 px-3">
-    						
-    						<h3><a href="#">Fila Grant hill 3 Woven </a></h3>
-    						<div class="pricing">
-	    						<p class="price"><span class="mr-2 price-dc">₹4000</span><span class="price-sale">₹3000</span></p>
-	    					</div>
-	    					<p class="bottom-area d-flex px-3">
-    							<a href="#" class="add-to-cart text-center py-2 mr-1"><span>Add to cart <i class="ion-ios-cart ml-1"></i></span></a>
-    							<a href="#" class="buy-now text-center py-2">Add to wish<span><i class="ion-ios-heart ml-1"></i></span></a>
-    						</p>
-    					</div>
-    				</div>
-    			</div>
-    			<div class="col-sm-12 col-md-6 col-lg-3 ftco-animate d-flex">
-    				<div class="product d-flex flex-column">
-    					<a href="#" class="img-prod"><img class="img-fluid" src={% static 'images/aditerex.jpg' %} alt="Colorlib Template">
-    						<span class="status">10% Off</span>
-    						<div class="overlay"></div>
-    					</a>
-    					<div class="text py-3 pb-4 px-3">
-    						
-    						<h3><a href="#">Adidas Terrex swift R3 Hiking Shoes </a></h3>
-  							<div class="pricing">
-	    						<p class="price"><span class="mr-2 price-dc">₹3000</span><span class="price-sale">₹2700</span></p>
-	    					</div>
-	    					<p class="bottom-area d-flex px-3">
-    							<a href="#" class="add-to-cart text-center py-2 mr-1"><span>Add to cart <i class="ion-ios-cart ml-1"></i></span></a>
-    							<a href="#" class="buy-now text-center py-2">Add to wish<span><i class="ion-ios-heart ml-1"></i></span></a>
-    						</p>
-    					</div>
-    				</div>
-    			</div>
-    			<div class="col-sm-12 col-md-6 col-lg-3 ftco-animate d-flex">
-    				<div class="product">
-    					<a href="#" class="img-prod"><img class="img-fluid" src={% static 'images/conv1.jpg' %} alt="Colorlib Template">
-							<span class="status">20% Off</span>
-	    					<div class="overlay"></div>
-	    				</a>
-    					<div class="text py-3 pb-4 px-3">
-    						
-    						<h3><a href="#">Converse Run Star Motion Shoe</a></h3>
-  							<div class="pricing">
-	    						<p class="price"><span class="mr-2 price-dc">₹7500</span><span class="price-sale">₹6000</span></p>
-	    					</div>
-	    					<p class="bottom-area d-flex px-3">
-    							<a href="#" class="add-to-cart text-center py-2 mr-1"><span>Add to cart <i class="ion-ios-cart ml-1"></i></span></a>
-    							<a href="#" class="buy-now text-center py-2">Add to wish<span><i class="ion-ios-heart ml-1"></i></span></a>
-    						</p>
-    					</div>
-    				</div>
-    			</div>
-    			<div class="col-sm-12 col-md-6 col-lg-3 ftco-animate d-flex">
-    				<div class="product">
-    					<a href="#" class="img-prod"><img class="img-fluid" src={% static 'images/nikeair1.jpg' %} alt="Colorlib Template">
-							<span class="status">10% Off</span>
-    						<div class="overlay"></div>
-    					</a>
-    					<div class="text py-3 pb-4 px-3">
-    						
-    						<h3><a href="#">Nike Air Jordan 1 Mid</a></h3>
-  							<div class="pricing">
-	    						<p class="price"><span class="mr-2 price-dc">₹11200</span><span class="price-sale">₹10000</span></p>
-	    					</div>
-	    					<p class="bottom-area d-flex px-3">
-    							<a href="#" class="add-to-cart text-center py-2 mr-1"><span>Add to cart <i class="ion-ios-cart ml-1"></i></span></a>
-    							<a href="#" class="buy-now text-center py-2">Add to wish<span><i class="ion-ios-heart ml-1"></i></span></a>
-    						</p>
-    					</div>
-    				</div>
-    			</div>
+				{% endfor %}
     		</div>
     	</div>
     </section>

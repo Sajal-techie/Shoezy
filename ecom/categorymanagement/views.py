@@ -2,12 +2,13 @@ from django.shortcuts import render,redirect
 from . models import Brand
 # Create your views here.
 def viewbrand(request):
-    brands = Brand.objects.all().order_by('id')
-    context = {
-        'brand': brands
-    }
-    return render(request,'admin/admcategory.html',context)
-
+    if 'admin' in request.session:
+        brands = Brand.objects.all().order_by('id')
+        context = {
+            'brand': brands
+        }
+        return render(request,'admin/admcategory.html',context)
+    return redirect('admlogin')
 
 
 def add_brand(request):

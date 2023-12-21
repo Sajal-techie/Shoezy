@@ -8,6 +8,7 @@ urlpatterns = [
     path('block_user/<str:id>', views.block_user, name='block_user'),
     path('unblock_user/<str:id>', views.unblock_user, name='unblock_user'),
     path('user_search/', views.user_search, name='user_search'),
+    path('admlogout/', views.admlogout, name='admlogout'),
     
     path('admbanners/', views.admbanners, name='admbanners'),
 

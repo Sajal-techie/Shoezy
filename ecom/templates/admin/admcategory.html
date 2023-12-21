@@ -46,9 +46,9 @@
                     <td >
                         <a href="#editEmployeeModal-{{forloop.counter}}" class="edit" data-toggle="modal" title="edit brand"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
                         {% if not br.is_listed  %}
-                        <a href="#listEmployeeModal-{{forloop.counter}}" class="delete" data-toggle="modal" title="unlist brand"><i class="fa-solid fa-eye  fa-lg" style="color: #35ef61;"></i></a>
+                        <a href="#listEmployeeModal-{{forloop.counter}}" class="delete" data-toggle="modal" title="list brand"><i class="fa-solid fa-eye  fa-lg" style="color: #35ef61;"></i></a>
                         {% else %}
-                        <a href="#listEmployeeModal-{{forloop.counter}}" class="delete" data-toggle="modal" title="list brand"><i class="fa-solid fa-eye-slash fa-sm" style="color: #00ff6e;"></i></a>
+                        <a href="#listEmployeeModal-{{forloop.counter}}" class="delete" data-toggle="modal" title="unlist brand"><i class="fa-solid fa-eye-slash fa-sm" style="color: #ff8c08;"></i></a>
                         {% endif %}
                         <a href="#deleteEmployeeModal-{{forloop.counter}}" class="delete" data-toggle="modal" title="delete brand"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
                     </td>
@@ -57,7 +57,7 @@
                 
             </tbody>
         </table>
-        <div class="clearfix">
+        <!-- <div class="clearfix">
             <div class="hint-text">Showing <b>5</b> out of <b>25</b> entries</div>
             <ul class="pagination">
                 <li class="page-item disabled"><a href="#">Previous</a></li>
@@ -68,7 +68,7 @@
                 <li class="page-item"><a href="#" class="page-link">5</a></li>
                 <li class="page-item"><a href="#" class="page-link">Next</a></li>
             </ul>
-        </div>
+        </div> -->
     </div>
 </div>
 <!-- ADD Modal HTML -->
@@ -139,7 +139,7 @@
                 </div>
                 <div class="modal-footer">
                     <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
-                    <input type="submit" class="btn btn-warning" value="List">
+                    <input type="submit" class="btn btn-warning" value="{% if i.is_listed %} unlist {% else %} list {% endif %}">
                 </div>
             </form>
         </div>

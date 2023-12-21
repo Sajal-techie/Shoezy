@@ -14,7 +14,13 @@ class Product(models.Model):
     selling_price = models.DecimalField(max_digits = 10,decimal_places = 2)
     description = models.TextField()
     quantity = models.PositiveIntegerField()
+    image1 = models.ImageField(upload_to='media/images/',blank=True)
+    is_listed = models.BooleanField(default = True)
     
     def __str__(self) -> str:
         return self.name
-    
+
+class ProductImages(models.Model):
+    product = models.ForeignKey(Product, related_name = 'images', on_delete = models.CASCADE)
+    images =  models.ImageField(upload_to='media/images/')
+    image_number = models.PositiveIntegerField(blank = True)
