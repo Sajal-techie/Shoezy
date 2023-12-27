@@ -1,0 +1,117 @@
+ {% extends "base.html" %} 
+{% load static %}
+  <body class="goto-here">
+{% block navbar %}
+{% include 'navbar.html' %}
+{% endblock navbar %}
+{% block maincontent %}
+
+    <section class="ftco-section ftco-cart">
+        <h1 class=" text-center scs">Cart</h1>
+			<div class="container">
+				<div class="row">
+    			<div class="col-md-12 ftco-animate">
+    				<div class="cart-list">
+	    				<table class="table">
+						    <thead class="thead-primary">
+						      <tr class="text-center">
+						        <th>&nbsp;</th>
+						        <th>&nbsp;</th>
+						        <th>Product</th>
+						        <th>Price</th>
+						        <th>Quantity</th>
+						        <th>Total</th>
+						      </tr>
+						    </thead>
+						    <tbody>
+                            {% for cart_item in cart_item %}
+						      <tr class="text-center">
+                                
+						        <td class="product-remove"><a href="/remove_cart/{{cart_item.id}}"><span class="ion-ios-close"></span></a></td>
+						        
+						        <td class="image-prod"><div class="img" style="width: 200px;  background-image:url({{ cart_item.product_id.image1.url }});" ></div></td>
+						        
+						        <td class="product-name">
+						        	<h3>{{ cart_item.product_id.brand  }} </h3>
+						        	<p>{{ cart_item.product_id.name }}</p>
+						        </td>
+						        
+						        <td class="price">{{ cart_item.product_id.selling_price }}</td>
+						        
+						        <td class="quantity">
+						        	<div class="input-group mb-3">
+                                        <div class="input-group-prepend">
+                                            <a href="/rem_quantity/{{cart_item.id}}" class="quantity-left-minus btn btn-outline-secondary"  >–</a>
+                                        </div>
+                                        <input type="number" name="quantity" class="quantity form-control input-number" value="{{ cart_item.quantity }}" min="1" max="100">
+                                        <div class="input-group-append">
+                                            <a href="/add_quantity/{{cart_item.id}}" class="quantity-right-plus btn btn-outline-secondary" >+</a>
+                                        </div>
+                                    </div>
+					          </td>
+						        
+						        <td class="total">{{cart_item.sub_total}}</td>
+                        
+						      </tr>
+                            {% endfor %}
+						     
+						    
+                            </tbody>
+						  </table>
+					  </div>
+    			</div>
+    		</div>
+    		<div class="row justify-content-end mt-4">
+                <div class="col col-lg-5 col-md-6 mt-5 cart-wrap ftco-animate">
+                    <form method="post" action="" >
+                        {% csrf_token %}
+                        <div class="form-row p-4 ">
+                            <div class="col-8" >
+                                <!-- <label for="coupon" class="sr-only">Apply Coupon:</label> -->
+                                <input type="text" class="form-control" id="coupon" name="coupon_code" placeholder="Enter coupon code">
+                            </div>
+                            <div class="col-2">
+                                <button type="submit" class=" btn-warning ">&nbsp;Apply &nbsp;</button>
+                            </div>
+                            <div class="col-2">
+                                <button type="button" class=" btn-danger" id="removeCoupon">Remove</button>
+                            </div>
+                        </div>
+                    </form>
+            
+                    <div class="cart-total mb-3">
+                        <h3>Cart Totals</h3>
+                        <p class="d-flex">
+                            <span>Subtotal</span>
+                            <span>₹{{total}}</span>
+                        </p>
+                        <p class="d-flex">
+                            <span>Delivery</span>
+                            <span>₹0.00</span>
+                        </p>
+                        <p class="d-flex">
+                            <span>Discount</span>
+                            <span>₹0.00</span>
+                        </p>
+                        <hr>
+                        <p class="d-flex total-price">
+                            <span>Total</span>
+                            <span>₹{{total}}</span>
+                        </p>
+                    </div>
+                    <p class="text-center"><a href="checkout.html" class="btn btn-primary py-3 px-4">Proceed to Checkout</a></p>
+                </div>
+            </div>
+			</div>
+		</section>
+		
+
+{% include 'footer.html' %}
+    
+  
+
+  <!-- loader -->
+  <div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px"><circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/><circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00"/></svg></div>
+
+      {% endblock maincontent %}
+  </body>

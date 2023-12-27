@@ -1,8 +1,9 @@
 from django.shortcuts import render,redirect
 from home.models import Customuser
 from django.db.models import Q
-from django.contrib.auth import authenticate
+from django.contrib.auth import authenticate,login,logout
 from django.views.decorators.cache import never_cache
+from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
 
@@ -15,7 +16,8 @@ def admlogin(request):
         password = request.POST['password']
         
         user = authenticate(username = name,password = password)
-        if user is not None:
+        if user is not None and user.is_staff:
+            login(request, user)
             request.session['admin'] = name
             return redirect('admhome')
         else:
@@ -26,14 +28,20 @@ def admlogin(request):
 
 
 @never_cache
+@login_required(login_url='admlogin')
 def admhome(request):
     if 'admin' in request.session:
-        return render(request,'admin/admhome.html' )
+        if request.user.is_staff:
+            return render(request,'admin/admhome.html' )
+        else:
+            messages.error(request,"you have no permission to view this page")
+            return redirect('admlogin')
+    
     return render(request,'admin/admlogin.html')
 
 
 def admusers(request):
-    if 'admin' in request.session:
+    if 'admin' in request.session and request.user.is_staff:
         user_list = Customuser.objects.all().order_by('id')
         context = {
             'user_details': user_list
@@ -73,4 +81,5 @@ def admbanners(request):
 def admlogout(request):
     if 'admin' in request.session:
         del request.session['admin']
+             
     return redirect('admlogin')

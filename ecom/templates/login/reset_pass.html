@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block maincontent %}
+
+<section class="login_part padding_top text-center">
+    <div class="container text-center">
+        <div class="row align-items-center justify-content-center">
+            <div class="col-lg-6 col-md-6">
+                <div class="login_part_form">
+                    <div class="login_part_form_iner">
+                        <h3>Welcome Admin <br>
+                            Login </h3>
+                        <form class="row contact_form" action="/reset_pass/{{id}}" method="POST" >
+                        {% csrf_token %}
+                        {% for message in messages %}
+                            <h5 class="text-center text-danger">{{message}} </h5>
+                        
+                        {% endfor %}
+                            <div class="col-md-12 form-group p_star">
+                                <input type="text" class="form-control" id="email" name="password" 
+                                    placeholder="password" required>
+                            </div>
+                            <div class="col-md-12 form-group p_star">
+                                <input type="password" class="form-control" id="password" name="password1" 
+                                    placeholder="confirm password" required>
+                            </div>
+                            <div class="col-md-12 form-group">
+                                {% comment %} <div class="creat_account d-flex align-items-center">
+                                    <input type="checkbox" id="f-option" name="selector">
+                                    <label for="f-option">Remember me</label>
+                                </div> {% endcomment %}
+                                <button type="submit" value="submit" class="btn_3 border-dark lgn">
+                                    Reset
+                                </button>
+                                </form>
+                    </div>
+                        
+                </div>
+            </div>
+        </div>
+    </div>
+
+ 
+    
+
+
+{% endblock maincontent %}

@@ -26,32 +26,32 @@
                             <h6 class=" text-danger"> {{ message }} </h6>
                           {% endfor %}
                           {% endif %}
-                      <form class="row contact_form" action="/register/" method="post" novalidate="novalidate">
+                      <form class="row contact_form" action="/register/" method="post" >
                         {% csrf_token %}
                             <div class="col-md-12 form-group p_star">
-                                <input type="text" class="form-control" id="fname" name="fname" value=""
-                                    placeholder="First name" required>
+                                <input   type="text" class="form-control" id="fname" name="fname" 
+                                    placeholder="First name" required >
                             </div>
                             <div class="col-md-12 form-group p_star">
-                                <input type="text" class="form-control" id="lname" name="lname" value=""
+                                <input type="text" class="form-control" id="lname" name="lname"
                                     placeholder="Last name" required>
                             </div>
                             <div class="col-md-12 form-group p_star">
-                                <input type="email" class="form-control" id="email" name="email" value=""
+                                <input type="email" class="form-control" id="email" name="email" 
                                     placeholder="email" required>
                             </div>
                             <div class="col-md-12 form-group p_star">
-                                <input type="password" class="form-control" id="password" name="password" value=""
+                                <input type="password" class="form-control" id="password" name="password" 
                                     placeholder="password" required>
                             </div>
                             <div class="col-md-12 form-group p_star">
-                                <input  type="password" class="form-control" id="password1" name="password1" value=""
+                                <input  type="password" class="form-control" id="password1" name="password1" 
                                     placeholder="confrim password" required >
                             </div>
                             <div class="col-md-12 form-group">
                                  <div class="creat_account d-flex align-items-center">
                                     <input type="checkbox" id="f-option" name="selector">
-                                    <label for="f-option">I agree to the terms and conditions</label>
+                                    <label for="f-option">I agree to the  <a href="#">terms and conditions</a> </label>
                                 </div> 
                                  <button type="submit" value="submit" class="btn_3 border-dark lgn">
                                     Register

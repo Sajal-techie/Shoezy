@@ -17,16 +17,24 @@
 		  <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
 		  <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
 		  <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+		  <li data-target="#carouselExampleIndicators" data-slide-to="3"></li>
+		  <li data-target="#carouselExampleIndicators" data-slide-to="4"></li>
 		</ol>
 		<div class="carousel-inner">
 		  <div class="carousel-item active">
 			<img class="d-block w-100 img-fluid" style="height: 600px;"  src="{% static 'images/banner1.jpeg'  %}" alt="First slide">
 		  </div>
 		  <div class="carousel-item">
-			<img class="d-block w-100 img-fluid"style="height: 600px;"  src="{% static 'images/banner26.png'  %}" alt="Second slide">
+			<img class="d-block w-100 img-fluid"style="height: 600px;"  src="{% static 'images/banner25.png'  %}" alt="Second slide">
 		  </div> 
 		  <div class="carousel-item">
+			<img class="d-block w-100 img-fluid" style="height: 600px;" src="{% static 'images/banner23.png'  %}" alt="Third slide">
+		  </div>
+			<div class="carousel-item">
 			<img class="d-block w-100 img-fluid" style="height: 600px;" src="{% static 'images/banner22.png'  %}" alt="Third slide">
+		  </div>
+		  <div class="carousel-item">
+			<img class="d-block w-100 img-fluid" style="height: 600px;" src="{% static 'images/banner30.png'  %}" alt="Third slide">
 		  </div>
 		</div>
 		<a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
@@ -80,12 +88,14 @@
 			</div>
 		</section>
 
+
 <!-- new arrival listing -->
     <section class="ftco-section bg-light">
     	<div class="container">
 				<div class="row justify-content-center mb-3 pb-3">
           <div class="col-md-12 heading-section text-center ftco-animate">
             <h2 class="mb-4">New Arrivals</h2>
+			{{ request.user }}
             <p>Fresh Styles, Fresh Vibes! Explore Our Latest Arrivals – Elevate Your Wardrobe with What's New.</p>
           </div>
         </div>   		
@@ -94,24 +104,26 @@
     		<div class="row">
 				{% for prod in product %}
     			<div class="col-sm-12 col-md-6 col-lg-3 ftco-animate d-flex">
-    				<div class="product d-flex flex-column">
-    					<a href="/singleproduct/" class="img-prod"><img class="img-fluid" src="{{ prod.image1.url }}" alt=" shoes pic">
+    				<div class="product d-flex flex-column hgt align-items-center justify-content-center align-content-center ">
+						<div class="">
+    					<a href="/singleproduct/{{prod.id}}" class="img-prod"><img class="img-fluid" src="{{ prod.image1.url }}" alt=" shoes pic">
+						
 							<!-- {% if prod.original_price and prod.selling_price and prod.original_price > 0 %} -->
 							<!-- {% with discount1=prod.original_price  discount2=prod.selling_price %} -->
 							<span class="status">50%%</span>
 							<!-- {% endwith %} -->
-							<!-- {% endif %} -->
-						<div class="overlay"></div>
+							<!-- {% endif %} --></div>
+						<!-- <div class="overlay"></div> -->
     					</a>
-    					<div class="text py-3 pb-4 px-3">
+    					<div class="text py-3 pb-4 px-3  align-baseline">
 							
-    						<h3><a href="/singleproduct/">{% for brad in brand  %}{% if prod.brand_id == brad.id %}{{brad.brand_name}}{% endif %}{% endfor %} &nbsp; {{prod.name}}</a></h3>
+    						<h3><a href="/singleproduct/{{prod.id}}">{% for brad in brand  %}{% if prod.brand_id == brad.id %}{{brad.brand_name}}{% endif %}{% endfor %} &nbsp; {{prod.name}}</a></h3>
 							
     						<div class="pricing">
 	    						<p class="price"><span class="mr-2 price-dc">₹{{prod.original_price}}</span><span class="price-sale">₹{{prod.selling_price}}</span></p>
 	    					</div>
 	    					<p class="bottom-area d-flex px-3">
-    							<a href="#" class="add-to-cart text-center py-2 mr-1"><span>Add to cart <i class="ion-ios-cart ml-1"></i></span></a>
+    							<a href="{% url 'addto_cart' prod.id  %}?next={{ request.path }}" class="add-to-cart text-center py-2 mr-1"><span>Add to cart <i class="ion-ios-cart ml-1"></i></span></a>
     							<a href="#" class="buy-now text-center py-2">Add to wish<span><i class="ion-ios-heart ml-1"></i></span></a>
     						</p>
     					</div>

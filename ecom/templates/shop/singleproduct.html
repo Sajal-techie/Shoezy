@@ -7,24 +7,27 @@
     <body class="goto-here">
  <!-- <h1 class="mb-0 bread text-center">Shop</h1> -->
     <section class="ftco-section">
+		{% for prod in product %}
     	<div class="container">
     		<div class="row">
     			<div class="col-lg-6 mb-5 ftco-animate prd1">
                     <div>
                         <div class="image-zoom-container imgsiz" id="product-container">
-                        <img src="{% static 'images/pumashoelow.jpg' %}" class="img-fluid" alt="Product Image" id="zoom-image">
+                        <img src="{{prod.image1.url}}" class="img-fluid" alt="Product Image" id="zoom-image">
                         </div>
                         <div class="thumbnail-container">
-                            <img src="{% static 'images/pumashoelow.jpg' %}" class="thumbnail" alt="Thumbnail 1" onclick="changeImage(this)">
-                            <img src="{% static 'images/pumashoelow.jpg' %}" class="thumbnail" alt="Thumbnail 2" onclick="changeImage(this)">
-                            <img src="{% static 'images/pumashoelow.jpg' %}" class="thumbnail" alt="Thumbnail 3" onclick="changeImage(this)">
-                            <img src="{% static 'images/pumashoelow.jpg' %}" class="thumbnail" alt="Thumbnail 4" onclick="changeImage(this)">
+                            <img src="{{ prod.image1.url }}" class="thumbnail" alt="Thumbnail 1" onclick="changeImage(this)">
+							{% for img in multi_image %}
+                            <img src="{{ img.images.url }}" class="thumbnail" alt="Thumbnail 2" onclick="changeImage(this)">
+                            <!-- <img src="{% static 'images/pumashoelow.jpg' %}" class="thumbnail" alt="Thumbnail 3" onclick="changeImage(this)">
+                            <img src="{% static 'images/pumashoelow.jpg' %}" class="thumbnail" alt="Thumbnail 4" onclick="changeImage(this)"> -->
+							{% endfor %}
                         </div>
                     </div>
                 </div>
             
     			<div class="col-lg-6 product-details pl-md-5 ftco-animate">
-    				<h3>Puma Vegas high top</h3>
+    				<h3>{{prod.brand.brand_name}} &nbsp; {{prod.name}}</h3>
     				<!-- <div class="rating d-flex">
 							<p class="text-left mr-4">
 								<a href="#" class="mr-2">5.0</a>
@@ -41,12 +44,12 @@
 								<a href="#" class="mr-2" style="color: #000;">500 <span style="color: #bbb;">Sold</span></a>
 							</p>
 						</div> -->
-                        <div class="ppp"><p class="price"><span class="mr-2 price-dc">₹2000</span><span class="price-sale">₹1000</span></p></div>
+                        <div class="ppp"><p class="price"><span class="mr-2 price-dc">₹{{prod.original_price}}</span><span class="price-sale">₹{{prod.selling_price}}</span></p></div>
 						<p>
-                            Brand : Puma <br>
-                            Name : Vegas high top <br>
-                            Catergory : Men <br>
-                            Color : Green  <br>
+                            Brand : {{prod.brand.brand_name}}  <br>
+                            Name : {{prod.name}} <br>
+                            Catergory : {{prod.category}} <br>
+                            <!-- Color : Green  <br> -->
                         </p>
 						<div class="row mt-4">
 							<div class="col-md-6">
@@ -69,19 +72,26 @@
                                         <i class="ion-ios-remove"></i>
                                     </button>
                                 </span>
-                                <input type="text" id="quantity" name="quantity" class="quantity form-control input-number" value="1" min="1" max="100">
+                                <input type="text" id="quantity" name="quantity" class="quantity form-control input-number" value="1" min="1" max="3">
                                 <span class="input-group-btn ml-2">
                                     <button type="button" class="quantity-right-plus btn" data-type="plus" data-field="">
                                         <i class="ion-ios-add"></i>
-                                </button>
+                                	</button>
                                 </span>
 	          	    </div>
 	          	<div class="w-100"></div>
 	          	<div class="col-md-12">
-	          		<p style="color: #2d2d2d;"> only 80 left</p>
+	          		<p style="color: #2d2d2d;"> only {{prod.quantity}} left</p>
 	          	</div>
           	</div>
-          	<p><a href="cart.html" class="btn btn-black py-3 px-5 mr-2">Add to Cart</a><a href="cart.html" class="btn btn-primary py-3 px-5 " style="color: black;">Buy now</a></p>
+          	<p>
+				{% if is_in_cart %}
+				<a href="/cart/" class="btn btn-black py-3 px-5 mr-2">View  Cart</a>
+				{% else %}
+				<a href="{% url 'addto_cart' prod.id  %}?next={{ request.path }}" class="btn btn-black py-3 px-5 mr-2">Add to Cart</a>
+				{% endif %}
+				<a href="cart.html" class="btn btn-primary py-3 px-5 " style="color: black;">Buy now</a>
+			</p>
     			</div>
     		</div>
             <div class="col-lg-6">
@@ -109,16 +119,16 @@
 
               <div class="tab-pane fade show active" id="v-pills-1" role="tabpanel" aria-labelledby="day-1-tab">
               	<div class="p-4">
-	              	<h3 class="mb-4">Puma Vegas High top </h3>
-	              	<p>The Puma Vegas High Top is a fusion of sporty style and street-ready flair. With a sleek and modern design, these high-top sneakers offer a fashion-forward look that effortlessly transitions from the court to the urban landscape. Crafted with Puma's renowned attention to comfort and performance, these high tops feature a supportive ankle design, cushioned insoles, and the iconic Puma logo. Whether you're hitting the streets or making a statement on the court, the Puma Vegas High Top combines athletic functionality with trendsetting aesthetics</p>
+	              	<h3 class="mb-4">{{prod.brand.brand_name}} {{prod.name}}</h3>
+	              	<p>{{prod.description}} <br> {{prod.name}}is a fusion of sporty style and street-ready flair. With a sleek and modern design, these high-top sneakers offer a fashion-forward look that effortlessly transitions from the court to the urban landscape. Crafted with Puma's renowned attention to comfort and performance, these high tops feature a supportive ankle design, cushioned insoles, and the iconic Puma logo. Whether you're hitting the streets or making a statement on the court, the Puma Vegas High Top combines athletic functionality with trendsetting aesthetics</p>
               	</div>
               </div>
 
               <div class="tab-pane fade" id="v-pills-2" role="tabpanel" aria-labelledby="v-pills-day-2-tab">
               	<div class="p-4">
-	              	<h3 class="mb-4">Manufactured By Nike</h3>
+	              	<h3 class="mb-4">Manufactured By {{prod.brand.brand_name}}</h3>
 	              	<p>
-                        Puma, a prominent shoe manufacturer, is recognized for its commitment to quality craftsmanship and innovative shoe designs. Leveraging cutting-edge technology, Puma's shoe manufacturing process integrates performance-driven features with contemporary aesthetics. The brand's expertise spans various athletic disciplines, with a focus on creating footwear that not only meets the demands of sports enthusiasts but also reflects current fashion trends. Puma's dedication to sustainability is evident in its responsible sourcing of materials and eco-friendly manufacturing practices. Through a combination of heritage and forward-thinking, Puma continues to shape the landscape of shoe manufacturing, producing a diverse range of athletic and lifestyle footwear that resonates with a global audience.</p>
+                        {{prod.brand.brand_name}}, a prominent shoe manufacturer, is recognized for its commitment to quality craftsmanship and innovative shoe designs. Leveraging cutting-edge technology, Puma's shoe manufacturing process integrates performance-driven features with contemporary aesthetics. The brand's expertise spans various athletic disciplines, with a focus on creating footwear that not only meets the demands of sports enthusiasts but also reflects current fashion trends. Puma's dedication to sustainability is evident in its responsible sourcing of materials and eco-friendly manufacturing practices. Through a combination of heritage and forward-thinking, Puma continues to shape the landscape of shoe manufacturing, producing a diverse range of athletic and lifestyle footwear that resonates with a global audience.</p>
               	</div>
               </div>
               <div class="tab-pane fade" id="v-pills-3" role="tabpanel" aria-labelledby="v-pills-day-3-tab">
@@ -252,6 +262,7 @@
           </div>
         </div>
     	</div>
+		{% endfor %}
     </section>
 {% include 'footer.html' %}
 

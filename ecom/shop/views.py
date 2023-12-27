@@ -1,31 +1,94 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from home.models import Customuser
 from django.views.decorators.cache import never_cache
 from productmanagement.models import Product,ProductImages
+from django.contrib import messages
 from categorymanagement.models import Brand
+from cart.views import check_cart
+from cart.models import Cart
 # Create your views here.
 
 def shop(request):
-    products = Product.objects.filter(is_listed = True, brand_id__is_listed = True)
+    products = Product.objects.filter(is_listed = True, brand_id__is_listed = True).order_by('-id')
     brands = Brand.objects.filter(is_listed = True)
     # multiple = ProductImages.objects.all()
     context = {
         'product' : products,
-        'brand' : brands
+        'brand' : brands,
     }
+    
     if 'users' in request.session:
         
         usm = request.session.get('users')
         username = Customuser.objects.get(email = usm)
-        return render(request, 'shop/shop.html', {'username':username.first_name,
-                                                  'product' : products,
-                                                  'brand' : brands})
+        context['username'] = username
+        cart_item = Cart.objects.filter(user_id = username).values('product_id')
+        context['cart_item'] = cart_item
+        
+        if not username.is_blocked:      
+            return render(request, 'shop/shop.html', context)
+        else:
+            if 'users' in request.session:
+                del request.session['users']
+            messages.error(request,'you are blocked ')
+            return redirect('login')
+        
     return render(request, 'shop/shop.html',context)
 
-def singleproduct(request):
+
+def singleproduct(request,id):
+    products = Product.objects.filter(id = id)
+    brands = Brand.objects.filter(id = id)
+    multiple = ProductImages.objects.filter(product_id = id )
+    
+    context = {
+        'product' : products,
+        'brand' : brands,
+        'multi_image' : multiple,
+        
+    }
     if 'users' in request.session:
         usm = request.session.get('users')
         username = Customuser.objects.get(email = usm)
-        return render(request, 'shop/singleproduct.html',{'username':username.first_name})
+        is_in_cart = check_cart(username,id)
+        context['is_in_cart']= is_in_cart
+        context['username'] = username
+        
+        if not username.is_blocked:     
+             
+            return render(request, 'shop/singleproduct.html', context)
+        else:
+            if 'users' in request.session:
+                del request.session['users']
+            messages.error(request,'you are blocked ')
+            
+            return redirect('login')
+        
+    return render(request, 'shop/singleproduct.html',context)
 
-    return render(request, 'shop/singleproduct.html')
+
+def seachitems(request):
+    itm = request.GET['search_items']
+    products = Product.objects.filter(is_listed = True, brand_id__is_listed = True,name__icontains = itm)
+    brands = Brand.objects.filter(is_listed = True)
+    context = {
+        'product' : products,
+        'brand' : brands
+    }
+    
+
+    if 'users' in request.session:
+        
+        usm = request.session.get('users')
+        username = Customuser.objects.get(email = usm)
+        context['username'] = username
+        
+        if not username.is_blocked:      
+            return render(request, 'shop/shop.html', context)
+        else:
+            if 'users' in request.session:
+                del request.session['users']
+            messages.error(request,'you are blocked ')
+            return redirect('login')
+        
+    return render(request, 'shop/shop.html',context)

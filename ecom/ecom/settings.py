@@ -43,6 +43,8 @@ INSTALLED_APPS = [
     'adminhome',
     'categorymanagement',
     'productmanagement',
+    'info',
+    'cart',
 ]
 
 MIDDLEWARE = [
@@ -60,7 +62,8 @@ ROOT_URLCONF = 'ecom.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['templates'],
+        'DIRS': ['templates',
+                 'info/templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -85,8 +88,8 @@ DATABASES = {
         'NAME': 'shoezy',
         'USER': 'postgres',
         'PASSWORD': '12345678',
-        'HOST': 'localhost',  # Set to your PostgreSQL server's address
-        'PORT': '5432',      # Set to your PostgreSQL server's port
+        'HOST': 'localhost', 
+        'PORT': '5432',      
     }
 }
 
