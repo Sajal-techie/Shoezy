@@ -1,0 +1,138 @@
+{% extends "base.html" %}
+{% load humanize %}
+{% block navbar %}{% include "navbar.html" %}{% endblock navbar %}
+
+{% block maincontent %}
+<head> 
+  <style>
+   
+    .order-history {
+      margin: 50px auto;
+    }
+.bb{
+      border: 2px solid #ddd;
+      overflow: hidden;
+      margin-bottom: 5px;
+
+    }
+    .order-card {
+      border-radius: 15px 0 0 15px;
+      overflow: hidden;
+      margin-bottom: 20px;
+      margin-left: -30px;
+
+    }
+    .detl{
+      border-radius:0 15px 15px 0;
+    }
+    .bb:hover {
+      transform: scale(1.03);
+    }
+
+    .order-card img {
+      width: 100%;
+      height: 407px; /* Adjust the height as needed */
+      object-fit: cover;
+      
+    }
+
+    .order-details {
+      padding: 20px;
+      color: #333;
+      background-color: #fff; /* Subtle background color */
+      
+    }
+
+    h2 {
+      color: #4CAF50;
+      margin-bottom: 15px;
+    }
+
+    .order-details span {
+      display: block;
+      margin-bottom: 10px;
+    }
+
+    .view-details {
+      color: #31c8ff;
+      text-decoration: none;
+      font-weight: bold;
+      transition: color 0.3s;
+    }
+
+    .view-details:hover {
+      color: #0b24ff;
+    }
+
+    .status {
+      margin-top: 15px;
+      padding: 8px;
+      border-radius: 5px;
+      font-weight: bold;
+    }
+
+    .status-delivered {
+      background-color: #5cb85c; /* Green */
+      color: #fff;
+    }
+
+    .status-processing {
+      background-color: #f0ad4e; /* Yellow */
+      color: #fff;
+    }
+    .status-cancelled {
+      background-color: #ff1717; /* Yellow */
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+  <div class="container order-history">
+    {% if order_items %}
+    {% for item in order_items  %}
+    <!-- Sample order data, replace with your actual data -->
+    <div class="row bb">
+      <div class="col-md-6">
+        <div class="order-card">
+          <img src="{{item.product_id.image1.url}}" alt="Product Image">
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="order-card detl">
+          <div class="order-details">
+            <h3>Order ID: {{item.id}} </h3>
+            <span>Product : {{ item.product_id.brand.brand_name}}  {{item.product_id.name}}</span>
+            <span>Price: ₹{{item.product_id.selling_price}}</span>
+            <span>Quantity: {{item.quantity}} </span>
+            <span>Total: ₹{{item.amount}}</span>
+            <span>Order Date: {{item.order_id.order_date}}</span>
+            {% if item.status != 'cancelled' %}
+            <span>Delivery Date : {{item.delivery_date}}</span>
+            {% endif %}
+            {% if item.status == 'ordered' or item.status == 'shipped' or item.status == 'out_for_delivery' %}
+            <a href="/track_order/{{item.id}}" class="text-white"><span class="status status-processing text-center">Track order</span></a>
+            {% elif item.status == 'delivered' %}
+            <a href="" class="text-white"><span class="status status-delivered text-center">Delivered</a></span>
+            {% elif item.status == 'cancelled' %}
+            <a href="" class="text-white"><span class="status status-cancelled text-center">Cancelled</a></span>
+            {% endif %}
+            <span class="text-center"><a href="#" class="view-details">View Details</a></span>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+
+    
+    {% endfor %}
+    {% else %}
+    <div class="bg-light m-4 p-4">
+      <div class="h4  text-center mb-4"> You haven't ordered yet </div>
+      <div class="text-center mb-4"> <a href="/shop/" class="btn btn-primary py-3 px-4">Continue Shopping</a>   </div>
+    </div>
+    {% endif %}
+    
+  </div>
+</body>
+{% include "footer.html" %}
+{% endblock maincontent %}

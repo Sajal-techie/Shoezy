@@ -1,0 +1,179 @@
+{% extends 'base.html' %}
+{% block navbar %}
+{% include "navbar.html" %}
+{% endblock navbar %}
+
+
+{% block maincontent %}
+  <body class="goto-here">
+	<section class="ftco-section">
+		<h1 class="text-center scs">Checkout</h1>
+		<hr>
+		<div class="container">
+			<div class="row justify-content-center">
+				
+				<div class="col-xl-12 ftco-animate">
+					<div class="text-dark">
+					<div class="row">
+						
+						<div class="col-md-6  ">
+							<h3>Cart Details</h3>
+							{% for item in cart_items %}
+								<div class="cart-item bg-light p-3 p-md-4">
+										<strong>{{ item.product_id.brand }} {{ item.product_id.name }}</strong>
+										<p>Price: ₹{{item.product_id.selling_price}} & Quantity: {{ item.quantity }}  <br>
+										total: ₹{{ item.sub_total }}</p>
+								</div>
+							{% endfor %}
+						</div>
+						<!-- Display saved addresses as radio buttons -->
+						<form method="post"  action="/checkout/" >
+							{% csrf_token %}
+							<h3 class="mx-4">Address</h3>
+							<div class="bg-light">
+								{% if address %}
+									{% for address in address %}
+									<div class="col-md-6 mb-3">
+										<div class="card bg-light">
+											<div class="card-body">
+												<input type="radio" name="address" value="{{ address.id }}" class="form-check-input" required>
+												<label class="form-check-label">
+													<strong>{{ address.name }}</strong><br>
+													{{ address.country }}, {{ address.state }}, {{ address.district }}, {{ address.town }}<br>
+													House: {{ address.house }}, Pincode: {{ address.pincode }}<br>
+													Mobile: {{ address.number }}
+												</label>
+											</div>
+										</div>
+									</div>
+									{% endfor %}
+									{% else %}
+									{% if messages %}
+                                    {% for message in messages %}
+                                        <h5 class=" text-danger"> {{ message }} </h5>
+                                    {% endfor %}
+                            		{% endif %}
+									{% endif %}
+								<div class="mb-3 text-center">
+									<a href="{% url 'add_address' %}?next={% url 'checkout' %}" class="btn btn-primary">Add New Address</a>
+								</div>
+							</div>
+						</div>
+							<!-- Cart Total Section -->
+							
+							<div class="row mt-5 pt-3 d-flex">
+								<div class="col-md-6 d-flex">
+									<div class="cart-detail cart-total bg-light p-3 p-md-4">
+										<!-- <form method="post" action="" > -->
+											{% csrf_token %}
+								
+											<div class="form-row p-4 ">
+												
+												<div class="col-8 col-md-6 " >
+											 
+													<!-- <label for="coupon" class="sr-only">Apply Coupon:</label> -->
+													<input type="text" class="form-control" id="coupon" name="coupon_code" placeholder="Enter coupon code">
+												</div>
+												<div class="">
+													<button type="submit" class=" btn-warning  p-2 px-3"> Apply</button>
+												</div>
+												<div class="">
+													<button type="button" class=" btn-danger p-2" id="removeCoupon">Remove</button>
+												</div>
+											</div>
+							
+										<!-- </form> -->
+										<h3 class="billing-heading mb-4">Cart Total</h3>
+										<p class="d-flex">
+												  <span>Subtotal</span>
+												  <span>₹{{total}}</span>
+											  </p>
+											  <p class="d-flex">
+												  <span>Delivery</span>
+												  <span>₹0.00</span>
+											  </p>
+											  <p class="d-flex">
+												  <span>Discount</span>
+												  <span>₹0.00</span>
+											  </p>
+											  <hr>
+											  
+											  <p class="d-flex total-price">
+												  <span>Total</span>
+												  <span>₹{{total}}</span>
+											  </p>
+											  </div>
+								</div>
+								<!-- Payment Method Section -->
+								<div class="col-md-6">
+									<div class="cart-detail bg-light p-3 p-md-4">
+										<h3 class="billing-heading mb-4">Payment Method</h3>
+										<!-- Display payment options -->
+										<div class="form-group">
+											<label for="payment" class="col-md-12">Select Payment Method:</label>
+											<div class="col-md-12">
+												<select name="payment" id="payment" class="form-control">
+													<option value="cod">Cash on Delivery</option>
+													<option value="UPI">UPI(not available )</option>
+			
+												</select>
+											</div>
+										</div>
+										<p><button type="submit" class="btn btn-primary py-3 px-4">Place  order</button></p>
+									</div>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+{% include "footer.html" %}  
+
+  <!-- loader -->
+  <div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px"><circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/><circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00"/></svg></div>
+
+
+
+
+  <script>
+		$(document).ready(function(){
+
+		var quantitiy=0;
+		   $('.quantity-right-plus').click(function(e){
+		        
+		        // Stop acting like a button
+		        e.preventDefault();
+		        // Get the field name
+		        var quantity = parseInt($('#quantity').val());
+		        
+		        // If is not undefined
+		            
+		            $('#quantity').val(quantity + 1);
+
+		          
+		            // Increment
+		        
+		    });
+
+		     $('.quantity-left-minus').click(function(e){
+		        // Stop acting like a button
+		        e.preventDefault();
+		        // Get the field name
+		        var quantity = parseInt($('#quantity').val());
+		        
+		        // If is not undefined
+		      
+		            // Increment
+		            if(quantity>0){
+		            $('#quantity').val(quantity - 1);
+		            }
+		    });
+		    
+		});
+	</script>
+    
+  </body>
+  {% endblock maincontent %}

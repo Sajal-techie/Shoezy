@@ -69,8 +69,8 @@
           {% endif %} 
           <div class="dropdown-menu" aria-labelledby="dropdown04">
             {%  if 'users' in request.session %}            
-            <a class="dropdown-item" href="#">Profile</a>
-            <a class="dropdown-item" href="#">order details</a>
+            <a class="dropdown-item" href="/view_profile/">Profile</a>
+            <a class="dropdown-item" href="/order_history/">order details</a>
             <a class="dropdown-item" href="/contact_us/">Contact us</a>
             <a class="dropdown-item" href="/logout/">Logout</a>
             {% else %}

@@ -27,6 +27,8 @@ urlpatterns = [
     path('',include('productmanagement.urls')),
     path('',include('info.urls')),
     path('',include('cart.urls')),
+    path('',include('user_profile.urls')),
+    path('',include('order_management.urls')),
 
 
 ] 

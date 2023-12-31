@@ -15,16 +15,16 @@
     <div class="table-wrapper">
         <div class="table-title">
             <div class="row">
-                <div class="col-sm-6">
+                <div class="col-sm-12 text-center">
                     <h2>Order <b>Management</b></h2>
                 </div>
-                <div class="col-sm-6">
+                {% comment %} <div class="col-sm-6">
                     <!-- <a href="#addEmployeeModal" class="btn btn-success" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Add New Product</span></a> -->
                     <!-- <a href="#deleteEmployeeModal" class="btn btn-danger" data-toggle="modal"><i class="material-icons">&#xE15C;</i> <span>Delete</span></a>						 -->
-                </div>
+                </div> {% endcomment %}
             </div>
         </div>
-        <div class="row input-group ">
+        <div class="row input-group mb-4 mt-4">
             <input type="search" class="form-control rounded offset-1 col-lg-8 col-sm-4 " placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
             <button type="button" class="btn btn-outline-primary btn-primary col-lg-2 col-sm-3 " data-mdb-ripple-init>search</button>
           </div>
@@ -32,94 +32,42 @@
             <thead>
                 <tr>
                     <th>id</th>
-                    <th>Name</th>
-                    <th>image</th>
+                    <th>Product Name</th>
+                    <th>Image</th>
                     <th>User</th>
-                    <th>Price</th>
-                    <th>Status</th>
+                    <th >Price x Quantity</th>
                     <th>Payment</th>
-                    <th>Actions</th>
+                    <th>Ordered date</th>
+                    <th>Delivery date</th>
+                    <th>Status</th>
                 </tr>
             </thead>
             <tbody>
+                {% for item in order_items  %}
                 <tr>
-                    <td>1</td>
-                    <td>Nike air jordan </td>
-                    <td><img src="{% static 'images/nikeair1l.jpg' %}" alt="nike" style="width: 60px; height: 60px; "></td>
-                    <td>musthu</td>
-                    <td>7000</td>
-                    <td>succes</td>
-                    <td>COD</td>
+                    <td> {{item.id}} </td>
+                    <td style=" word-wrap: break-word; max-width:100px"> {{item.product_id.brand}} <br> {{item.product_id.name}} </td>
+                    <td><img src=" {{ item.product_id.image1.url }} " alt="nike" style="width: 70px; height: 80px; "></td>
+                    <td> {{item.user1}} </td>
+                    <td> {{item.product_id.selling_price}} x {{item.quantity}}  </td>
+                    <td> {{item.order_id.payment_mode}} </td>
                     
                     <td >
-                        <a href="#editEmployeeModal" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
+                            {{item.order_id.order_date}} 
+                        <!-- <a href="#editEmployeeModal" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
                         <a href="#listEmployeeModal" class="delete" data-toggle="modal"><i class="fa-solid fa-eye  fa-lg" style="color: #ffd500;"></i></a>
-                        <a href="#deleteEmployeeModal" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
+                        <a href="#deleteEmployeeModal" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a> -->
                     </td>
+                    <td> {{item.delivery_date}} 
+                        <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href="#editdate{{item.id}}" class="edit " data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a></td>
+                    </td>
+                    <td> {{item.status}} <a href="#editstatus{{item.id}}" class="edit" data-toggle="modal"><i class="material-icons " data-toggle="tooltip" title="Edit">&#xE254;</i></a></td>
                 </tr>
-                <tr>
-                    <td>1</td>
-                    <td>Nike air jordan </td>
-                    <td><img src="{% static 'images/nikeair1l.jpg' %}" alt="nike" style="width: 60px; height: 60px; "></td>
-                    <td>musthu</td>
-                    <td>7000</td>
-                    <td>succes</td>
-                    <td>COD</td>
-                    
-                    <td >
-                        <a href="#editEmployeeModal" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
-                        <a href="#listEmployeeModal" class="delete" data-toggle="modal"><i class="fa-solid fa-eye  fa-lg" style="color: #ffd500;"></i></a>
-                        <a href="#deleteEmployeeModal" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
-                    </td>
-                </tr>
-                <tr>
-                    <td>1</td>
-                    <td>Nike air jordan </td>
-                    <td><img src="{% static 'images/nikeair1l.jpg' %}" alt="nike" style="width: 60px; height: 60px; "></td>
-                    <td>musthu</td>
-                    <td>7000</td>
-                    <td>succes</td>
-                    <td>COD</td>
-                    
-                    <td >
-                        <a href="#editEmployeeModal" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
-                        <a href="#listEmployeeModal" class="delete" data-toggle="modal"><i class="fa-solid fa-eye  fa-lg" style="color: #ffd500;"></i></a>
-                        <a href="#deleteEmployeeModal" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
-                    </td>
-                </tr>
-                <tr>
-                    <td>1</td>
-                    <td>Nike air jordan </td>
-                    <td><img src="{% static 'images/nikeair1l.jpg' %}" alt="nike" style="width: 60px; height: 60px; "></td>
-                    <td>musthu</td>
-                    <td>7000</td>
-                    <td>succes</td>
-                    <td>COD</td>
-                    
-                    <td >
-                        <a href="#editEmployeeModal" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
-                        <a href="#listEmployeeModal" class="delete" data-toggle="modal"><i class="fa-solid fa-eye  fa-lg" style="color: #ffd500;"></i></a>
-                        <a href="#deleteEmployeeModal" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
-                    </td>
-                </tr>			
-                <tr>
-                    <td>1</td>
-                    <td>Nike air jordan </td>
-                    <td><img src="{% static 'images/nikeair1l.jpg' %}" alt="nike" style="width: 60px; height: 60px; "></td>
-                    <td>musthu</td>
-                    <td>7000</td>
-                    <td>succes</td>
-                    <td>COD</td>
-                    
-                    <td >
-                        <a href="#editEmployeeModal" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
-                        <a href="#listEmployeeModal" class="delete" data-toggle="modal"><i class="fa-solid fa-eye  fa-lg" style="color: #ffd500;"></i></a>
-                        <a href="#deleteEmployeeModal" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
-                    </td>
-                </tr>
+                {% endfor %}
+                
             </tbody>
         </table>
-        <div class="clearfix">
+        <!-- <div class="clearfix">
             <div class="hint-text">Showing <b>5</b> out of <b>25</b> entries</div>
             <ul class="pagination">
                 <li class="page-item disabled"><a href="#">Previous</a></li>
@@ -130,89 +78,96 @@
                 <li class="page-item"><a href="#" class="page-link">5</a></li>
                 <li class="page-item"><a href="#" class="page-link">Next</a></li>
             </ul>
-        </div>
+        </div> -->
     </div>
 </div>
-<!-- ADD Modal HTML -->
-<div id="addEmployeeModal" class="modal fade">
+<!-- edit Modal HTML -->
+{% for item in order_items %}
+<div id="editstatus{{item.id}}" class="modal fade">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form>
+            <form method="post" action="/update_status/{{item.id}}">
+                {% csrf_token %}
                 <div class="modal-header">						
-                    <h4 class="modal-title">Add Product</h4>
+                    <h4 class="modal-title">Update Status</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 </div>
                 <div class="modal-body">					
                     <div class="form-group">
-                        <label>Name</label>
-                        <input type="text" class="form-control" required>
+                        <label>Order ID</label>
+                        <input type="text" class="form-control"  value="{{item.id}}"  disabled>
                     </div>
                     <div class="form-group">
-                        <label>Category</label>
-                        <input type="email" class="form-control" required>
+                        <label>Product</label>
+                        <input type="email" class="form-control" value="{{item.product_id}}" disabled>
                     </div>
                     <div class="form-group">
-                        <label>Brand</label>
-                        <input type="text" class="form-control" required>
+                        <label>Customer</label>
+                        <input type="text" class="form-control" value="{{item.user1}}" disabled>
                     </div>
                     <div class="form-group">
-                        <label>Size</label>
-                        <input type="text" class="form-control" required>
+                        <label for="category">Status</label>       
+                        <select class="form-control" id="status" name="status" required>
+                            <option value="ordered" {% if item.status == 'ordered' %} selected {% endif %}> Ordered</option>
+                            <option value="shipped" {% if item.status == 'shipped' %} selected {% endif %} > Shipped</option>
+                            <option value="out_for_delivery" {% if item.status == 'out_for_delivery' %} selected {% endif %}> Out for delivery</option>
+                            <option value="delivered" {% if item.status == 'delivered' %} selected {% endif %}> Delivered</option>
+                            <option value="cancelled" {% if item.status == 'cancelled' %} selected {% endif %}>Cancelled </option>
+                        </select>
+                        
                     </div>
-                    <div class="form-group">
-                        <label>No Offer Price</label>
-                        <input type="number" class="form-control" required>
-                    </div>
-                    <div class="form-group">
-                        <label>offer Price</label>
-                        <input type="number" class="form-control" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Description</label>
-                        <textarea class="form-control" required></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label>Quantity</label>
-                        <input type="number" class="form-control" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Image 1</label>
-                        <input type="file" class="form-control image-input" accept="image/*" required>
-                        <div class="image-preview-container">
-                            <img id="image-preview-1" src="#" alt="Image Preview" class="image-preview">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label>Image 2</label>
-                        <input type="file" class="form-control image-input" accept="image/*" required>
-                        <div class="image-preview-container">
-                            <img id="image-preview-2" src="#" alt="Image Preview" class="image-preview">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label>Image 3</label>
-                        <input type="file" class="form-control image-input" accept="image/*" required>
-                        <div class="image-preview-container">
-                            <img id="image-preview-3" src="#" alt="Image Preview" class="image-preview">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label>Image 4</label>
-                        <input type="file" class="form-control image-input" accept="image/*" required>
-                        <div class="image-preview-container">
-                            <img id="image-preview-4" src="#" alt="Image Preview" class="image-preview">
-                        </div>
-                    </div>					
+                    
                 </div>
                 <div class="modal-footer">
                     <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
-                    <input type="submit" class="btn btn-success" value="Add">
+                    <input type="submit" class="btn btn-success" value="Update">
                 </div>
             </form>
         </div>
     </div>
 </div>
+{% endfor %}
 
+<!-- update delivery date  -->
+{% for item in order_items %}
+<div id="editdate{{item.id}}" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form method="post" action="/update_date/{{item.id}}">
+                {% csrf_token %}
+                <div class="modal-header">						
+                    <h4 class="modal-title">Update Status</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                </div>
+                <div class="modal-body">					
+                    <div class="form-group">
+                        <label>Order ID</label>
+                        <input type="text" class="form-control"  value="{{item.id}}"  disabled>
+                    </div>
+                    <div class="form-group">
+                        <label>Product</label>
+                        <input type="text" class="form-control" value="{{item.product_id}}" disabled>
+                    </div>
+                    <div class="form-group">
+                        <label>Ordered Date</label>
+                        <input type="text" class="form-control" value="{{item.order_id.order_date}}" disabled>
+                    </div>
+                    <div class="form-group">
+                        <label for="category">Delivery Date : {{ item.delivery_date }}</label>       
+                        <input type="date" class="form-control" value="{{ item.delivery_date|date:'Y-m-d' }}" name="date" required>
+                        
+                    </div>
+                    
+                </div>
+                <div class="modal-footer">
+                    <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+                    <input type="submit" class="btn btn-success" value="Update">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endfor %}
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 <script src="https://kit.fontawesome.com/412a20d28b.js" crossorigin="anonymous"></script>
 {% endblock content1 %}

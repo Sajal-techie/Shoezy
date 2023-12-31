@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% block navbar %}{% include "navbar.html" %}{% endblock navbar %}
+{% block maincontent %}
+
+  <div class="container mt-4">
+    <h2 class="text-center">Edit Profile</h2>
+    <form method="POST" action="/edit_profile/{{username.id}}/">
+        {% csrf_token %}
+
+      <div class="row gx-3 mb-3">
+        <div class="col-md-6">
+          <label class="form-label" for="inputFirstName">First name</label>
+          <input class="form-control" id="inputFirstName" type="text" placeholder="Enter your first name" value="{{username.first_name}}" name="fname">
+        </div>
+        <div class="col-md-6">
+          <label class="form-label" for="inputLastName">Last name</label>
+          <input class="form-control" id="inputLastName" type="text" placeholder="Enter your last name" value="{{username.last_name}}" name="lname">
+        </div>
+      </div>
+      <div class="mb-3">
+        <label class="form-label" for="inputUsername">Email</label>
+        <input class="form-control" id="inputUsername" type="text" placeholder="Enter your email" value="{{username.email}}" disabled>
+      </div>
+      <!-- Form Group (organization name and location) -->
+      <!-- <div class="row gx-3 mb-3">
+        <div class="col-md-6">
+          <label class="form-label" for="inputOrgName">Organization name</label>
+          <input class="form-control" id="inputOrgName" type="text" placeholder="Enter your organization name" value="Start Bootstrap">
+        </div>
+        <div class="col-md-6">
+          <label class="form-label" for="inputLocation">Location</label>
+          <input class="form-control" id="inputLocation" type="text" placeholder="Enter your location" value="San Francisco, CA">
+        </div>
+      </div> -->
+
+      <!-- Form Group (email address) -->
+      <div class="mb-3">
+        <label class="form-label" for="inputPhone">Phone number</label>
+        <input class="form-control" id="inputPhone" type="tel" placeholder="Enter your phone number" value="{{username.number}}" name="number">
+      </div>
+
+      <!-- Form Group (phone number and birthday) -->
+      <div class="row gx-3 mb-3">
+        <div class="col-md-6">
+          <label class="form-label" for="inputPhone">Gender</label>
+          <select class="form-control" id="category" name="gender" >
+            <option value="men">Men</option>
+            <option value="women" >Women</option>
+            <option value="others">Others</option>
+        </select>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label" for="inputBirthday">Date of Birth</label>
+          <input class="form-control" id="inputBirthday" type="date" name="dob" placeholder="Enter your birthday" value="{{username.dob|date:'Y-m-d'}}">
+        </div>
+      </div>
+
+      <!-- Save changes button -->
+      <div class="text-center"><button class="btn btn-primary py-2 px-3" type="submit">Save Changes</button></div>
+      
+    </form>
+  </div>
+{% endblock %}

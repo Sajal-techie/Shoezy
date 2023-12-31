@@ -1,0 +1,198 @@
+{% extends "base.html" %}
+{% load static %}
+{% block navbar %}{% include "navbar.html" %}{% endblock navbar %}
+{% block maincontent %}
+<style>
+  .containe {
+      margin-top: 50px;
+      margin-bottom: 50px;
+      display: flex;
+justify-content: center;
+
+  }
+
+  .card {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      word-wrap: break-word;
+      background-color: #fff;
+      background-clip: border-box;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      border-radius: 0.10rem;
+  }
+
+  .card-header:first-child {
+      border-radius: calc(0.37rem - 1px) calc(0.37rem - 1px) 0 0;
+  }
+
+  .card-header {
+      padding: 0.75rem 1.25rem;
+      margin-bottom: 0;
+      background-color: #fff;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  }
+
+  .track {
+      position: relative;
+      background-color: #ddd;
+      height: 7px;
+      display: flex;
+      margin-bottom: 60px;
+      margin-top: 50px;
+  }
+
+  .track .step {
+      flex-grow: 1;
+      width: 25%;
+      margin-top: -18px;
+      text-align: center;
+      position: relative;
+  }
+
+  .track .step.active:before {
+      background: rgb(187, 171, 108);
+  }
+
+  .track .step::before {
+      height: 7px;
+      position: absolute;
+      content: "";
+      width: 100%;
+      left: 0;
+      top: 18px;
+  }
+
+  .track .step.active .icon {
+      background: rgb(187, 171, 108);
+      color: #fff;
+  }
+
+  .track .icon {
+      display: inline-block;
+      width: 40px;
+      height: 40px;
+      line-height: 40px;
+      position: relative;
+      border-radius: 100%;
+      background: #ddd;
+  }
+
+  .track .step.active .text {
+      font-weight: 400;
+      color: #000;
+  }
+
+  .track .text {
+      display: block;
+      margin-top: 7px;
+  }
+
+  .itemside {
+      position: relative;
+      display: flex;
+      width: 100%;
+  }
+
+  .itemside .aside {
+      position: relative;
+      flex-shrink: 0;
+  }
+
+  .img-sm {
+      width: 100px;
+      height: 100px;
+      padding: 3px;
+  }
+
+  ul.row, ul.row-sm {
+      list-style: none;
+      padding: 0;
+  }
+
+  .itemside .info {
+      padding-left: 15px;
+      padding-right: 7px;
+  }
+
+  .itemside .title {
+      display: block;
+      margin-bottom: 5px;
+      color: #212529;
+  }
+
+  p {
+      margin-top: 0;
+      margin-bottom: 1rem;
+  }
+
+  .btn-warning {
+      color: #000000;
+      background-color: #dbcc8f;
+      border-color: #000000;
+      border-radius: 1px;
+  }
+
+  .btn-warning:hover {
+      color: #454545;
+      background-color: #ffffff;
+      border-color: #dbcc8f;
+      border-radius: 1px;
+  }
+</style>
+<body>
+  <div class="container containe ">
+    <article class="card ">
+      <header class="card-header text-center"> <h4>Track Order </h4></header>
+      <div class="card-body">
+        <h6>Order ID: {{ order.id }}</h6>
+        <hr>
+        <article class="">
+          <div class="card-body row">
+            <div class="col">
+              <strong>Ordered date:</strong> <br>{{ order.order_id.order_date }}
+            </div>
+            <div class="col">
+              <strong>Expected delivery date:</strong> <br>{{ order.delivery_date }}
+            </div>
+            <div class="col">
+              <strong>Current Status:</strong> <br>{{ order.status }}
+            </div>
+  
+          </div>
+          <hr>
+        </article>
+        <div class="track ">
+          {% for step in tracking_steps %}
+            <div class="step{% if step in previous_steps %} active {% endif %}">
+              <span class="icon"> <i class="fa fa-check"></i> </span>
+              <span class="text">{% if step.description == 'out_for_delivery' %}outfor Delivery {% else %}{{ step.description }} {% endif %} </span>
+            </div>
+          {% endfor %}
+        </div>
+        <hr>
+        <ul class="row">
+            <li class="col-md-12">
+              <figure class="itemside mb-6">
+                <div class="aside"><img src="{{ order.product_id.image1.url }}" class="img-sm border"></div>
+                <figcaption class="info align-self-center">
+                  <p class="title">{{ order.product_id.brand }} <br> {{ order.product_id.name }}</p>
+                  <span class="text-muted">₹{{ order.product_id.selling_price }} </span>
+                </figcaption>
+              </figure>
+                {% if order.status == 'ordered' or order.status == 'shipped' or order.status == 'out_for_delivery' %}
+                <div class="text-center"><a href="/cancel_order/{{order.id}}" class="btn btn-danger" data-abc="true"> Cancel order</a></div>
+        
+                  {% endif %}
+            </li>
+        </ul>
+        <hr>
+        <a href="/order_history/" class="btn btn-warning" data-abc="true"> <i class="fa fa-chevron-left"></i> Back to orders</a>
+        
+      </div>
+    </article>
+  </div>
+</body>
+
+{% endblock maincontent %}

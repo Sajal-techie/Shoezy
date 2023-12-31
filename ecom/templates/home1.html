@@ -95,7 +95,6 @@
 				<div class="row justify-content-center mb-3 pb-3">
           <div class="col-md-12 heading-section text-center ftco-animate">
             <h2 class="mb-4">New Arrivals</h2>
-			{{ request.user }}
             <p>Fresh Styles, Fresh Vibes! Explore Our Latest Arrivals – Elevate Your Wardrobe with What's New.</p>
           </div>
         </div>   		
@@ -103,6 +102,7 @@
     	<div class="container">
     		<div class="row">
 				{% for prod in product %}
+				
     			<div class="col-sm-12 col-md-6 col-lg-3 ftco-animate d-flex">
     				<div class="product d-flex flex-column hgt align-items-center justify-content-center align-content-center ">
 						<div class="">
@@ -110,7 +110,7 @@
 						
 							<!-- {% if prod.original_price and prod.selling_price and prod.original_price > 0 %} -->
 							<!-- {% with discount1=prod.original_price  discount2=prod.selling_price %} -->
-							<span class="status">50%%</span>
+							{% comment %} <span class="status">50%</span> {% endcomment %}
 							<!-- {% endwith %} -->
 							<!-- {% endif %} --></div>
 						<!-- <div class="overlay"></div> -->
@@ -147,7 +147,7 @@
 								<span class="subheading">Men's Shoes</span>
     						<h2>Men's Collection</h2>
     						<p>Elevate Your Look, Empower Your Presence. Unleash the Latest Trends in Men's Fashion – Your Signature Style, Defined.</p>
-    						<p><a href="#" class="btn btn-black px-3 py-2">Shop now</a></p>
+    						<p><a href="/shop/" class="btn btn-black px-3 py-2">Shop now</a></p>
     					</div>
     				</div>
 					</div>
@@ -160,7 +160,7 @@
 	    								<span class="subheading">Women's Shoes</span>
 			    						<h2>Women's Collection</h2>
 			    						<p>Fierce, Fabulous, Fearless. Unleash Your Style with Our Latest Women's Collection – Embrace the Extraordinary.</p>
-			    						<p><a href="#" class="btn btn-black px-3 py-2">Shop now</a></p>
+			    						<p><a href="/shop/" class="btn btn-black px-3 py-2">Shop now</a></p>
 			    					</div>
 	    						</div>
 	    					</div>
@@ -173,7 +173,7 @@
 		    								<span class="subheading">Popular</span>
 				    						<h2>Top rated</h2>
 				    						<p>"Explore What's in Vogue! Our Popular Picks Showcase the Latest Trends and Timeless Classics. Elevate Your Style with the Favorites of Many.</p>
-				    						<p><a href="#" class="btn btn-black px-3 py-2">Shop now</a></p>
+				    						<p><a href="/shop/" class="btn btn-black px-3 py-2">Shop now</a></p>
 				    					</div>
 		    						</div>
 	    						</div>
@@ -183,7 +183,7 @@
 		    								<span class="subheading">Shoes</span>
 				    						<h2>Best Brands</h2>
 				    						<p >Iconic Choices, Unmatched Quality. Dive into the World of Top Brands – Elevate Your Wardrobe with the Best in Fashion</p>
-				    						<p><a href="#" class="btn btn-black px-3 py-2">Shop now</a></p>
+				    						<p><a href="/shop/" class="btn btn-black px-3 py-2">Shop now</a></p>
 				    					</div>
 		    						</div>
 	    						</div>
