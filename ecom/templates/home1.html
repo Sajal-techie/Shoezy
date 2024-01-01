@@ -9,7 +9,7 @@
     <!-- END nav -->
 {% block maincontent %} 	
 
-
+<link rel="stylesheet" href={% static 'css/height.css' %}>
 
 <!-- banner start -->
 	<div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel" style="height: 80vh;">
@@ -102,18 +102,14 @@
     	<div class="container">
     		<div class="row">
 				{% for prod in product %}
-				
-    			<div class="col-sm-12 col-md-6 col-lg-3 ftco-animate d-flex">
-    				<div class="product d-flex flex-column hgt align-items-center justify-content-center align-content-center ">
+    			<div class="col-sm-12 col-md-6 col-lg-3 ftco-animate d-flex " id="divhgt">
+    				<div class="product d-flex flex-column hgt align-items-center justify-content-center align-content-center " id="divhg">
 						<div class="">
     					<a href="/singleproduct/{{prod.id}}" class="img-prod"><img class="img-fluid" src="{{ prod.image1.url }}" alt=" shoes pic">
+							<span class="status">{{prod.discount_percentage}}% Off</span>
+						</div>
 						
-							<!-- {% if prod.original_price and prod.selling_price and prod.original_price > 0 %} -->
-							<!-- {% with discount1=prod.original_price  discount2=prod.selling_price %} -->
-							{% comment %} <span class="status">50%</span> {% endcomment %}
-							<!-- {% endwith %} -->
-							<!-- {% endif %} --></div>
-						<!-- <div class="overlay"></div> -->
+						<div class="overlay"></div>
     					</a>
     					<div class="text py-3 pb-4 px-3  align-baseline">
 							
@@ -123,8 +119,17 @@
 	    						<p class="price"><span class="mr-2 price-dc">₹{{prod.original_price}}</span><span class="price-sale">₹{{prod.selling_price}}</span></p>
 	    					</div>
 	    					<p class="bottom-area d-flex px-3">
+								{% if  prod.id in cartlist %}
+								<a href="/cart/" class="add-to-cart text-center py-2 mr-1"><span>View cart <i class="ion-ios-cart ml-1"></i></span></a>
+								{% else %}
     							<a href="{% url 'addto_cart' prod.id  %}?next={{ request.path }}" class="add-to-cart text-center py-2 mr-1"><span>Add to cart <i class="ion-ios-cart ml-1"></i></span></a>
-    							<a href="#" class="buy-now text-center py-2">Add to wish<span><i class="ion-ios-heart ml-1"></i></span></a>
+								{% endif %}
+								{% if prod.id in wishlist1 %}
+								<a href="/wishlist/" class="buy-now text-center py-2">View wishlist<span><i class="ion-ios-heart ml-1"></i></span></a>
+								{% else %}
+								<a href="{% url 'add_to_wish' prod.id %}?next={{ request.path }}" class="buy-now text-center py-2">Add to wish<span><i class="ion-ios-heart ml-1"></i></span></a>
+								{% endif %}
+    							
     						</p>
     					</div>
     				</div>

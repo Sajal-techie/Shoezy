@@ -52,7 +52,7 @@
                             <!-- Color : Green  <br> -->
                         </p>
 						<div class="row mt-4">
-							<div class="col-md-6">
+							<!-- <div class="col-md-6">
 								<div class="form-group d-flex">
                                     <div class="select-wrap">
                                     <div class="icon"><span class="ion-ios-arrow-down"></span></div>
@@ -64,9 +64,9 @@
                                     </select>
                                     </div>
                                 </div>
-							</div>
-						<div class="w-100"></div>
-					<div class="input-group col-md-6 d-flex mb-3">
+							</div> -->
+						<div class="w-100 p-4"></div>
+					<!-- <div class="input-group col-md-6 d-flex mb-3">
                                 <span class="input-group-btn mr-2">
                                     <button type="button" class="quantity-left-minus btn"  data-type="minus" data-field="">
                                         <i class="ion-ios-remove"></i>
@@ -78,10 +78,10 @@
                                         <i class="ion-ios-add"></i>
                                 	</button>
                                 </span>
-	          	    </div>
+	          	    </div> -->
 	          	<div class="w-100"></div>
 	          	<div class="col-md-12">
-	          		<p style="color: #2d2d2d;"> only {{prod.quantity}} left</p>
+	          		<p style="color: #2d2d2d;"> {% if prod.quantity > 0 %} Only {{prod.quantity}} left {% else %} Out of stock {% endif %} </p>
 	          	</div>
           	</div>
           	<p>
@@ -90,7 +90,15 @@
 				{% else %}
 				<a href="{% url 'addto_cart' prod.id  %}?next={{ request.path }}" class="btn btn-black py-3 px-5 mr-2">Add to Cart</a>
 				{% endif %}
-				<a href="cart.html" class="btn btn-primary py-3 px-5 " style="color: black;">Buy now</a>
+				{% if prod.quantity > 0 %}
+				<a href="/buy_now/{{prod.id}}" class="btn btn-primary py-3 px-5 " style="color: black;">Buy now</a>
+				{% endif %}
+				&nbsp; &nbsp;
+				{% if not is_in_wish %}
+				<a href="{% url 'add_to_wish' prod.id %}?next={{request.path}} " title="add to wishlist"> <i class="fa-regular fa-heart fa-beat fa-2xl" style="color: #ff3246;"></i></a>
+				{% else %}
+				<a href="{% url 'remove_wish' prod.id %}?next={{request.path}}" title="remove from wishlist"><i class="fa-solid fa-heart fa-2xl" style="color: #ff3246;"></i></a>
+				{% endif %}
 			</p>
     			</div>
     		</div>

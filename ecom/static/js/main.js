@@ -224,7 +224,7 @@
 				  el.removeClass('item-animate');
 				}, k * 1, 'easeInOutExpo');
 			  });
-			}, 100);
+			}, 10);
 		  }
 		}, { offset: '95%' });
 	  };

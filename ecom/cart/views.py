@@ -2,7 +2,7 @@ from django.shortcuts import render,redirect
 from django.contrib import messages
 from home.models import Customuser
 from productmanagement.models import Product,ProductImages
-from . models import Cart
+from . models import *
 from user_profile.models import Address
 from order_management.models import *
 
@@ -13,16 +13,23 @@ def cart(request):
     
     if 'users' in request.session:
         usm = request.session.get('users')
-        username = Customuser.objects.get(email = usm)        
+        username = Customuser.objects.get(email = usm)
+        if username.is_blocked:
+            if 'users' in request.session:
+                del request.session['users']
+            messages.error(request,'you are blocked ')
+            return redirect('login')       
         cart_items = Cart.objects.filter(user_id = username).select_related('product_id__brand').order_by('-id')
         total = sum(i.sub_total for i in cart_items)
-        
+        cartcount = Cart.objects.filter(user_id = username).count()
         context = {
             'username': username,
             'cart_item': cart_items,
-            'total':total
+            'total':total,
+            'cartcount':cartcount
         }
-        
+        wishcount = Wishlist.objects.filter(user_id = username).count()
+        context['wishcount']=wishcount
         if not username.is_blocked:      
             return render(request, 'cart/cart.html', context)
         else:
@@ -37,8 +44,6 @@ def cart(request):
 
 
 
-
-
 def addto_cart(request,p_id):
     if 'users' in request.session:
         context={}
@@ -47,7 +52,7 @@ def addto_cart(request,p_id):
         product = Product.objects.get(id = p_id)
         # cart_item = Cart.objects.get(user_id = user2,product_id= product)
         # if cart_item is None:
-        if product.quantity > 0:
+        if product.quantity > 0 and not Cart.objects.filter(user_id = user2, product_id = product):
                 Cart.objects.create( user_id = user2 ,product_id = product,quantity = 1)
                 # is_in_cart = check_cart(user2,product.id)
                 # context={
@@ -65,6 +70,9 @@ def check_cart(user,product_id):
     is_in_cart = Cart.objects.filter(user_id = user, product_id=product_id).exists()
     return is_in_cart    
   
+def check_wishlist(user,product_id):
+     is_in_wish = Wishlist.objects.filter(user_id = user,product_id=product_id).exists()
+     return is_in_wish
         
 def add_quantity(request,id):
     item = Cart.objects.get(id=id)
@@ -98,12 +106,16 @@ def checkout(request):
             address = Address.objects.filter(user = username.id)
             cart_items = Cart.objects.filter(user_id = username.id).select_related('product_id__brand')
             total = sum(i.sub_total for i in cart_items)
+            cartcount = Cart.objects.filter(user_id = username).count()
             context = {
                 'address':address,
                 'cart_items':cart_items,
                 'username' :username,
-                'total':total
+                'total':total,
+                'cartcount':cartcount
             }
+            wishcount = Wishlist.objects.filter(user_id = username).count()
+            context['wishcount']=wishcount
             if request.method == 'POST':
                 adress1 = request.POST.get('address',None)
                 if not adress1:
@@ -128,6 +140,49 @@ def checkout(request):
               
             return render(request, 'cart/checkout.html',context)
     
+    return redirect('login')
+
+
+def buy_now(request,id):
+    if 'users' in request.session:
+            usm = request.session.get('users')
+            username = Customuser.objects.get(email = usm)
+            address = Address.objects.filter(user = username.id)
+            buy_item = Product.objects.get(id = id)
+            total = buy_item.selling_price
+            cartcount = Cart.objects.filter(user_id = username).count()
+            context = {
+                'address':address,
+                'buy_item':buy_item,
+                'username' :username,
+                'total':total,
+                'cartcount':cartcount
+            }
+            wishcount = Wishlist.objects.filter(user_id = username).count()
+            context['wishcount']=wishcount
+            if request.method == 'POST':
+                adress1 = request.POST.get('address',None)
+                if not adress1:
+                    messages.error(request,'add address for delivery')
+                    return redirect('checkout')
+                payment = request.POST['payment']
+                adress =  Address.objects.get(id = adress1)
+                current_order = Order.objects.create(user = username, address = adress,total = total,payment_mode = payment)
+                obj = OrderProducts(order_id = current_order,user1 = username,product_id = buy_item ,address1 = adress,quantity = 1,amount = total,status = 'ordered')
+                if obj.product_id.quantity >= 1: 
+                    obj.product_id.quantity = obj.product_id.quantity - obj.quantity
+                    obj.product_id.save()
+                else:
+                    messages.error(request, 'out of stock')
+                    return redirect('checkout')
+                obj.save()
+
+            
+                return redirect('confirm',current_order.id)
+            
+              
+            return render(request, 'cart/checkout.html',context)
+    return redirect('login')
 
 
 def confirm(request,id):
@@ -136,12 +191,64 @@ def confirm(request,id):
         username = Customuser.objects.get(email = usm)
         orders = Order.objects.get(id = id)
         order_items = OrderProducts.objects.filter(order_id = id)
+        cartcount = Cart.objects.filter(user_id = username).count()
         context = {
             'username':username,
             'orders' : orders,
-            'order_items': order_items
+            'order_items': order_items,
+            'cartcount':cartcount
         }
-        
+        wishcount = Wishlist.objects.filter(user_id = username).count()
+        context['wishcount']=wishcount
         return render(request, 'cart/confirm.html',context)
+    
+    return redirect('login')
+
+
+def wishlist(request):
+    if 'users' in request.session:
+        usm = request.session.get('users')
+        username = Customuser.objects.get(email = usm)
+        if username.is_blocked:
+            if 'users' in request.session:
+                del request.session['users']
+            messages.error(request,'you are blocked ')
+            return redirect('login') 
+        cartcount = Cart.objects.filter(user_id = username).count()
+        wishlist_items = Wishlist.objects.filter(user_id = username).select_related('product_id__brand').order_by('-id')
+        context = {
+            'username': username,
+            'cartcount':cartcount,
+            'wishlist_items':wishlist_items,
+            
+        }
+        wishcount = Wishlist.objects.filter(user_id = username).count()
+        context['wishcount']=wishcount
+        return render(request, 'cart/wishlist.html',context)
+    return redirect('login')
+
+def add_to_wish(request,id):
+    if 'users' in request.session:
+        usm = request.session.get('users')
+        username = Customuser.objects.get(email = usm)
+        products = Product.objects.get(id = id)
+        if not Wishlist.objects.filter(product_id = products ,user_id = username):
+            wish = Wishlist.objects.create(product_id = products,user_id = username)
+            wish.stock = 'In Stock' if wish.product_id.quantity > 0 else 'Out of Stock'
+            wish.save()
+        nxt_url = request.GET.get('next','/')
+        return redirect(nxt_url)
+    messages.error(request,'you need to login')
+    return redirect('login')
+
+def remove_wish(request,id):
+    if 'users' in request.session:
+        usm = request.session.get('users')
+        username = Customuser.objects.get(email = usm)
+        prod = Product.objects.get(id = id)
+        wish = Wishlist.objects.get(product_id = prod, user_id = username)
+        wish.delete()
+        nxt_url = request.GET.get('next','wishlist')
+        return redirect(nxt_url)
     
     return redirect('login')

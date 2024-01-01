@@ -27,11 +27,6 @@ class OrderProducts(models.Model):
     delivery_date = models.DateField(null=True,blank = True)
     
     
-    # def save(self, *args, **kwargs):
-        
-    #         self.delivery_date = self.order_id.order_date   +  timedelta(days=10)
-            
-    #         super().save(*args, **kwargs)
 @receiver(pre_save, sender=OrderProducts)
 def update_delivery_date(sender, instance, **kwargs):
     if not instance.delivery_date:

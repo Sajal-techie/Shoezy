@@ -3,35 +3,50 @@ from .models import Address
 from .forms import Adressform
 from home.models import Customuser
 from order_management.models import *
-from django.views.decorators.cache import never_cache
+from django.views.decorators.cache import never_cache,cache_control
 from django.contrib import messages
+from cart.models import *
 # Create your views here.
 
 def view_profile(request):
     if 'users' in request.session:
         usm = request.session.get('users')
         username = Customuser.objects.get(email = usm)
+        if username.is_blocked:
+            if 'users' in request.session:
+                del request.session['users']
+            messages.error(request,'you are blocked ')
+            return redirect('login') 
         addressess = Address.objects.filter(user = username)
+        cartcount = Cart.objects.filter(user_id = username).count()
         context = {
             'username':username,
             'address':addressess,
-            
-            
+            'cartcount':cartcount,
         }
+        wishcount = Wishlist.objects.filter(user_id = username).count()
+        context['wishcount']=wishcount
         return render(request, 'profile/user_details.html',context)
 
 @never_cache
 def edit_profile(request,id):
     username = Customuser.objects.get(id = id)
+    cartcount = Cart.objects.filter(user_id = username).count()
     context = {
-        'username':username
+        'username':username,
+        'cartcount':cartcount
     }
+    wishcount = Wishlist.objects.filter(user_id = username).count()
+    context['wishcount']=wishcount
     if request.method == 'POST':
         fname = request.POST['fname']
         lname = request.POST['lname']
         number = request.POST['number']
         gender = request.POST['gender']
         dob = request.POST['dob']
+        if len(number) != 10:
+            messages.error(request,'Enter valid number')
+            return redirect('edit_profile',id)
         username.first_name = fname
         username.last_name = lname
         username.number = number
@@ -41,15 +56,19 @@ def edit_profile(request,id):
         return redirect('view_profile')
     return render(request, 'profile/edit_profile.html',context)
 
-
 @never_cache
+@cache_control(no_store=True, no_cache = True, must_revalidate=True,max_age=0)
 def reset_password(request):
     if 'users' in request.session:
         usm = request.session.get('users')
         username = Customuser.objects.get(email = usm)
+        cartcount = Cart.objects.filter(user_id = username).count()
         context = {
-            'username' : username
+            'username' : username,
+            'cartcount':cartcount
         }
+        wishcount = Wishlist.objects.filter(user_id = username).count()
+        context['wishcount']=wishcount
         if request.method == 'POST':
             old = request.POST['old_pass']
             new = request.POST['new_pass']
@@ -72,12 +91,12 @@ def reset_password(request):
         return render (request, 'profile/reset_password.html',context)
 
 
-def view_address(request):
-    if 'users' in request.session:
-        usm = request.session.get('users')
-        username = Customuser.objects.get(email = usm)
-        address = Address.objects.filter(user = username)
-        return render(request,'profile/address.html',{'address':address,'username':username})
+# def view_address(request):
+#     if 'users' in request.session:
+#         usm = request.session.get('users')
+#         username = Customuser.objects.get(email = usm)
+#         address = Address.objects.filter(user = username)
+#         return render(request,'profile/address.html',{'address':address,'username':username})
 
 
 
@@ -90,6 +109,9 @@ def add_address(request):
             print(form.errors)
             if form.is_valid():
                 address = form.save(commit = False)
+                if len(address.number) != 10:
+                    messages.error(request, 'Enter valid number')
+                    return redirect('add_address')
                 address.user = username
                 address.save()
                 next_url = request.GET.get('next', None)
@@ -117,15 +139,22 @@ def order_history(request):
     if 'users' in request.session:
         usm = request.session.get('users')
         username = Customuser.objects.get(email = usm)
+        if username.is_blocked:
+            if 'users' in request.session:
+                del request.session['users']
+            messages.error(request,'you are blocked ')
+            return redirect('login') 
         # orders= Order.objects.filter(user = username)
         order_items = OrderProducts.objects.filter(user1 = username).order_by('-id')
-        
+        cartcount = Cart.objects.filter(user_id = username).count()
         context = {
             # 'orders':orders,
             'order_items': order_items,
-            'username':username
+            'username':username,
+            'cartcount':cartcount
         }
-
+        wishcount = Wishlist.objects.filter(user_id = username).count()
+        context['wishcount']=wishcount
         
         return render(request, 'profile/order_history.html',context)
 
@@ -135,6 +164,7 @@ def track_order(request,id):
         usm = request.session.get('users')
         username = Customuser.objects.get(email = usm)
         order_items = OrderProducts.objects.get(id = id)
+        cartcount = Cart.objects.filter(user_id = username).count()
         tracking_steps = [
             {'description': 'ordered'},
             {'description': 'shipped'},
@@ -149,8 +179,11 @@ def track_order(request,id):
             'order': order_items,
             'tracking_steps': tracking_steps,
             'previous_steps': previous_steps,
-            'username':username
+            'username':username,
+            'cartcount':cartcount,
         }
+        wishcount = Wishlist.objects.filter(user_id = username).count()
+        context['wishcount']=wishcount
         return render(request, 'profile/track_order.html',context)
     
     return redirect('login')

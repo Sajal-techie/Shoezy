@@ -12,6 +12,11 @@
     <h2 class="mb-4">Add Address</h2>
     <form method="post" action="{% url 'add_address' %}?next={{ request.GET.next }}">
       {% csrf_token %}
+      {% if messages %}
+        {% for message in messages %}
+            <h5 class=" text-danger text-center"> {{ message }} </h5>
+        {% endfor %}
+        {% endif %}
       <div class="form-group row">
         <label for="name" class="col-sm-2 col-form-label offset-3 ">Name</label>
         <div class="col-sm-2">
@@ -73,7 +78,7 @@
         </div>
       </div>
         <div class="pb-4">
-         <button type="submit" class="btn btn-primary">Save Address</button>
+         <button type="submit" class="btn btn-primary p-3 px-4" >Save Address</button>
         </div>
 
     </form>

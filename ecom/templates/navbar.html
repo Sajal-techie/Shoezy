@@ -58,7 +58,7 @@
 
       <div class="collapse navbar-collapse" id="ftco-nav">
         <ul class="navbar-nav ml-auto">
-          <li class="nav-item active"><a href="/" class="nav-link">Home</a></li>
+          <li class="nav-item "><a href="/" class="nav-link">Home</a></li>
           <li class="nav-item"><a href="/shop/" class="nav-link">Shop</a></li>
           <li class="nav-item"><a href="/about_us/" class="nav-link">About</a></li>
         <li class="nav-item dropdown">
@@ -94,10 +94,10 @@
             </div>
         </div></li>
           {%  if 'users' in request.session %}
-          <li class="nav-item  cta cta-colored"><a href="#" class="nav-link"><img class="heart1" src={% static 'images/heart.svg' %} alt="wishlist">[0]</a></li> 
+          <li class="nav-item  cta cta-colored"><a href="/wishlist/" class="nav-link"><img class="heart1" src={% static 'images/heart.svg' %} alt="wishlist">[{{wishcount}}]</a></li> 
+          
+          <li class="nav-item cta cta-colored"><a href="/cart/" class="nav-link"><span class="icon-shopping_cart"></span>[{{cartcount}}]</a></li>
           {% endif %} 
-          <li class="nav-item cta cta-colored"><a href="/cart/" class="nav-link"><span class="icon-shopping_cart"></span>[0]</a></li>
-
         </ul>
       </div>
     </div>

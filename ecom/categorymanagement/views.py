@@ -2,6 +2,8 @@ from django.shortcuts import render,redirect
 from . models import Brand
 # Create your views here.
 def viewbrand(request):
+    if 'users' in request.session:
+        return redirect('page_not_found')
     if 'admin' in request.session:
         brands = Brand.objects.all().order_by('id')
         context = {

@@ -4,6 +4,8 @@ from datetime import datetime
 # Create your views here.
 
 def admorders(request):
+    if 'users' in request.session:
+        return redirect('page_not_found')
     if 'admin' in request.session:
         orders = OrderProducts.objects.all().order_by('-id')
         context = {

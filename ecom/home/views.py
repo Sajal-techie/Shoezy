@@ -6,7 +6,7 @@ from . signals import send_otp
 from django.views.decorators.cache import never_cache
 from productmanagement.models import Product,ProductImages
 from categorymanagement.models import Brand
-
+from cart.models import *
 
 
 # Create your views here.
@@ -14,8 +14,7 @@ from categorymanagement.models import Brand
 def home(request):
     products = Product.objects.filter(is_listed = True, brand_id__is_listed = True).order_by('-id')[:8]
     brands = Brand.objects.filter(is_listed = True)
-    # multiple = ProductImages.objects.all()
-    
+
     context = {
         'product' : products,
         'brand' : brands,
@@ -28,7 +27,26 @@ def home(request):
 
         
         if not username.is_blocked:  
-            return render (request, 'home1.html',{'username': username.first_name,'product' : products, 'brand' : brands,})
+            cartcount = Cart.objects.filter(user_id = username).count()
+            wishcount = Wishlist.objects.filter(user_id = username).count()
+            cartlist = []
+            cart_items = Cart.objects.filter(user_id = username)
+            for i in cart_items:
+                    cartlist.append(i.product_id.id)
+                    
+            wishlist1 = []
+            wishitems = Wishlist.objects.filter(user_id = username)
+            for j in wishitems:
+                wishlist1.append(j.product_id.id)
+                
+            return render (request, 'home1.html',{'username': username.first_name,
+                                                  'product' : products, 
+                                                  'brand' : brands,
+                                                  'cartcount':cartcount,
+                                                  'wishcount':wishcount,
+                                                  'cartlist':cartlist ,
+                                                  'wishlist1':wishlist1
+                                                  })
         else:
             if 'users' in request.session:
                 del request.session['users']
@@ -190,3 +208,7 @@ def logout(request):
     if 'users' in request.session:
         del request.session['users']
     return redirect('home')
+
+
+def page_not_found(request):
+    return render(request, 'page_not_found.html',status=404) 

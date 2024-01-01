@@ -1,0 +1,24 @@
+
+
+      @media (min-width: 768px){
+        #divhgt{
+            height: 500px !important  ;
+          }
+          }
+
+@media (min-width: 991px){
+    #divhgt{
+        height: 370px !important  ;
+      }
+      }   
+      @media (min-width: 1200px){
+        #divhgt{
+            height: 400px !important  ;
+          }
+          }
+                 
+ #divhgt{
+        margin-bottom: 40px !important;
+      }
+      
+   

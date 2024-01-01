@@ -62,9 +62,9 @@
                         {% if not prod.is_listed  %}
                         <a href="#listproduct{{prod.id}}" class="blue" data-toggle="modal" title="list product"><i class="fa-solid fa-eye  fa-lg" style="color: #00ff6e;"></i></a>
                         {% else %}
-                        <a href="#listproduct{{prod.id}}" class="blue" data-toggle="modal" title="unlist product"><i class="fa-solid fa-eye-slash fa-sm" style="color: #00ff6e;"></i></a>
+                        <a href="#listproduct{{prod.id}}" class="blue" data-toggle="modal" title="unlist product"><i class="fa-solid fa-eye-slash fa-sm" style="color: red;"></i></a>
                         {% endif %}
-                        <a href="#deleteProduct{{prod.id}}" class="delete" data-toggle="modal" title="delete"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
+                        {% comment %} <a href="#deleteProduct{{prod.id}}" class="delete" data-toggle="modal" title="delete"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a> {% endcomment %}
                     </td>
                 </tr>
                 {% endfor %}

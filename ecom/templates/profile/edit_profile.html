@@ -6,7 +6,11 @@
     <h2 class="text-center">Edit Profile</h2>
     <form method="POST" action="/edit_profile/{{username.id}}/">
         {% csrf_token %}
-
+        {% if messages %}
+        {% for message in messages %}
+            <h5 class=" text-danger text-center"> {{ message }} </h5>
+        {% endfor %}
+        {% endif %}
       <div class="row gx-3 mb-3">
         <div class="col-md-6">
           <label class="form-label" for="inputFirstName">First name</label>

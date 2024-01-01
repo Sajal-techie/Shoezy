@@ -9,6 +9,8 @@ from django.contrib import messages
 
 @never_cache
 def admlogin(request):
+    if 'users' in request.session:
+        return redirect('page_not_found')
     if 'admin' in request.session:
         return redirect('admhome')
     if request.method == 'POST':
@@ -30,6 +32,8 @@ def admlogin(request):
 @never_cache
 @login_required(login_url='admlogin')
 def admhome(request):
+    if 'users' in request.session:
+        return redirect('page_not_found')
     if 'admin' in request.session:
         if request.user.is_staff:
             return render(request,'admin/admhome.html' )
@@ -41,6 +45,8 @@ def admhome(request):
 
 
 def admusers(request):
+    if 'users' in request.session:
+        return redirect('page_not_found')
     if 'admin' in request.session and request.user.is_staff:
         user_list = Customuser.objects.all().order_by('id')
         context = {
@@ -67,6 +73,8 @@ def unblock_user(request,id):
 
 
 def user_search(request):
+    if 'users' in request.session:
+        return redirect('page_not_found')
     sname = request.GET['searchuser']
     user_list = Customuser.objects.filter(Q(first_name__icontains = sname ) | Q(email__icontains = sname) ).order_by('id')
     context = {

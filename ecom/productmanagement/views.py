@@ -5,8 +5,10 @@ import os
 
 # view products
 def view_products(request):
+    if 'users' in request.session:
+        return redirect('page_not_found')
     if 'admin' in request.session:
-        products = Product.objects.all().order_by('id')
+        products = Product.objects.all().order_by('-id')
         brands = Brand.objects.all()
 
         mulimage = ProductImages.objects.all()

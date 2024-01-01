@@ -18,6 +18,13 @@
 						
 						<div class="col-md-6  ">
 							<h3>Cart Details</h3>
+							{% if buy_item %}
+								<div class="cart-item bg-light p-3 p-md-4">
+										<strong>{{ buy_item.brand.brand_name }} {{ buy_item.name }}</strong>
+										<p>Price: ₹{{buy_item.selling_price}} <br> Quantity: 1  <br>
+										total: ₹{{ buy_item.selling_price }}</p>
+								</div>
+							{% else %}
 							{% for item in cart_items %}
 								<div class="cart-item bg-light p-3 p-md-4">
 										<strong>{{ item.product_id.brand }} {{ item.product_id.name }}</strong>
@@ -25,9 +32,16 @@
 										total: ₹{{ item.sub_total }}</p>
 								</div>
 							{% endfor %}
+							{% endif %}
 						</div>
 						<!-- Display saved addresses as radio buttons -->
+						{% if buy_item  %}
+						<form method="post"  action="/buy_now/{{buy_item.id}}/" >
+						{% else %}
 						<form method="post"  action="/checkout/" >
+						
+						{% endif %}
+						
 							{% csrf_token %}
 							<h3 class="mx-4">Address</h3>
 							<div class="bg-light">
@@ -55,7 +69,13 @@
                             		{% endif %}
 									{% endif %}
 								<div class="mb-3 text-center">
+									{% if not buy_item %}
 									<a href="{% url 'add_address' %}?next={% url 'checkout' %}" class="btn btn-primary">Add New Address</a>
+									{% else %}
+									<a href="{% url 'add_address' %}?next={% url 'buy_now' buy_item.id %}" class="btn btn-primary">Add New Address</a>
+
+									{% endif %}
+									
 								</div>
 							</div>
 						</div>

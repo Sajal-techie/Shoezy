@@ -1,5 +1,8 @@
 from django.db import models
 from categorymanagement . models import Brand
+from django.db.models.signals import pre_save
+from django.dispatch import receiver
+
 # Create your models here.
 
 class Product(models.Model):
@@ -12,10 +15,11 @@ class Product(models.Model):
     brand = models.ForeignKey(Brand,on_delete = models.CASCADE)
     original_price = models.DecimalField(max_digits = 10, decimal_places = 2)
     selling_price = models.DecimalField(max_digits = 10,decimal_places = 2)
-    description = models.TextField()
-    quantity = models.PositiveIntegerField()
+    description = models.TextField(null = True, blank =True)
+    quantity = models.PositiveIntegerField(default = 0)
     image1 = models.ImageField(upload_to='media/images/',blank=True)
     is_listed = models.BooleanField(default = True)
+    discount_percentage = models.DecimalField(max_digits = 3,decimal_places = 0, default = 0,null = True, blank = True)
     
     def __str__(self) -> str:
         return self.name
@@ -24,3 +28,12 @@ class ProductImages(models.Model):
     product = models.ForeignKey(Product, related_name = 'images', on_delete = models.CASCADE)
     images =  models.ImageField(upload_to='media/images/')
     image_number = models.PositiveIntegerField(blank = True)
+    
+@receiver(pre_save,sender = Product)
+def calc_discount_percentage(sender,instance,**kwargs):
+    if not instance.discount_percentage:
+        og = int(instance.original_price)
+        sp = int(instance.selling_price)
+        instance.discount_percentage = round(((og-sp) / og ) * 100) 
+
+

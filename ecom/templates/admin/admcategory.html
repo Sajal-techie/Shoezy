@@ -50,7 +50,7 @@
                         {% else %}
                         <a href="#listEmployeeModal-{{forloop.counter}}" class="delete" data-toggle="modal" title="unlist brand"><i class="fa-solid fa-eye-slash fa-sm" style="color: #ff8c08;"></i></a>
                         {% endif %}
-                        <a href="#deleteEmployeeModal-{{forloop.counter}}" class="delete" data-toggle="modal" title="delete brand"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
+                        {% comment %} <a href="#deleteEmployeeModal-{{forloop.counter}}" class="delete" data-toggle="modal" title="delete brand"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a> {% endcomment %}
                     </td>
                 </tr>
             {% endfor %}
