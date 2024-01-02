@@ -6,6 +6,7 @@ from order_management.models import *
 from django.views.decorators.cache import never_cache,cache_control
 from django.contrib import messages
 from cart.models import *
+from django.db.models import Q
 # Create your views here.
 
 def view_profile(request):
@@ -17,7 +18,7 @@ def view_profile(request):
                 del request.session['users']
             messages.error(request,'you are blocked ')
             return redirect('login') 
-        addressess = Address.objects.filter(user = username)
+        addressess = Address.objects.filter(Q(user = username) & Q(is_available= True))
         cartcount = Cart.objects.filter(user_id = username).count()
         context = {
             'username':username,
@@ -129,9 +130,24 @@ def add_address(request):
     return render(request,'profile/add_address.html',{'form':form,'username':username})
 
 
+def edit_address(request,id):
+    existing_address = Address.objects.get(id=id)
+    if request.method == 'POST':
+        form = Adressform(request.POST, instance=existing_address)
+        if form.is_valid():
+            form.save()
+            return redirect('view_profile') 
+    else:
+        # Create a form instance and pre-fill with existing data
+        form = Adressform(instance=existing_address)
+
+    return render(request, 'profile/edit_address.html', {'form': form, 'address': id})
+
+
 def delete_address(request,id):
     address = Address.objects.get(id = id)
-    address.delete()
+    address.is_available = False
+    address.save()
     return redirect('view_profile')
 
 

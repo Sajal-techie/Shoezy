@@ -14,6 +14,7 @@ class Address(models.Model):
     pincode = models.IntegerField()
     number = models.CharField(max_length = 15)
     alternate_number = models.CharField(max_length = 15,blank = True, null = True)
+    is_available = models.BooleanField(default = True,null = True, blank = True)
     
     def __str__(self) -> str:
         return f"{self.name}'s Address "

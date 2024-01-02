@@ -101,8 +101,10 @@
         <li class="address-list-item">
           <span class="text-capitalize">{{ address.country }}, {{ address.state }}, {{ address.district }} </span>
           house:{{ address.house }} , {{ address.town }} , PIN:{{ address.pincode }} <br>
-          {{ address.number }} <br>
 
+           {{address.name}}  ,  &nbsp; {{ address.number }} <br>
+
+          <a href="/edit_address/{{address.id}}/" class="btn btn-light border border-info" > Edit Address</a>
           <a href="#confirmationModal-{{forloop.counter}}" class="btn btn-danger" data-toggle="modal" data-target="#confirmationModal-{{forloop.counter}}"> Delete address</a>
         </li>
 

@@ -8,81 +8,70 @@
 {% block maincontent %}
 
 
-<div class="container mt-5 text-center mb-4">
-    <h2 class="mb-4">Add Address</h2>
-    <form method="post" action="{% url 'add_address' %}?next={{ request.GET.next }}">
-      {% csrf_token %}
-      {% if messages %}
-        {% for message in messages %}
-            <h5 class=" text-danger text-center"> {{ message }} </h5>
-        {% endfor %}
-        {% endif %}
-      <div class="form-group row">
-        <label for="name" class="col-sm-2 col-form-label offset-3 ">Name</label>
-        <div class="col-sm-2">
-          {{ form.name }}
-        </div>
-      </div>
-      <div class="form-group row">
-        <label for="country" class="col-sm-2 col-form-label offset-3">Country</label>
-        <div class="col-sm-2">
-          {{ form.country }}
-        </div>
-      </div>
-      <div class="form-group row">
-        <label for="state" class="col-sm-2 col-form-label offset-3">State</label>
-        <div class="col-sm-2">
-          {{ form.state }}
-        </div>
-      </div>
-      <div class="form-group row">
-        <label for="district" class="col-sm-2 col-form-label offset-3">District</label>
-        <div class="col-sm-2">
-          {{ form.district }}
-        </div>
-      </div>
-      <div class="form-group row">
-        <label for="town" class="col-sm-2 col-form-label offset-3">Town</label>
-        <div class="col-sm-2">
-          {{ form.town }}
-        </div>
-      </div>
-      <div class="form-group row">
-        <label for="house" class="col-sm-2 col-form-label offset-3">House</label>
-        <div class="col-sm-2">
-          {{ form.house }}
-        </div>
-      </div>
-      <div class="form-group row">
-        <label for="land_mark" class="col-sm-2 col-form-label offset-3">Landmark</label>
-        <div class="col-sm-2">
-          {{ form.land_mark }}
-        </div>
-      </div>
-      <div class="form-group row">
-        <label for="pincode" class="col-sm-2 col-form-label offset-3">Pincode</label>
-        <div class="col-sm-2">
-          {{ form.pincode }}
-        </div>
-      </div>
-      <div class="form-group row">
-        <label for="number" class="col-sm-2 col-form-label offset-3">Mobile Number</label>
-        <div class="col-sm-2">
-          {{ form.number }}
-        </div>
-      </div>
-      <div class="form-group row">
-        <label for="alternate_number" class="col-sm-2 col-form-label offset-3">Alternate Number</label>
-        <div class="col-sm-2">
-          {{ form.alternate_number }}
-        </div>
-      </div>
-        <div class="pb-4">
-         <button type="submit" class="btn btn-primary p-3 px-4" >Save Address</button>
-        </div>
+<div class="container mt-5 d-flex  justify-content-center mb-4 p-3">
+  <div class="card bg-light p-4  ">
+      <h2 class="mb-4 text-center">Add Address</h2>
+      <form method="post" action="{% url 'add_address' %}?next={{ request.GET.next }}">
+          {% csrf_token %}
+          {% if messages %}
+              {% for message in messages %}
+                  <h5 class="text-danger text-center">{{ message }}</h5>
+              {% endfor %}
+          {% endif %}
+          <div class="row">
+              <div class="col-md-6">
+                  <div class="form-group">
+                      <label for="name">Name</label>
+                      {{ form.name }}
+                  </div>
+                  <div class="form-group">
+                      <label for="country">Country</label>
+                      {{ form.country }}
+                  </div>
 
-    </form>
+                  <div class="form-group">
+                      <label for="district">District</label>
+                      {{ form.district }}
+                  </div>
+
+                <div class="form-group">
+                  <label for="house">House</label>
+                  {{ form.house }}
+              </div>
+              <div class="form-group">
+                <label for="land_mark">Landmark</label>
+                {{ form.land_mark }}
+            </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="number">Mobile Number</label>
+                  {{ form.number }}
+              </div>
+              <div class="form-group">
+                <label for="state">State</label>
+                {{ form.state }}
+            </div>
+            <div class="form-group">
+              <label for="town">Town</label>
+              {{ form.town }}
+          </div>
+                  <div class="form-group">
+                      <label for="pincode">Pincode</label>
+                      {{ form.pincode }}
+                  </div>
+                
+                  <div class="form-group">
+                      <label for="alternate_number">Alternate Number</label>
+                      {{ form.alternate_number }}
+                  </div>
+              </div>
+          </div>
+          <div class="text-center">
+              <button type="submit" class="btn btn-primary px-4">Save Address</button>
+          </div>
+      </form>
   </div>
-
+</div>
 {% include "footer.html" %}
 {% endblock maincontent %}

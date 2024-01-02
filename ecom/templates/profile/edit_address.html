@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% block navbar %}
+    {% include "navbar.html" %}
+{% endblock navbar %}
+
+{% block maincontent %}
+<div class="container mt-5 p-3 mb-4">
+    <div class="card bg-light p-4 mx-auto" style="max-width: 600px;">
+        <h2 class="mb-4 text-center">Edit Address</h2>
+        <form method="post" action="{% url 'edit_address' address %}">
+            {% csrf_token %}
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-danger text-center" role="alert">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="name">Name</label>
+                        {{ form.name }}
+                    </div>
+                    <div class="form-group">
+                        <label for="country">Country</label>
+                        {{ form.country }}
+                    </div>
+                    <div class="form-group">
+                        <label for="district">District</label>
+                        {{ form.district }}
+                    </div>
+                    <div class="form-group">
+                        <label for="house">House</label>
+                        {{ form.house }}
+                    </div>
+                    <div class="form-group">
+                        <label for="land_mark">Landmark</label>
+                        {{ form.land_mark }}
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="number">Mobile Number</label>
+                        {{ form.number }}
+                    </div>
+                    <div class="form-group">
+                        <label for="state">State</label>
+                        {{ form.state }}
+                    </div>
+                    <div class="form-group">
+                        <label for="town">Town</label>
+                        {{ form.town }}
+                    </div>
+                    <div class="form-group">
+                        <label for="pincode">Pincode</label>
+                        {{ form.pincode }}
+                    </div>
+                    <div class="form-group">
+                        <label for="alternate_number">Alternate Number</label>
+                        {{ form.alternate_number }}
+                    </div>
+                </div>
+            </div>
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary px-4">Update Address</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% include "footer.html" %}
+{% endblock maincontent %}
