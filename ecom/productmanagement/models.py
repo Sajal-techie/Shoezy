@@ -37,3 +37,15 @@ def calc_discount_percentage(sender,instance,**kwargs):
         instance.discount_percentage = round(((og-sp) / og ) * 100) 
 
 
+class ProductVariant(models.Model):
+    SIZE_CHOICES = [
+                (7, '7'),
+                (8, '8'),
+                (9, '9'),
+                (10, '10')
+    ]
+    product_id = models.ForeignKey(Product, on_delete = models.CASCADE)
+    size = models.CharField(max_length = 5,choices = SIZE_CHOICES,null = True,blank = True, default = '7')
+    stock = models.PositiveIntegerField(default = 0,null = True,blank = True)
+    color = models.CharField(max_length = 20,null= True,blank = True,default = 'white')
+    

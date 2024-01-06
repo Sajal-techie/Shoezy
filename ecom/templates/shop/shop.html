@@ -30,11 +30,11 @@
                                         <p class="price"><span class="mr-2 price-dc">₹{{prod.original_price}}</span><span class="price-sale">₹{{prod.selling_price}}</span></p>
                                     </div>
                                     <p class="bottom-area d-flex px-3">
-                                        {% if prod.id in cartlist   %}
+                                        <!-- {% if prod.id in cartlist   %}  
                                         <a href="/cart/" class="add-to-cart text-center py-2 mr-1"><span>view cart <i class="ion-ios-cart ml-1"></i></span></a>
-                                        {% else %}
-                                        <a href="{% url 'addto_cart' prod.id  %}?next={{ request.path }}" class="add-to-cart text-center py-2 mr-1"><span>Add to cart <i class="ion-ios-cart ml-1"></i></span></a>
-                                        {% endif %}
+                                        {% else %} -->
+                                        <a href="{% url 'singleproduct' prod.id %}" class="add-to-cart text-center py-2 mr-1"><span>View details </span></a>
+                                        <!-- {% endif %} -->
                                         {% if prod.id in wishlist1 %}
                                         <a href="/wishlist/" class="buy-now text-center py-2">View wishlist<span><i class="ion-ios-heart ml-1"></i></span></a>
                                         {% else %}

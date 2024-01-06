@@ -1,0 +1,219 @@
+{% extends 'base.html' %}
+{% block navbar %}{% include "navbar.html" %} {% endblock navbar %}
+{% block maincontent %}
+<style>
+  body {
+    font-family: 'Open Sans', sans-serif;
+    background-color: #f8f9fa;
+    font-size: 16px;
+    line-height: 1.6;
+    color: #333;
+  }
+  main {
+    width: 80%;
+    margin: 50px auto;
+    background-color: #fff;
+    padding: 20px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+  }
+  h1, h2, h3 {
+    color: #333;
+  }
+  img {
+    max-width: 300px !important;
+    height: auto;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  }
+  .section-container {
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    background-color: #f5f5f5;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  }
+  .grid-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+  .cancelled-reason {
+    color: red;
+    font-weight: bold;
+  }
+  .order-details-section {
+    padding: 20px;
+    border-radius: 10px;
+    background-color: #f5f5f5;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+  }
+  .order-actions {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+  }
+  .order-actions button {
+    background-color: #007bff;
+    color: #fff;
+    padding: 15px 30px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+  }
+  .order-actions button i {
+    margin-right: 10px;
+  }
+  .attractive-text {
+    background: linear-gradient(to right, #007bff, #00bfff);
+    -webkit-background-clip: text;
+    color: transparent;
+    display: inline;
+  }
+</style>
+<style>
+    .order-details-section {
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        margin-top: 20px;
+    }
+
+    .attractive-text {
+        color: #333;
+        font-size: 24px;
+        margin-bottom: 20px;
+    }
+
+    .order-status {
+        font-size: 18px;
+        color: #27ae60;
+    }
+
+    .total-amount, .payment-method {
+        margin-top: 20px;
+    }
+
+    h3 {
+        color: #333;
+        font-size: 20px;
+        margin-bottom: 10px;
+    }
+
+    p {
+        font-size: 16px;
+        color: #555;
+    }
+
+    .cancelled-section {
+        margin-top: 20px;
+        border-top: 2px solid #e74c3c;
+        padding-top: 20px;
+    }
+
+    .cancelled-reason {
+        color: #e74c3c;
+        font-size: 18px;
+        font-weight: bold;
+    }
+    .continue-shopping {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+      }
+      .continue-shopping a {
+        background-color: #28a745;
+        color: #fff;
+        padding: 15px 30px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+        display: flex;
+        align-items: center;
+      }
+      .continue-shopping a i {
+        margin-right: 10px;
+      }
+</style>
+
+<main class="container">
+  <div class="section-container">
+    <h3 class="attractive-text ">Order ID  #{{ order_item.id }}</h3>
+    <p>Order Date: {{ order_item.order_id.order_date }}</p>
+   </div>
+
+  <!-- Product and Address Section -->
+  <div class="grid-container ">
+    <div class="text-center">
+      <img src="{{ order_item.product.product_id.image1.url }}" alt="Product Image" class="img-fluid">
+    </div>
+    <div>
+      <h2 class="attractive-text">Product Details</h2>
+      <p><strong>Brand:</strong> {{ order_item.product.product_id.brand }}</p>
+      <p><strong>Name:</strong> {{ order_item.product.product_id.name }}</p>
+      <p><strong>Size:</strong> {{ order_item.product.size }}</p>
+      <p><strong>Color:</strong> {{ order_item.product.color }}</p>
+      <p><strong>Price:</strong> ₹{{ order_item.product.product_id.selling_price }}</p>
+      <p><strong>Quantity:</strong> {{ order_item.quantity }}</p>
+    </div>
+  </div>
+
+  <!-- Address Information Section -->
+  <div class="section-container">
+    <h2 class="attractive-text">Delivery  Address </h2>
+    <p><strong>Name:</strong> {{ order_item.address1.name }}</p>
+    <p><strong>Number:</strong> {{ order_item.address1.number }}</p>
+    <p><strong>Country:</strong> {{ order_item.address1.country }},
+    <strong>State:</strong> {{ order_item.address1.state }},
+    <strong>District:</strong> {{ order_item.address1.district }}</p>
+    <p><strong>House:</strong> {{ order_item.address1.house }},
+    <strong>Town:</strong> {{ order_item.address1.town }},
+    <strong>Pincode:</strong> {{ order_item.address1.pincode }}</p>
+  </div>
+
+  <!-- Order Details Content -->
+  <div class="order-details-section">
+    <h2 class="attractive-text">Order Details</h2>
+    {% if order_item.status != 'cancelled' %}
+    <p class="order-status"><strong>Status:</strong> {{ order_item.status }}</p>
+    {% else %}
+    <p class="cancelled-reason"><strong>Status:</strong> {{ order_item.status }}</p>
+    {% endif %}
+    <div class="total-amount">
+        {% if order_item.status != 'cancelled' %}
+        <h3>Delivery date</h3>
+        <p><strong>{{ order_item.delivery_date }}</strong></p>
+        {% endif %}
+    </div>
+
+    <div class="total-amount">
+        <h3>Total Amount</h3>
+        <p><strong>₹{{ order_item.amount }}</strong></p>
+    </div>
+
+    <div class="payment-method">
+        <h3>Payment Method</h3>
+        <p><strong>{{ order_item.order_id.payment_mode }}</strong></p>
+    </div>
+
+    {% if order_item.status == 'cancelled' %}
+        <div class="cancelled-section">
+            <h3 class="cancelled-reason">Order Canceled</h3>
+            <h3>Cancellation Reason</h3>
+            <p><strong>Cancelled Date:</strong> {{ order_item.delivery_date }}</p>
+            <p><strong>Reason:</strong> {{ order_item.reason }}</p>
+        </div>
+    {% endif %}
+</div>
+
+<div class="continue-shopping">
+    <a href="/shop/" class="btn btn-primary"><i class="fas fa-shop"></i> Continue Shopping</a>
+  </div>
+</main>
+{% endblock maincontent %}

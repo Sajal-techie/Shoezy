@@ -9035,7 +9035,8 @@ h1, h2, h3, h4, h5,
   background: transparent;
   padding: 0 15px; }
 
-.product-details button, .product-details .form-control {
+/* .product-details button,  */
+.product-details .form-control {
   height: 40px !important;
   text-align: center;
   border: 1px solid rgba(0, 0, 0, 0.1) !important;
@@ -9047,7 +9048,8 @@ h1, h2, h3, h4, h5,
   -ms-border-radius: 0;
   border-radius: 0;
   font-size: 14px; }
-  .product-details button:hover, .product-details button:focus, .product-details .form-control:hover, .product-details .form-control:focus {
+  /* .product-details button:hover, .product-details button:focus,  */
+  .product-details .form-control:hover, .product-details .form-control:focus {
     text-decoration: none;
     outline: none; }
 

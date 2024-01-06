@@ -210,14 +210,33 @@ def cancel_order(request,id):
         username = Customuser.objects.get(email = usm)
         
         current_order = OrderProducts.objects.get(id=id)
+        if request.method == 'POST':
+            reason = request.POST['reason']
         
-        if current_order.status != 'delivered':
-            current_order.status = 'cancelled'
-            current_order.save()
-            
-            return redirect('order_history')
+            if current_order.status != 'delivered':
+                current_order.status = 'cancelled'
+                current_order.reason = reason
+                current_order.delivery_date =  timezone.now()
+                current_order.save()
+                current_order.product.stock = current_order.product.stock + current_order.quantity
+                current_order.product.save()
+                 
+                
+                return redirect('order_history')
         
         return redirect('order_history')
     
     return redirect('login')
     
+    
+def view_order_details(request,id):
+    if 'users' in request.session:
+        usm = request.session.get('users')
+        username = Customuser.objects.get(email = usm)
+        order = OrderProducts.objects.get(id = id )
+        context = {
+            'username': username,
+            'order_item': order 
+        }
+        return render(request, 'profile/view_order_details.html',context)
+    return redirect('login')

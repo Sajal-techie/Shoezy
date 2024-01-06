@@ -8,7 +8,12 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    
+    <style>
+        input[type="number"]::-webkit-outer-spin-button,
+        input[type="number"]::-webkit-inner-spin-button {
+          -webkit-appearance: none;
+        }
+    </style>
 </head>
 {% block content1 %}
 <div class="container tbd1">
@@ -34,42 +39,121 @@
             <thead>
                 <tr>
                    
-                    <th>Name</th>
-                    <th>Brand</th>
+                    <th>Brand,Name</th>
+
                     <th>Category</th>
-                    
-                    <!-- <th>Original price</th> -->
                     <th>Selling price</th>
-                    <th>Quantity</th>
+                    {% comment %} <th>Quantity</th> {% endcomment %}
                     <th>Image</th>
                     <th>Actions</th>
+                    <th>Add Variants</th>
+                    <th>View Variants</th>
                 </tr>
             </thead>
             <tbody>
                 {% for prod in product %}
                 <tr>
-                    <td>{{prod.name}}</td>
-                    <td>{{prod.brand.brand_name}}</td>
+                    <td><b class="text-dark"> {{prod.brand}} </b><br>
+                        {{prod.name}}</td>
                     <td>{{prod.category}}</td>
                     <!-- <td>{{prod.original_price}}</td> -->
+                    {% comment %} <td>{{prod.size}}</td> {% endcomment %}
                     <td>{{prod.selling_price}}</td>
-                    <td>{{prod.quantity}}</td>
+                    {% comment %} <td>{{prod.stock}}</td> {% endcomment %}
                     <td>
                     {% if prod.image1 %}<img src="{{prod.image1.url }}" alt="nike" style="width: 60px; height: 60px; ">{% else %} <h5>no image</h5> {% endif %}
                     </td>
                     <td>
-                        <a href="#editProduct{{prod.id}}" class="edit" data-toggle="modal" title="edit "><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
+                        <a href="#editProduct{{prod.id}}" class="edit pt-3" data-toggle="modal" title="edit "><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a> &nbsp;
                         {% if not prod.is_listed  %}
-                        <a href="#listproduct{{prod.id}}" class="blue" data-toggle="modal" title="list product"><i class="fa-solid fa-eye  fa-lg" style="color: #00ff6e;"></i></a>
+                        <a href="#listproduct{{prod.id}}" class="blue pt-3" data-toggle="modal" title="list product"><i class="fa-solid fa-eye  fa-lg" style="color: #00ff6e;"></i></a>
                         {% else %}
-                        <a href="#listproduct{{prod.id}}" class="blue" data-toggle="modal" title="unlist product"><i class="fa-solid fa-eye-slash fa-sm" style="color: red;"></i></a>
+                        <a href="#listproduct{{prod.id}}" class="blue pt-3" data-toggle="modal" title="unlist product"><i class="fa-solid fa-eye-slash fa-sm" style="color: red;"></i></a>
                         {% endif %}
                         {% comment %} <a href="#deleteProduct{{prod.id}}" class="delete" data-toggle="modal" title="delete"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a> {% endcomment %}
                     </td>
+                    <td class="text-center">
+                        <a href="#addvariant{{prod.id}}" class="blue pt-3 " data-toggle="modal" title="add variant"> <i class="fa-solid fa-circle-plus fa-2xl" style="color: #00ff6e;"></i>  Add <br>Variant  </a>
+                        <div id="addvariant{{prod.id}}" class="modal fade">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <form method="POST" action="/add_variant/{{prod.id}}" >
+                                    {% csrf_token %}
+                                        <div class="modal-header">						
+                                            <h4 class="modal-title">Add Variant</h4>
+                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                        </div>
+                                        <div class="modal-body">					
+                                            <div class="form-group">
+                                                <label for="category">Size</label>
+                                                <select class="form-control" id="category" name="size" required>
+                                                    <option value="7">7</option>
+                                                    <option value="8">8</option>
+                                                    <option value="9">9</option>
+                                                    <option value="10">10</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="category">Color</label>
+                                                <select class="form-control" id="category" name="color" >
+                                                    <option value="black">Black</option>
+                                                    <option value="white">White</option>
+                                                    <option value="red">Red</option>
+                                                    <option value="blue">Blue</option>
+                                                    <option value="Brown">Brown</option>
+                                                    <option value="pink">Pink</option>
+                                                    <option value="mixedcolors">Mixed Colors</option>
+                        
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Quantity</label>
+                                                <input name="quantity" type="number" class="form-control" required>
+                                            </div> 
+                                        <div class="modal-footer">
+                                            <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+                                            <input type="submit" class="btn btn-success" value="Add">
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                    <td><a href="#collapseview{{prod.id}}" data-toggle="collapse" class="btn btn-info ">View </a></td>
+                    
                 </tr>
+                
+                <tr class="collapse" id="collapseview{{prod.id}}">
+                    <td colspan="7">       
+                        <div class="card card-body">
+                            <h4>Variants:</h4>
+                            <div class="row">
+                                {% for i in productvariant %}
+                                    {% if i.product_id.id == prod.id %}
+                                        <div class="col-md-3 mb-3">
+                                            <div class="card">
+                                                <div class="card-body">
+                                                    <p class="card-text"><strong>Size:</strong> {{ i.size }}</p>
+                                                    <p class="card-text"><strong>Color:</strong> {{ i.color }}</p>
+                                                    <p class="card-text"><strong>Quantity:</strong> {{ i.stock }}</p>
+                                                    <p class="card-text text-center"><a href="#edit_variant{{i.id}}" class="text-warning"  data-toggle="modal" > Update</a></p>
+                                                    <!-- <a href="/delete_variant/{{i.id}}">delete</a> -->
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                
                 {% endfor %}
             </tbody>
         </table>
+
+      
+        
         <!-- <div class="clearfix">
             <div class="hint-text">Showing <b>5</b> out of <b>25</b> entries</div>
             <ul class="pagination">
@@ -84,7 +168,7 @@
         </div> -->
     </div>
 </div>
-<!-- ADD Modal HTML -->
+<!-- ADD product Modal HTML -->
 <div id="addProduct" class="modal fade">
     <div class="modal-dialog new1">
         <div class="modal-content">
@@ -116,10 +200,6 @@
                         </select>
                         
                     </div>
-                    <!-- <div class="form-group">
-                        <label>Size</label>
-                        <input name="Size" type="text" class="form-control" required>
-                    </div> -->
                     <div class="form-group">
                         <label>No Offer Price</label>
                         <input name="noofferprice" type="number" class="form-control" required>
@@ -131,10 +211,6 @@
                     <div class="form-group">
                         <label>Description</label>
                         <textarea  name="desc" class="form-control" required></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label>Quantity</label>
-                        <input name="quantity" type="number" class="form-control" required>
                     </div>
                     <div class="form-group">
                         <label>Image 1</label>
@@ -223,10 +299,6 @@
                         <textarea name="desc"  class="form-control" required>{{ prod.description }}</textarea>
                     </div>
                     <div class="form-group">
-                        <label>Quantity</label>
-                        <input name="quantity" value="{{prod.quantity}}" type="number" class="form-control" required>
-                    </div>
-                    <div class="form-group">
                         <label>Image 1</label>
                         <input name="image1" type="file" class="form-control image-input" accept="image/*">
                         <div class="image-preview-container">
@@ -282,6 +354,59 @@
 </div>
 {% endfor %}
 
+<!-- edit variant -->
+{% for i in productvariant %}
+<div id="edit_variant{{i.id}}" class="modal fade">
+    <div class="modal-dialog new1 ">
+        <div class="modal-content">
+            <form method="POST" action="/edit_variant/{{i.id}}" enctype="multipart/form-data">
+            {% csrf_token %}
+                <div class="modal-header">						
+                    <h4 class="modal-title">Update Stock</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                </div>
+                <div class="modal-body ">					
+                    <div class="form-group">
+                        <label>Quantity</label>
+                        <input name="quantity" value="{{i.stock}}" type="number" class="form-control" required>
+                    </div> 		
+                
+                <!--                 
+                <div class="form-group ">
+                    <label for="category">Size</label>
+                    <select class="form-control" id="category" name="size" required>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                        <option value="9">9</option>
+                        <option value="10">10</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="category">Color</label>
+                    <select class="form-control" id="category" name="color" >
+                        <option value="black">Black</option>
+                        <option value="white">White</option>
+                        <option value="red">Red</option>
+                        <option value="blue">Blue</option>
+                        <option value="Brown">Brown</option>
+                        <option value="pink">Pink</option>
+                        <option value="mixedcolors">Mixed Colors</option>
+
+                    </select>
+                </div> -->
+
+            </div>
+                <div class="modal-footer">
+                    <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+                    <input type="submit" class="btn btn-info" value="Update">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endfor %}
+
+
 <!-- list product -->
 {% for prod in product %}
 <div id="listproduct{{prod.id}}" class="modal fade">
@@ -306,30 +431,8 @@
     </div>
 </div>
 {% endfor %}
-<!-- Delete Modal HTML -->
-{% for prod in product %}
-<div id="deleteProduct{{prod.id}}" class="modal fade">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <form method="POST" action="/delete_product/{{prod.id}}">
-                {% csrf_token %}
-                <div class="modal-header">						
-                    <h4 class="modal-title">Delete Product</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                </div>
-                <div class="modal-body">					
-                    <p>Are you sure you want to delete <b> {{ prod.name }}</b>?</p>
-                    <p class="text-warning"><small>This action cannot be undone.</small></p>
-                </div>
-                <div class="modal-footer">
-                    <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
-                    <input type="submit" class="btn btn-danger" value="Delete">
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-{% endfor %}
+
+<!-- Add variant Modal HTML -->
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 <script>
     $(document).ready(function() {

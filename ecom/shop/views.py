@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect
 from home.models import Customuser
 from django.views.decorators.cache import never_cache
-from productmanagement.models import Product,ProductImages
+from productmanagement.models import *
 from django.contrib import messages
 from categorymanagement.models import Brand
 from cart.views import check_cart,check_wishlist
@@ -31,11 +31,11 @@ def shop(request):
         wishcount = Wishlist.objects.filter(user_id = username).count()
         context['wishcount']=wishcount
         
-        cartlist = []
-        cart_items = Cart.objects.filter(user_id = username)
-        for i in cart_items:
-            cartlist.append(i.product_id.id)
-        context['cartlist'] = cartlist 
+        # cartlist = []
+        # cart_items = Cart.objects.filter(user_id = username)
+        # for i in cart_items:
+        #     cartlist.append(i.product.product_id.id)
+        # context['cartlist'] = cartlist 
         wishlist1 = []
         wishitems = Wishlist.objects.filter(user_id = username)
         for j in wishitems:
@@ -56,12 +56,15 @@ def singleproduct(request,id):
     products = Product.objects.filter(id = id)
     brands = Brand.objects.filter(id = id)
     multiple = ProductImages.objects.filter(product_id = id )
-    
+    productvariant = ProductVariant.objects.filter(product_id = id)[:1]
+    productvariants = ProductVariant.objects.filter(product_id = id)
     
     context = {
         'product' : products,
         'brand' : brands,
         'multi_image' : multiple,
+        'productvariant':productvariant,
+        'productvariants':productvariants,
     }
     if 'users' in request.session:
         usm = request.session.get('users')
@@ -71,10 +74,10 @@ def singleproduct(request,id):
                 del request.session['users']
             messages.error(request,'you are blocked ')
             return redirect('login') 
-        is_in_cart = check_cart(username,id)
-        context['is_in_cart']= is_in_cart
-        is_in_wish = check_wishlist(username,id)
-        context['is_in_wish']= is_in_wish
+        # is_in_cart = check_cart(username,id)          # dubt area
+        # context['is_in_cart']= is_in_cart             # doubt area
+        is_in_wish = check_wishlist(username,id)      
+        context['is_in_wish']= is_in_wish            
         context['username'] = username
         cartcount = Cart.objects.filter(user_id = username).count()
         context['cartcount']=cartcount
@@ -92,6 +95,7 @@ def singleproduct(request,id):
             return redirect('login')
         
     return render(request, 'shop/singleproduct.html',context)
+
 
 
 def seachitems(request):

@@ -1,7 +1,8 @@
 from django.shortcuts import render,redirect
+from django.http import JsonResponse
 from django.contrib import messages
 from home.models import Customuser
-from productmanagement.models import Product,ProductImages
+from productmanagement.models import *
 from . models import *
 from user_profile.models import Address
 from order_management.models import *
@@ -19,7 +20,7 @@ def cart(request):
                 del request.session['users']
             messages.error(request,'you are blocked ')
             return redirect('login')       
-        cart_items = Cart.objects.filter(user_id = username).select_related('product_id__brand').order_by('-id')
+        cart_items = Cart.objects.filter(user_id = username).select_related('product__product_id__brand').order_by('-id') 
         total = sum(i.sub_total for i in cart_items)
         cartcount = Cart.objects.filter(user_id = username).count()
         context = {
@@ -46,52 +47,63 @@ def cart(request):
 
 def addto_cart(request,p_id):
     if 'users' in request.session:
-        context={}
         usm = request.session.get('users')
         user2 = Customuser.objects.get(email = usm)
-        product = Product.objects.get(id = p_id)
-        # cart_item = Cart.objects.get(user_id = user2,product_id= product)
-        # if cart_item is None:
-        if product.quantity > 0 and not Cart.objects.filter(user_id = user2, product_id = product):
-                Cart.objects.create( user_id = user2 ,product_id = product,quantity = 1)
-                # is_in_cart = check_cart(user2,product.id)
-                # context={
-                #     'is_in_cart':is_in_cart
-                # }
-                
-        next_url = request.GET.get('next', '/')
-        return redirect(next_url,context)
+        product = Product.objects.get(productvariant__id = p_id)
+        size = request.GET.get('size',None)
+        quantity = int(request.GET.get('quantity',None))
+        try:
+            product_size = ProductVariant.objects.get(product_id = product, size = size)  
+        except ProductVariant.DoesNotExist:
+            product_size = None
+            
+        if product_size is None:
+            messages.error(request, 'Not available')
+            return redirect('singleproduct',product.id) 
+        
+        if product_size.stock < quantity:
+            messages.error(request,'out of Stock')
+            return redirect('singleproduct',product.id) 
+            
+        if product_size.stock > 0:
+            if  not Cart.objects.filter(user_id = user2, product = product_size, size = size).exists():
+                 Cart.objects.create( user_id = user2 ,product = product_size, size = size, quantity = quantity ) 
+            else:
+                messages.error(request, 'Already in Cart')
+        else:
+            messages.error(request, 'Out of stock')
+        return redirect('singleproduct',product.id)      
     messages.error(request,'you need to login')
     return redirect('login')
         
         
         
 def check_cart(user,product_id):
-    is_in_cart = Cart.objects.filter(user_id = user, product_id=product_id).exists()
+    is_in_cart = Cart.objects.filter(user_id = user, product=product_id).exists()
     return is_in_cart    
   
 def check_wishlist(user,product_id):
      is_in_wish = Wishlist.objects.filter(user_id = user,product_id=product_id).exists()
      return is_in_wish
         
-def add_quantity(request,id):
-    item = Cart.objects.get(id=id)
-    # product = Product.objects.get(id = item.product_id)
-    if item.quantity < item.product_id.quantity:
-        item.quantity = item.quantity + 1
-        item.sub_total = item.product_id.selling_price * item.quantity
-        item.save()
-    return redirect('cart')
+def change_quantity(request):
+    if request.method == 'POST':
+        products_id = int(request.POST.get('products_id'))
+        action = request.POST.get('action')
+        item = Cart.objects.get(id=products_id)
+        
+        if action == 'plus':
+            if item.quantity  < item.product.stock and item.quantity < 5:
+                item.quantity = item.quantity  + 1        
+        elif action =='minus':
+            if item.quantity  > 1:
+                item.quantity = item.quantity  - 1
+                
+        item.sub_total = item.product.product_id.selling_price * item.quantity
+        item.save() 
+        return JsonResponse({'status':"updated suucessfully"})
     
 
-def rem_quantity(request,id):
-    item= Cart.objects.get(id=id)
-    if item.quantity > 1:
-        item.quantity = item.quantity - 1
-        item.sub_total = item.product_id.selling_price * item.quantity
-        item.save()
-    return redirect('cart')
-    
     
 def remove_cart(request,id):
     remove_item= Cart.objects.get(id = id)
@@ -104,9 +116,10 @@ def checkout(request):
             usm = request.session.get('users')
             username = Customuser.objects.get(email = usm)
             address = Address.objects.filter(user = username.id)
-            cart_items = Cart.objects.filter(user_id = username.id).select_related('product_id__brand')
+            cart_items = Cart.objects.filter(user_id = username.id).select_related('product__product_id')
             total = sum(i.sub_total for i in cart_items)
             cartcount = Cart.objects.filter(user_id = username).count()
+
             context = {
                 'address':address,
                 'cart_items':cart_items,
@@ -125,10 +138,10 @@ def checkout(request):
                 adress =  Address.objects.get(id = adress1)
                 current_order = Order.objects.create(user = username, address = adress,total = total,payment_mode = payment)
                 for i in cart_items:
-                    obj = OrderProducts(order_id = current_order,user1 = username,product_id = i.product_id ,address1 = adress,quantity = i.quantity,amount = i.sub_total,status = 'ordered')
-                    if obj.product_id.quantity >= 1: 
-                        obj.product_id.quantity = obj.product_id.quantity - obj.quantity
-                        obj.product_id.save()
+                    obj = OrderProducts(order_id = current_order,user1 = username,product = i.product ,address1 = adress,quantity = i.quantity,amount = i.sub_total,status = 'ordered',size = i.size)
+                    if obj.product.stock > 0: 
+                        obj.product.stock = obj.product.stock - obj.quantity
+                        obj.product.save()
                     else:
                         messages.error(request, 'out of stock')
                         return redirect('checkout')
@@ -143,44 +156,58 @@ def checkout(request):
     return redirect('login')
 
 
+# not working make it work
+
 def buy_now(request,id):
     if 'users' in request.session:
+       
             usm = request.session.get('users')
             username = Customuser.objects.get(email = usm)
             address = Address.objects.filter(user = username.id)
-            buy_item = Product.objects.get(id = id)
-            total = buy_item.selling_price
             cartcount = Cart.objects.filter(user_id = username).count()
+            produc = Product.objects.get(id = id)
+            size = request.GET.get('size',None)
+            quantity = request.GET.get('quantity',None)
+            if size is not None and quantity is not None:
+                total = int(produc.selling_price) * int(quantity) 
+            try:
+                buy_item =  ProductVariant.objects.get(product_id = id, size = size)
+            except:
+                buy_item = None
             context = {
                 'address':address,
                 'buy_item':buy_item,
                 'username' :username,
                 'total':total,
-                'cartcount':cartcount
+                'cartcount':cartcount,
+                'size':size,
+                'quantity': quantity
             }
             wishcount = Wishlist.objects.filter(user_id = username).count()
             context['wishcount']=wishcount
             if request.method == 'POST':
+             if buy_item is not None:
                 adress1 = request.POST.get('address',None)
+    
                 if not adress1:
                     messages.error(request,'add address for delivery')
                     return redirect('checkout')
                 payment = request.POST['payment']
                 adress =  Address.objects.get(id = adress1)
                 current_order = Order.objects.create(user = username, address = adress,total = total,payment_mode = payment)
-                obj = OrderProducts(order_id = current_order,user1 = username,product_id = buy_item ,address1 = adress,quantity = 1,amount = total,status = 'ordered')
-                if obj.product_id.quantity >= 1: 
-                    obj.product_id.quantity = obj.product_id.quantity - obj.quantity
-                    obj.product_id.save()
+                obj = OrderProducts(order_id = current_order,user1 = username,product = buy_item ,address1 = adress,quantity = quantity,amount = total,status = 'ordered',size=size )
+                if obj.product.stock >= 1: 
+                    obj.product.stock = obj.product.stock - obj.quantity
+                    obj.product.save()
+
                 else:
                     messages.error(request, 'out of stock')
                     return redirect('checkout')
                 obj.save()
 
-            
                 return redirect('confirm',current_order.id)
             
-              
+
             return render(request, 'cart/checkout.html',context)
     return redirect('login')
 
@@ -214,7 +241,7 @@ def wishlist(request):
                 del request.session['users']
             messages.error(request,'you are blocked ')
             return redirect('login') 
-        cartcount = Cart.objects.filter(user_id = username).count()
+        cartcount = Cart.objects.filter(user_id = username).count() 
         wishlist_items = Wishlist.objects.filter(user_id = username).select_related('product_id__brand').order_by('-id')
         context = {
             'username': username,

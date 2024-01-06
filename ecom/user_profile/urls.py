@@ -9,7 +9,7 @@ urlpatterns = [
     path('reset_password/', views.reset_password, name='reset_password' ),
     path('edit_profile/<str:id>/', views.edit_profile, name='edit_profile' ),
     path('track_order/<str:id>', views.track_order, name='track_order'),
-    path('track_order/<str:id>', views.track_order, name='track_order'),
+    path('view_order_details/<str:id>', views.view_order_details, name='view_order_details'),
     path('order_history/', views.order_history, name='order_history'),
     path('cancel_order/<str:id>', views.cancel_order, name='cancel_order'),
   

@@ -93,9 +93,9 @@
     <!-- Sample order data, replace with your actual data -->
     <div class="row bb">
       <div class="col-md-6">
-        <a href="/singleproduct/{{item.product_id.id}}">
+        <a href="/singleproduct/{{item.product.product_id.id}}">
         <div class="order-card">
-          <img src="{{item.product_id.image1.url}}" alt="Product Image">
+          <img src="{{item.product.product_id.image1.url}}" alt="Product Image">
         </div>
       </a>
       </div>
@@ -103,22 +103,25 @@
         <div class="order-card detl">
           <div class="order-details">
             <h3>Order ID: {{item.id}} </h3>
-            <span>Product : {{ item.product_id.brand.brand_name}}  {{item.product_id.name}}</span>
-            <span>Price: ₹{{item.product_id.selling_price}}</span>
+            <span>Product : {{ item.product.product_id.brand.brand_name}}  {{item.product.product_id.name}}</span>
+            <span>Size: {{item.size}} </span>
+            <span>Price: ₹{{item.product.product_id.selling_price}}</span>
             <span>Quantity: {{item.quantity}} </span>
             <span>Total: ₹{{item.amount}}</span>
             <span>Order Date: {{item.order_id.order_date}}</span>
             {% if item.status != 'cancelled' %}
             <span>Delivery Date : {{item.delivery_date}}</span>
+            {% else %}
+            <span>Cancelled Date : {{item.delivery_date}}</span>
             {% endif %}
             {% if item.status == 'ordered' or item.status == 'shipped' or item.status == 'out_for_delivery' %}
             <a href="/track_order/{{item.id}}" class="text-white"><span class="status status-processing text-center">Track order</span></a>
             {% elif item.status == 'delivered' %}
             <a href="" class="text-white"><span class="status status-delivered text-center">Delivered</a></span>
             {% elif item.status == 'cancelled' %}
-            <a href="" class="text-white"><span class="status status-cancelled text-center">Cancelled</a></span>
+            <span class="status status-cancelled text-center ">Cancelled</span>
             {% endif %}
-            <span class="text-center"><a href="#" class="view-details">View Details</a></span>
+            <span class="text-center"><a href="/view_order_details/{{item.id}}" class="view-details">View Details</a></span>
             
           </div>
         </div>

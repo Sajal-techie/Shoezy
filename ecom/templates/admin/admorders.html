@@ -35,7 +35,9 @@
                     <th>Product Name</th>
                     <th>Image</th>
                     <th>User</th>
-                    <th >Price x Quantity</th>
+                    <th>Address</th>
+                    <th>Price x Quantity</th>
+                    <th>Size</th>
                     <th>Payment</th>
                     <th>Ordered date</th>
                     <th>Delivery date</th>
@@ -46,10 +48,14 @@
                 {% for item in order_items  %}
                 <tr>
                     <td> {{item.id}} </td>
-                    <td style=" word-wrap: break-word; max-width:100px"> {{item.product_id.brand}} <br> {{item.product_id.name}} </td>
-                    <td><img src=" {{ item.product_id.image1.url }} " alt="nike" style="width: 70px; height: 80px; "></td>
+                    <td style=" word-wrap: break-word; max-width:100px"> {{item.product.product_id.brand}} <br> {{item.product.product_id.name}} </td>
+                    <td><img src=" {{ item.product.product_id.image1.url }} " alt="nike" style="width: 70px; height: 80px; "></td>
                     <td> {{item.user1}} </td>
-                    <td> {{item.product_id.selling_price}} x {{item.quantity}}  </td>
+                    <td style=" word-wrap: break-word; max-width:130px"> {{item.address1.state}},{{item.address1.district}} <br>
+                        {{item.address1.house}},{{item.address1.town}}, {{item.address1.pincode}} <br> {{item.address1.number}}
+                    </td>
+                    <td> {{item.product.product_id.selling_price}} x {{item.quantity}}  </td>
+                    <td> {{item.size}}  </td>
                     <td> {{item.order_id.payment_mode}} </td>
                     
                     <td >
@@ -99,7 +105,7 @@
                     </div>
                     <div class="form-group">
                         <label>Product</label>
-                        <input type="email" class="form-control" value="{{item.product_id}}" disabled>
+                        <input type="email" class="form-control" value="{{item.product.product_id}}" disabled>
                     </div>
                     <div class="form-group">
                         <label>Customer</label>
@@ -146,7 +152,7 @@
                     </div>
                     <div class="form-group">
                         <label>Product</label>
-                        <input type="text" class="form-control" value="{{item.product_id}}" disabled>
+                        <input type="text" class="form-control" value="{{item.product.product_id}}" disabled>
                     </div>
                     <div class="form-group">
                         <label>Ordered Date</label>

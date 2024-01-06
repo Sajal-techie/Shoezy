@@ -1,5 +1,5 @@
 from django.shortcuts import render,redirect
-from .models import Product,ProductImages
+from .models import *
 from categorymanagement. models import Brand
 import os
 
@@ -9,13 +9,15 @@ def view_products(request):
         return redirect('page_not_found')
     if 'admin' in request.session:
         products = Product.objects.all().order_by('-id')
+        productvariant = ProductVariant.objects.all()
         brands = Brand.objects.all()
 
         mulimage = ProductImages.objects.all()
-        context = {
+        context = {  
             'product':products,
             'brands': brands,
-            'imagess':mulimage
+            'imagess':mulimage,
+            'productvariant':productvariant
             
         }
         return render(request,'admin/admproducts.html',context)
@@ -30,7 +32,7 @@ def add_product(request):
             noofferprice = request.POST['noofferprice']
             offerprice = request.POST['offerprice']
             desc = request.POST['desc']
-            quantity = request.POST['quantity']
+            # quantity = request.POST['quantity']
             img_name = request.FILES.get('image1') if 'image1' in request.FILES else None
             brand = Brand.objects.get(id = brand_id)
             pro = Product(name = name,
@@ -39,7 +41,8 @@ def add_product(request):
                         original_price = noofferprice,
                         selling_price = offerprice,
                         description = desc,
-                        quantity = quantity,)
+                        # quantity = quantity,
+                        )
             
             # add image to product table
             if img_name:
@@ -57,7 +60,35 @@ def add_product(request):
         
         return redirect('view_products')
     
-    
+def add_variant(request,id):
+    if request.method == 'POST':
+        color = request.POST['color']
+        size = request.POST['size']
+        quantity = request.POST['quantity']
+        product = Product.objects.get(id = id)
+        ProductVariant.objects.create(product_id = product,size = size,stock = quantity,color = color)
+  
+    return redirect('view_products')
+
+def edit_variant(request,id):
+    if request.method == 'POST':
+        quantity = request.POST['quantity']
+        # color = request.POST['color']
+        # size = request.POST['size']
+        variant = ProductVariant.objects.get(id = id)
+        # variant.size = size
+        # variant.color = color
+        variant.stock = quantity
+        variant.save()
+        
+    return redirect('view_products')
+
+
+def delete_variant(request,id):
+    variant = ProductVariant.objects.get(id=id)
+    variant.delete()
+    return redirect('view_products')
+        
 
 
 def edit_product(request,id):
@@ -71,7 +102,6 @@ def edit_product(request,id):
         noofferprice = request.POST['noofferprice']
         offerprice = request.POST['offerprice']
         desc = request.POST['desc']
-        quantity = request.POST['quantity']
         
         img_name = request.FILES.get('image1',None) 
         
@@ -81,7 +111,6 @@ def edit_product(request,id):
         exist.original_price = noofferprice
         exist.selling_price = offerprice
         exist.description = desc
-        exist.quantity = quantity
         
         
         if img_name is not None :
@@ -127,7 +156,9 @@ def list_product(request,id):
 def search_product(request):
     search = request.GET['search']
     items   = Product.objects.filter(name__icontains = search)
+    productvariant = ProductVariant.objects.all()
     context = {
-        'product': items
+        'product': items,
+        'productvariant':productvariant
     }
     return render(request, 'admin/admproducts.html',context)

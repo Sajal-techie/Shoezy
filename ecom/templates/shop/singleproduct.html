@@ -4,31 +4,52 @@
 
     {% block navbar %} {% include 'navbar.html' %} {% endblock navbar %} 
     {% block maincontent %} 
+	
+	<style>.custom-button {
+		width: 150px !important;
+		height: 80px !important;
+		display: inline-block !important;
+		padding-bottom: 20px  !important;
+		font-size: 16px;
+		font-weight: bold;
+		text-align: center !important;
+		text-decoration: none;
+		border-radius: 25px !important;
+		cursor: pointer ;
+		background-color: #000000 !important;
+		color: #000000 !important;
+		border: 3px solid #000000 !important;
+		transition: background-color 0.3s, color 0.3s !important;
+	}
+	
+	.custom-button:hover {
+		background-color: #000000 !important;
+		color: #fff !important;
+	}</style>
     <body class="goto-here">
  <!-- <h1 class="mb-0 bread text-center">Shop</h1> -->
     <section class="ftco-section">
-		{% for prod in product %}
+		{% for prod in productvariant %}
     	<div class="container">
     		<div class="row">
     			<div class="col-lg-6 mb-5 ftco-animate prd1">
                     <div>
                         <div class="image-zoom-container imgsiz" id="product-container">
-                        <img src="{{prod.image1.url}}" class="img-fluid" alt="Product Image" id="zoom-image">
+                        <img src="{{prod.product_id.image1.url}}" class="img-fluid" alt="Product Image" id="zoom-image">
                         </div>
                         <div class="thumbnail-container">
-                            <img src="{{ prod.image1.url }}" class="thumbnail" alt="Thumbnail 1" onclick="changeImage(this)">
+                            <img src="{{ prod.product_id.image1.url }}" class="thumbnail" alt="Thumbnail 1" onclick="changeImage(this)">
 							{% for img in multi_image %}
                             <img src="{{ img.images.url }}" class="thumbnail" alt="Thumbnail 2" onclick="changeImage(this)">
-                            <!-- <img src="{% static 'images/pumashoelow.jpg' %}" class="thumbnail" alt="Thumbnail 3" onclick="changeImage(this)">
-                            <img src="{% static 'images/pumashoelow.jpg' %}" class="thumbnail" alt="Thumbnail 4" onclick="changeImage(this)"> -->
 							{% endfor %}
                         </div>
                     </div>
                 </div>
             
     			<div class="col-lg-6 product-details pl-md-5 ftco-animate">
-    				<h3>{{prod.brand.brand_name}} &nbsp; {{prod.name}}</h3>
-    				<!-- <div class="rating d-flex">
+    				<h3>{{prod.product_id.brand.brand_name}} &nbsp; {{prod.product_id.name}}</h3>
+    				<!-- 
+                     <div class="rating d-flex">
 							<p class="text-left mr-4">
 								<a href="#" class="mr-2">5.0</a>
 								<a href="#"><span class="ion-ios-star-outline"></span></a>
@@ -44,62 +65,118 @@
 								<a href="#" class="mr-2" style="color: #000;">500 <span style="color: #bbb;">Sold</span></a>
 							</p>
 						</div> -->
-                        <div class="ppp"><p class="price"><span class="mr-2 price-dc">₹{{prod.original_price}}</span><span class="price-sale">₹{{prod.selling_price}}</span></p></div>
+                        <div class="ppp"><p class="price"><span class="mr-2 price-dc">₹{{prod.product_id.original_price}}</span><span class="price-sale">₹{{prod.product_id.selling_price}}</span></p></div>
 						<p>
-                            Brand : {{prod.brand.brand_name}}  <br>
-                            Name : {{prod.name}} <br>
-                            Catergory : {{prod.category}} <br>
+                            Brand : {{prod.product_id.brand.brand_name}}  <br> 
+                            Name : {{prod.product_id.name}} <br>
+                            Catergory : {{prod.product_id.category}} <br>
+                            Color : {{prod.color}} <br>
+
                             <!-- Color : Green  <br> -->
                         </p>
+
+						<form action="{% url 'addto_cart' prod.id  %}" method="get">
+
 						<div class="row mt-4">
-							<!-- <div class="col-md-6">
+							<div class="col-md-6" id="reloadArea">
 								<div class="form-group d-flex">
-                                    <div class="select-wrap">
-                                    <div class="icon"><span class="ion-ios-arrow-down"></span></div>
-                                    <select name="" id="" class="form-control">
-                                        <option value="">Small</option>
-                                        <option value="">Medium</option>
-                                        <option value="">Large</option>
-                                        <option value="">Extra Large</option>
-                                    </select>
-                                    </div>
-                                </div>
-							</div> -->
-						<div class="w-100 p-4"></div>
-					<!-- <div class="input-group col-md-6 d-flex mb-3">
-                                <span class="input-group-btn mr-2">
-                                    <button type="button" class="quantity-left-minus btn"  data-type="minus" data-field="">
+									<div class="select-wrap">
+										<div class="icon"><span class="ion-ios-arrow-down"></span></div>
+										<select name="size" id="size" class="form-control" onchange="updateQuantity()">
+											<option value="7">7</option>
+											<option value="8">8</option>
+											<option value="9">9</option>
+											<option value="10">10</option>
+										</select>
+									</div>
+								</div>
+								<div class="w-100"></div>
+								<div class="col-md-12">
+									<p  id="quantityMessage" style="color: #2d2d2d;">  Only 0 left</p>
+								</div>
+							</div>
+						<div class="w-100 "></div>
+							<!-- quantity increment and decrement -->
+					<div class="input-group col-md-6 d-flex mb-3 ">
+                                <span class="input-group-btn mr-2    border border-muted">
+									<button type="button" class="quantity-left-minus btn mt-2 "  data-type="minus" data-field="">
                                         <i class="ion-ios-remove"></i>
                                     </button>
+                                    
                                 </span>
-                                <input type="text" id="quantity" name="quantity" class="quantity form-control input-number" value="1" min="1" max="3">
-                                <span class="input-group-btn ml-2">
-                                    <button type="button" class="quantity-right-plus btn" data-type="plus" data-field="">
+                                <input type="text" id="quantity" name="quantity" class="quantity form-control input-number" value="1" readonly >
+                                <span class="input-group-btn ml-2  border border-muted">
+								<button type="button" class="quantity-right-plus btn mt-2" data-type="plus" data-field="">
                                         <i class="ion-ios-add"></i>
                                 	</button>
+                                    
                                 </span>
-	          	    </div> -->
-	          	<div class="w-100"></div>
-	          	<div class="col-md-12">
-	          		<p style="color: #2d2d2d;"> {% if prod.quantity > 0 %} Only {{prod.quantity}} left {% else %} Out of stock {% endif %} </p>
-	          	</div>
+	          	    </div>
+					<!-- quantity end  -->
+	          	
           	</div>
-          	<p>
-				{% if is_in_cart %}
+          	<p class="p-3">
+			 <!-- {% if is_in_cart %}
 				<a href="/cart/" class="btn btn-black py-3 px-5 mr-2">View  Cart</a>
-				{% else %}
-				<a href="{% url 'addto_cart' prod.id  %}?next={{ request.path }}" class="btn btn-black py-3 px-5 mr-2">Add to Cart</a>
+				{% else %}  -->
+				{% if messages %}
+				{% for message in messages %}
+					<h6 class=" text-danger"> {{ message }} </h6>
+				{% endfor %}
 				{% endif %}
-				{% if prod.quantity > 0 %}
-				<a href="/buy_now/{{prod.id}}" class="btn btn-primary py-3 px-5 " style="color: black;">Buy now</a>
-				{% endif %}
+				<button type="submit" class="btn btn-black px-5 py-3" style="border-radius: 0cm;">
+					<span>Add to Cart</span>
+				</button>&nbsp;
+
+				<a href="" class="btn btn-primary py-3 px-5" style="color: black; border-radius: 0cm;"  data-toggle="modal" data-target="#sizeModal">Buy Now</a>
+
+						
+
 				&nbsp; &nbsp;
 				{% if not is_in_wish %}
-				<a href="{% url 'add_to_wish' prod.id %}?next={{request.path}} " title="add to wishlist"> <i class="fa-regular fa-heart fa-beat fa-2xl" style="color: #ff3246;"></i></a>
+				<a href="{% url 'add_to_wish' prod.product_id.id %}?next={{request.path}} " title="add to wishlist"> <i class="fa-regular fa-heart fa-beat fa-2xl" style="color: #ff3246;"></i></a>
 				{% else %}
-				<a href="{% url 'remove_wish' prod.id %}?next={{request.path}}" title="remove from wishlist"><i class="fa-solid fa-heart fa-2xl" style="color: #ff3246;"></i></a>
+				<a href="{% url 'remove_wish' prod.product_id.id %}?next={{request.path}}" title="remove from wishlist"><i class="fa-solid fa-heart fa-2xl" style="color: #ff3246;"></i></a>
 				{% endif %}
 			</p>
+			</form>
+			<!-- modal for buy now -->
+			<div class="modal fade" id="sizeModal" tabindex="-1" role="dialog" aria-labelledby="sizeModalLabel" aria-hidden="true" data-backdrop="false">
+				<div class="modal-dialog modal-dialog-centered" role="document">
+					<div class="modal-content border border-info">
+						<div class="modal-header">
+							<h5 class="modal-title" id="sizeModalLabel">Select Size</h5>
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+						<div class="modal-body">
+							<form  method="get" action="{% url 'buy_now' prod.product_id.id %}">
+								{% csrf_token %}
+								<div class="form-group">
+									<label for="size">Size:</label>
+									<select name="size" id="size" class="form-control">
+										<option value="7">7</option>
+										<option value="8">8</option>
+										<option value="9">9</option>
+										<option value="10">10</option>
+									</select>
+								</div>
+
+									<input type="text" class="form-control " id="name" name="quantity" placeholder="Enter the Quantity" required >
+								
+								<div class="text-center pt-2">
+									<button type="submit" class="btn btn-primary py-3 px-4" >Buy Now</button>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+		 <!-- {% endif %}  -->
+				
+				
     			</div>
     		</div>
             <div class="col-lg-6">
@@ -127,16 +204,16 @@
 
               <div class="tab-pane fade show active" id="v-pills-1" role="tabpanel" aria-labelledby="day-1-tab">
               	<div class="p-4">
-	              	<h3 class="mb-4">{{prod.brand.brand_name}} {{prod.name}}</h3>
-	              	<p>{{prod.description}} <br> {{prod.name}}is a fusion of sporty style and street-ready flair. With a sleek and modern design, these high-top sneakers offer a fashion-forward look that effortlessly transitions from the court to the urban landscape. Crafted with Puma's renowned attention to comfort and performance, these high tops feature a supportive ankle design, cushioned insoles, and the iconic Puma logo. Whether you're hitting the streets or making a statement on the court, the Puma Vegas High Top combines athletic functionality with trendsetting aesthetics</p>
+	              	<h3 class="mb-4">{{prod.product_id.brand.brand_name}} {{prod.product_id.name}}</h3>
+	              	<p>{{prod.product_id.description}} <br> {{prod.product_id.name}}is a fusion of sporty style and street-ready flair. With a sleek and modern design, these high-top sneakers offer a fashion-forward look that effortlessly transitions from the court to the urban landscape. Crafted with Puma's renowned attention to comfort and performance, these high tops feature a supportive ankle design, cushioned insoles, and the iconic Puma logo. Whether you're hitting the streets or making a statement on the court, the Puma Vegas High Top combines athletic functionality with trendsetting aesthetics</p>
               	</div>
               </div>
 
               <div class="tab-pane fade" id="v-pills-2" role="tabpanel" aria-labelledby="v-pills-day-2-tab">
               	<div class="p-4">
-	              	<h3 class="mb-4">Manufactured By {{prod.brand.brand_name}}</h3>
+	              	<h3 class="mb-4">Manufactured By {{prod.product_id.brand.brand_name}}</h3>
 	              	<p>
-                        {{prod.brand.brand_name}}, a prominent shoe manufacturer, is recognized for its commitment to quality craftsmanship and innovative shoe designs. Leveraging cutting-edge technology, Puma's shoe manufacturing process integrates performance-driven features with contemporary aesthetics. The brand's expertise spans various athletic disciplines, with a focus on creating footwear that not only meets the demands of sports enthusiasts but also reflects current fashion trends. Puma's dedication to sustainability is evident in its responsible sourcing of materials and eco-friendly manufacturing practices. Through a combination of heritage and forward-thinking, Puma continues to shape the landscape of shoe manufacturing, producing a diverse range of athletic and lifestyle footwear that resonates with a global audience.</p>
+                        {{prod.product_id.brand.brand_name}}, a prominent shoe manufacturer, is recognized for its commitment to quality craftsmanship and innovative shoe designs. Leveraging cutting-edge technology, Puma's shoe manufacturing process integrates performance-driven features with contemporary aesthetics. The brand's expertise spans various athletic disciplines, with a focus on creating footwear that not only meets the demands of sports enthusiasts but also reflects current fashion trends. Puma's dedication to sustainability is evident in its responsible sourcing of materials and eco-friendly manufacturing practices. Through a combination of heritage and forward-thinking, Puma continues to shape the landscape of shoe manufacturing, producing a diverse range of athletic and lifestyle footwear that resonates with a global audience.</p>
               	</div>
               </div>
               <div class="tab-pane fade" id="v-pills-3" role="tabpanel" aria-labelledby="v-pills-day-3-tab">
@@ -282,6 +359,28 @@
   <div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px"><circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/><circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00"/></svg></div>
 
   <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+  <script>
+    // Call the updateQuantity function when the page loads
+    document.addEventListener("DOMContentLoaded", function() {
+        updateQuantity();
+    });
+
+    function updateQuantity() {
+        // Get the selected size from the dropdown
+        var selectedSize = document.getElementById("size").value;
+
+        // Loop through product variants to find the corresponding quantity
+        var quantityMessage = "Out of stock";
+        {% for vari in productvariants %}
+            if ({{ vari.size }} == selectedSize && {{ vari.stock }} > 0) {
+                quantityMessage = "Only " + {{ vari.stock }} + " left";
+            }
+        {% endfor %}
+
+        // Update the quantity message in the HTML
+        document.getElementById("quantityMessage").innerText = quantityMessage;
+    }
+</script>
 
   <script>
 		$(document).ready(function(){
@@ -295,9 +394,9 @@
 		        var quantity = parseInt($('#quantity').val());
 		        
 		        // If is not undefined
-		            
+		            if(quantity < 5){
 		            $('#quantity').val(quantity + 1);
-
+					}
 		          
 		            // Increment
 		        
@@ -312,7 +411,7 @@
 		        // If is not undefined
 		      
 		            // Increment
-		            if(quantity>0){
+		            if(quantity>1){
 		            $('#quantity').val(quantity - 1);
 		            }
 		    });
@@ -337,6 +436,14 @@ thumbnailContainer.addEventListener('mouseover', function () {
 
 
 	</script>
-    
+	<script>
+		$(document).ready(function() {
+			$("#sizeForm").submit(function(e) {
+				e.preventDefault();
+				console.log("Form submitted with size: " + $("#size").val());
+				$('#sizeModal').modal('hide');
+			});
+		});
+	</script>
   </body>
   {% endblock maincontent %} 

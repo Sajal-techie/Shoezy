@@ -175,15 +175,15 @@ justify-content: center;
         <ul class="row">
             <li class="col-md-12">
               <figure class="itemside mb-6">
-                <div class="aside"><img src="{{ order.product_id.image1.url }}" class="img-sm border"></div>
+                <div class="aside"><img src="{{ order.product.product_id.image1.url }}" class="img-sm border"></div>
                 <figcaption class="info align-self-center">
-                  <p class="title">{{ order.product_id.brand }} <br> {{ order.product_id.name }}</p>
-                  <span class="text-muted">₹{{ order.product_id.selling_price }} </span>
+                  <p class="title">{{ order.product.product_id.brand }} <br> {{ order.product.product_id.name }}</p>
+                  Size : {{order.size}}  &nbsp; &nbsp;
+                  <span class="text-muted">Price : ₹{{ order.product.product_id.selling_price }} </span>
                 </figcaption>
               </figure>
                 {% if order.status == 'ordered' or order.status == 'shipped' or order.status == 'out_for_delivery' %}
-                <div class="text-center"><a href="/cancel_order/{{order.id}}" class="btn btn-danger" data-abc="true"> Cancel order</a></div>
-        
+                <div class="text-center"><a href="#" class="btn btn-danger" data-toggle="modal" data-target="#cancelOrderModal" data-abc="true">Cancel order</a></div>
                   {% endif %}
             </li>
         </ul>
@@ -192,7 +192,34 @@ justify-content: center;
         
       </div>
     </article>
+    </div>
+
+<!-- cancel reason MOdal -->
+    <div class="modal fade" id="cancelOrderModal" tabindex="-1" role="dialog" aria-labelledby="cancelOrderModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+          <div class="modal-content">
+              <div class="modal-header">
+                  <h5 class="modal-title" id="cancelOrderModalLabel">Cancel Order</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                  </button>
+              </div>
+              <div class="modal-body text-center">
+                  <!-- Form for reason input -->
+                  <form method="post" action="{% url 'cancel_order' order.id %}">
+                      {% csrf_token %}
+                      <div class="form-group ">
+                          <label for="cancellation_reason">Reason for cancellation:</label> <br>
+                          <!-- <input type="text" class="form-control" id="cancellation_reason" name="cancellation_reason" required> -->
+                          <textarea name="reason"  cols="55" rows="4" required></textarea>
+                      </div>
+                      <button type="submit" class="btn btn-danger">Submit </button>
+                  </form>
+              </div>
+          </div>
+      </div>
   </div>
+  
 </body>
 
 {% endblock maincontent %}

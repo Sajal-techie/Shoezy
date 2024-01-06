@@ -1,7 +1,7 @@
 from django.db import models
 from home.models import Customuser
 from user_profile.models import Address
-from productmanagement.models import Product
+from productmanagement.models import *
 from datetime import timedelta
 from django.utils import timezone
 from django.db.models.signals import pre_save
@@ -19,12 +19,14 @@ class Order(models.Model):
 class OrderProducts(models.Model):
     order_id = models.ForeignKey(Order, on_delete= models.SET_NULL, null = True,blank = True) 
     user1 =  models.ForeignKey(Customuser, on_delete= models.SET_NULL, null = True,blank = True) 
-    product_id = models.ForeignKey(Product, on_delete= models.SET_NULL, null = True,blank = True)  
+    product = models.ForeignKey(ProductVariant, on_delete= models.SET_NULL, null = True,blank = True )
+    size = models.IntegerField() 
     quantity = models.PositiveIntegerField(default = 0)
     amount =  models.DecimalField(max_digits=10, decimal_places=2, default=0.00,blank = True,null = True)
     status = models.CharField(max_length = 30,blank = True,null = True)
     address1 = models.ForeignKey(Address, on_delete= models.SET_NULL,null = True,blank = True) 
     delivery_date = models.DateField(null=True,blank = True)
+    reason = models.TextField(null = True,blank = True)
     
     
 @receiver(pre_save, sender=OrderProducts)

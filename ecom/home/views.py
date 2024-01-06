@@ -29,22 +29,23 @@ def home(request):
         if not username.is_blocked:  
             cartcount = Cart.objects.filter(user_id = username).count()
             wishcount = Wishlist.objects.filter(user_id = username).count()
-            cartlist = []
-            cart_items = Cart.objects.filter(user_id = username)
-            for i in cart_items:
-                    cartlist.append(i.product_id.id)
+            # cartlist = []
+            # cart_items = Cart.objects.filter(user_id = username).select_related('product__product_id')
+            # for i in cart_items:
+            #         cartlist.append(i.product.product_id.id)
                     
             wishlist1 = []
             wishitems = Wishlist.objects.filter(user_id = username)
             for j in wishitems:
                 wishlist1.append(j.product_id.id)
+                print(wishitems)
                 
             return render (request, 'home1.html',{'username': username.first_name,
                                                   'product' : products, 
                                                   'brand' : brands,
                                                   'cartcount':cartcount,
                                                   'wishcount':wishcount,
-                                                  'cartlist':cartlist ,
+                                                #   'cartlist':cartlist ,
                                                   'wishlist1':wishlist1
                                                   })
         else:

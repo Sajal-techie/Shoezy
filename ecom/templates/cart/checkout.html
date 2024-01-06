@@ -20,15 +20,17 @@
 							<h3>Cart Details</h3>
 							{% if buy_item %}
 								<div class="cart-item bg-light p-3 p-md-4">
-										<strong>{{ buy_item.brand.brand_name }} {{ buy_item.name }}</strong>
-										<p>Price: ₹{{buy_item.selling_price}} <br> Quantity: 1  <br>
-										total: ₹{{ buy_item.selling_price }}</p>
+										<strong>{{ buy_item.product_id.brand.brand_name }} {{ buy_item.product_id.name }}</strong> <BR>
+										Size : <strong>{{size}}</strong>
+										<p>Price: ₹{{buy_item.product_id.selling_price}} <br> Quantity: {{quantity}} <br>
+										total: ₹{{ total }}</p>
 								</div>
 							{% else %}
 							{% for item in cart_items %}
 								<div class="cart-item bg-light p-3 p-md-4">
-										<strong>{{ item.product_id.brand }} {{ item.product_id.name }}</strong>
-										<p>Price: ₹{{item.product_id.selling_price}} & Quantity: {{ item.quantity }}  <br>
+										<strong>{{ item.product.product_id.brand }} {{ item.product.product_id.name }}</strong> <br>
+										Size :<strong>  {{item.size}} </strong>
+										<p>Price: ₹{{item.product.product_id.selling_price}} & Quantity: {{ item.quantity }}  <br>
 										total: ₹{{ item.sub_total }}</p>
 								</div>
 							{% endfor %}

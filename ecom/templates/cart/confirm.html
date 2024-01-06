@@ -69,6 +69,7 @@
               <thead>
                 <tr>
                   <th scope="col" colspan="2">Product</th>
+                  <th scope="col">Size</th>
                   <th scope="col">Quantity</th>
                   <th scope="col">Total</th>
                 </tr>
@@ -76,7 +77,8 @@
               <tbody>
                 {% for item in order_items %}
                 <tr>
-                  <td colspan="2">{{item.product_id.brand.brand_name}} {{ item.product_id.name }}</td>
+                  <td colspan="2">{{item.product.product_id.brand.brand_name}} {{ item.product.product_id.name }}</td>
+                  <td>{{item.size}}</td>
                   <td>{{item.quantity}}</td>
                   <td><span>{{item.amount}}</span></td>
                 </tr>
