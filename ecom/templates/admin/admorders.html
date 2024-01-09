@@ -116,7 +116,7 @@
                         <select class="form-control" id="status" name="status" required>
                             <option value="ordered" {% if item.status == 'ordered' %} selected {% endif %}> Ordered</option>
                             <option value="shipped" {% if item.status == 'shipped' %} selected {% endif %} > Shipped</option>
-                            <option value="out_for_delivery" {% if item.status == 'out_for_delivery' %} selected {% endif %}> Out for delivery</option>
+                            <option value="out for delivery" {% if item.status == 'out for delivery' %} selected {% endif %}> Out for delivery</option>
                             <option value="delivered" {% if item.status == 'delivered' %} selected {% endif %}> Delivered</option>
                             <option value="cancelled" {% if item.status == 'cancelled' %} selected {% endif %}>Cancelled </option>
                         </select>

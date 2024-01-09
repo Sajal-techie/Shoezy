@@ -9,9 +9,24 @@ from cart.models import *
 # Create your views here.
 
 def shop(request):
+    
+    categor = request.GET.get('category')
+    brand_names = request.GET.get('brand')
+    
     products = Product.objects.filter(is_listed = True, brand_id__is_listed = True).order_by('-id')
-    brands = Brand.objects.filter(is_listed = True)
+    brands = Brand.objects.filter(is_listed = True).order_by('id')
     # multiple = ProductImages.objects.all()
+
+    if categor:
+        products = Product.objects.filter(is_listed = True, brand_id__is_listed = True,category = categor).order_by('-id') 
+
+    if brand_names:
+        products = Product.objects.filter(is_listed = True, brand_id__is_listed = True,brand_id__brand_name = brand_names).order_by('-id') 
+        
+    
+
+    
+    
     
     context = {
         'product' : products,

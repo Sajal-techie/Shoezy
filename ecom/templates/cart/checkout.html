@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block navbar %}
 {% include "navbar.html" %}
 {% endblock navbar %}
@@ -52,7 +53,7 @@
 									<div class="col-md-6 mb-3">
 										<div class="card bg-light">
 											<div class="card-body">
-												<input type="radio" name="address" value="{{ address.id }}" class="form-check-input" required>
+												<input type="radio" name="address" value="{{ address.id }}" class="form-check-input main-address" required checked>
 												<label class="form-check-label">
 													<strong>{{ address.name }}</strong><br>
 													{{ address.country }}, {{ address.state }}, {{ address.district }}, {{ address.town }}<br>
@@ -125,6 +126,9 @@
 												  <span>₹{{total}}</span>
 											  </p>
 											  </div>
+											  <input type="hidden" value="{{total}}" name="total_prize">
+											  <input type="hidden" value="{{username.first_name}} {{username.last_name}}" name="usersname">
+											  <input type="hidden" value="{{username.number}}" name="number1">
 								</div>
 								<!-- Payment Method Section -->
 								<div class="col-md-6">
@@ -132,16 +136,9 @@
 										<h3 class="billing-heading mb-4">Payment Method</h3>
 										<!-- Display payment options -->
 										<div class="form-group">
-											<label for="payment" class="col-md-12">Select Payment Method:</label>
-											<div class="col-md-12">
-												<select name="payment" id="payment" class="form-control">
-													<option value="cod">Cash on Delivery</option>
-													<option value="UPI">UPI(not available )</option>
-			
-												</select>
-											</div>
+										<p><button type="submit" class="btn btn-success" style="padding:15px 161px ;">Place  Order (Cash on delivery)</button></p>
+										<p><button type="button" class="btn btn-secondary razor" id="rzp-button1" style="padding:15px 194px ;">Pay with Razorpay</button></p>
 										</div>
-										<p><button type="submit" class="btn btn-primary py-3 px-4">Place  order</button></p>
 									</div>
 								</div>
 							</div>
@@ -157,45 +154,9 @@
   <!-- loader -->
   <div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px"><circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/><circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00"/></svg></div>
 
-
-
-
-  <script>
-		$(document).ready(function(){
-
-		var quantitiy=0;
-		   $('.quantity-right-plus').click(function(e){
-		        
-		        // Stop acting like a button
-		        e.preventDefault();
-		        // Get the field name
-		        var quantity = parseInt($('#quantity').val());
-		        
-		        // If is not undefined
-		            
-		            $('#quantity').val(quantity + 1);
-
-		          
-		            // Increment
-		        
-		    });
-
-		     $('.quantity-left-minus').click(function(e){
-		        // Stop acting like a button
-		        e.preventDefault();
-		        // Get the field name
-		        var quantity = parseInt($('#quantity').val());
-		        
-		        // If is not undefined
-		      
-		            // Increment
-		            if(quantity>0){
-		            $('#quantity').val(quantity - 1);
-		            }
-		    });
-		    
-		});
-	</script>
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script src={% static 'js/checkout.js' %}></script>
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     
   </body>
   {% endblock maincontent %}

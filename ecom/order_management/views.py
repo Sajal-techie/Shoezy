@@ -8,6 +8,12 @@ def admorders(request):
         return redirect('page_not_found')
     if 'admin' in request.session:
         orders = OrderProducts.objects.all().order_by('-id')
+        for order in orders:
+            if order.delivery_date < datetime.now().date():
+                order.status = 'delivered'
+            if order.delivery_date == datetime.now().date() and (order.status == 'ordered' or order.status == 'shipped'):
+                order.status = 'out for delivery'
+                order.save()
         context = {
             'order_items':orders
         }
@@ -21,6 +27,8 @@ def update_status(request,id):
         status1 = request.POST['status']
         orders = OrderProducts.objects.get(id = id)
         orders.status = status1
+        if status1 == 'delivered' or status1 =='out for delivery':
+            orders.delivery_date = datetime.now().date() 
         orders.save()
     return redirect('admorders')
 
@@ -31,7 +39,6 @@ def update_date(request,id):
         new_date = datetime.strptime(new_date1, '%Y-%m-%d').date()
         orders = OrderProducts.objects.get(id = id)
         orders.delivery_date = new_date
-        print(new_date1,new_date)
         orders.save()
         
     return redirect('admorders')

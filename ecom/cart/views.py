@@ -115,7 +115,7 @@ def checkout(request):
     if 'users' in request.session:
             usm = request.session.get('users')
             username = Customuser.objects.get(email = usm)
-            address = Address.objects.filter(user = username.id)
+            address = Address.objects.filter(user = username.id,is_available = True).order_by('id')
             cart_items = Cart.objects.filter(user_id = username.id).select_related('product__product_id')
             total = sum(i.sub_total for i in cart_items)
             cartcount = Cart.objects.filter(user_id = username).count()
@@ -134,7 +134,7 @@ def checkout(request):
                 if not adress1:
                     messages.error(request,'add address for delivery')
                     return redirect('checkout')
-                payment = request.POST['payment']
+                payment = 'Cash on delivery'
                 adress =  Address.objects.get(id = adress1)
                 current_order = Order.objects.create(user = username, address = adress,total = total,payment_mode = payment)
                 for i in cart_items:
@@ -154,6 +154,50 @@ def checkout(request):
             return render(request, 'cart/checkout.html',context)
     
     return redirect('login')
+
+
+def razor_pay(request):
+    if 'users' in request.session:
+            usm = request.session.get('users')
+            username = Customuser.objects.get(email = usm)
+            address = Address.objects.filter(user = username.id,is_available = True).order_by('id')
+            cart_items = Cart.objects.filter(user_id = username.id).select_related('product__product_id')
+            total = sum(i.sub_total for i in cart_items)
+            cartcount = Cart.objects.filter(user_id = username).count()
+
+            context = {
+                'address':address,
+                'cart_items':cart_items,
+                'username' :username,
+                'total':total,
+                'cartcount':cartcount
+            }
+            wishcount = Wishlist.objects.filter(user_id = username).count()
+            context['wishcount']=wishcount
+            if request.method == 'POST':
+                adress1 = request.POST.get('address',None)
+                payment = 'Razorpay'
+                adress =  Address.objects.get(id = adress1)
+                current_order = Order.objects.create(user = username, address = adress,total = total,payment_mode = payment)
+                for i in cart_items:
+                    obj = OrderProducts(order_id = current_order,user1 = username,product = i.product ,address1 = adress,quantity = i.quantity,amount = i.sub_total,status = 'ordered',size = i.size)
+                    if obj.product.stock > 0: 
+                        obj.product.stock = obj.product.stock - obj.quantity
+                        obj.product.save()
+                    else:
+                        messages.error(request, 'out of stock')
+                        data = {'redirect_url':'/checkout/',
+                                'error': True
+                        }
+                        return JsonResponse(data)
+                    obj.save()
+                    i.delete()
+                data = {'redirect_url':'/confirm/',
+                        'order_id1' : current_order.id ,
+                        'completed': True 
+                        }
+                return JsonResponse(data) 
+            
 
 
 # not working make it work

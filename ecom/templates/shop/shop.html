@@ -62,10 +62,12 @@
                     </div>
                 </div>
             </div>
-
-            <div class="col-md-4 col-lg-2">
+            
+          
+            <div class="col-md-4 col-lg-2 border border-muted">
                 <div class="sidebar">
                     <!-- Your existing sidebar content --><div class="sidebar">
+                        <form id="filterForm" method="get" action="{% url 'shop' %}">
 							<div class="sidebar-box-2">
 								<h2 class="heading">Filter</h2>
 								<div class="fancy-collapse-panel">
@@ -79,10 +81,14 @@
                          </div>
                          <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
                              <div class="panel-body">
-                                 <ul>
-                                 	<li><a href="#">Men</a></li>
-                                 	<li><a href="#">Female</a></li>
-                                 </ul>
+                                <label>
+                                    <input type="radio" name="category" value="men"> Men
+                                </label>
+                            
+                                <label>
+                                    <input type="radio" name="category" value="women"> Women
+                                </label>
+                            
                              </div>
                          </div>
                      </div>
@@ -96,12 +102,9 @@
                          <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
                              <div class="panel-body">
                                 <ul>
-                                 	<li><a href="#">Nike</a></li>
-                                 	<li><a href="#">Adidas</a></li>
-                                 	<li><a href="#">Fila</a></li>
-                                 	<li><a href="#">Puma</a></li>
-                                 	<li><a href="#">Converse</a></li>
-                                 	<li><a href="#">Woodland</a></li>
+                                    {% for brand in brand %}
+                                 	<li class="text-capitalize"><a href="?brand={{brand.brand_name}}">{{brand.brand_name}}</a></li>
+                                    {% endfor %}
                                 </ul>
                              </div>
                          </div>
@@ -136,7 +139,7 @@
                                 <ul>
                                  	<li><a href="#">9</a></li>
                                  	<li><a href="#">8</a></li>
-                                 q	<li><a href="#">7</a></li>
+                                 	<li><a href="#">7</a></li>
                                  	<li><a href="#">6</a></li>
                                  </ul>
                              </div>
@@ -147,7 +150,7 @@
 							</div>
 							<div class="sidebar-box-2">
 								<h2 class="heading">Price Range</h2>
-								<form method="post" class="colorlib-form-2">
+								<!-- <form method="post" class="colorlib-form-2"> -->
 		              <div class="row">
 		                <div class="col-md-12">
 		                  <div class="form-group">
@@ -183,11 +186,13 @@
 		                </div>
 		              </div>
 					  
-		            </form>
+		            <!-- </form> -->
 							</div>
 						</div>
                 </div>
             </div>
+        
+</form>
         </div>
     </div>
 </section>
@@ -255,4 +260,20 @@
 
 
 {% include "footer.html" %}
+
+
+<script>
+    document.querySelectorAll('select').forEach(select => {
+        select.addEventListener('change', () => {
+            document.getElementById('filterForm').submit();
+        });
+    });
+</script>
+<script>
+    document.querySelectorAll('input[type="radio"]').forEach(radio => {
+        radio.addEventListener('change', () => {
+            document.getElementById('filterForm').submit();
+        });
+    });
+</script>
 {% endblock maincontent %}

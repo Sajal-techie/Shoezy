@@ -11,6 +11,4 @@ urlpatterns = [
     path('page_not_found/', views.page_not_found ,name='page_not_found'),
     path('logout/', views.logout ,name='logout'),
 
-
-
 ]

@@ -12,47 +12,47 @@ from cart.models import *
 # Create your views here.
 @never_cache
 def home(request):
-    products = Product.objects.filter(is_listed = True, brand_id__is_listed = True).order_by('-id')[:8]
-    brands = Brand.objects.filter(is_listed = True)
+    try:
+        products = Product.objects.filter(is_listed = True, brand_id__is_listed = True).order_by('-id')[:8]
+        brands = Brand.objects.filter(is_listed = True)
 
-    context = {
-        'product' : products,
-        'brand' : brands,
-    }
-    if 'users' in request.session:
-        usm = request.session.get('users')
-        username = Customuser.objects.get(email = usm)
-        username.otp = None
-        username.save()
+        context = {
+            'product' : products,
+            'brand' : brands,
+        }
+        if 'users' in request.session:
+            usm = request.session.get('users')
+            username = Customuser.objects.get(email = usm)
+            username.otp = None
+            username.save()
 
-        
-        if not username.is_blocked:  
-            cartcount = Cart.objects.filter(user_id = username).count()
-            wishcount = Wishlist.objects.filter(user_id = username).count()
-            # cartlist = []
-            # cart_items = Cart.objects.filter(user_id = username).select_related('product__product_id')
-            # for i in cart_items:
-            #         cartlist.append(i.product.product_id.id)
+            
+            if not username.is_blocked:  
+                # getting cart count and wishlist count for displaying badge
+                cartcount = Cart.objects.filter(user_id = username).count()
+                wishcount = Wishlist.objects.filter(user_id = username).count()
+                        
+                wishlist1 = []
+                wishitems = Wishlist.objects.filter(user_id = username)
+                for j in wishitems:
+                    wishlist1.append(j.product_id.id)
+                    print(wishitems)
                     
-            wishlist1 = []
-            wishitems = Wishlist.objects.filter(user_id = username)
-            for j in wishitems:
-                wishlist1.append(j.product_id.id)
-                print(wishitems)
-                
-            return render (request, 'home1.html',{'username': username.first_name,
-                                                  'product' : products, 
-                                                  'brand' : brands,
-                                                  'cartcount':cartcount,
-                                                  'wishcount':wishcount,
-                                                #   'cartlist':cartlist ,
-                                                  'wishlist1':wishlist1
-                                                  })
-        else:
-            if 'users' in request.session:
-                del request.session['users']
-            messages.error(request,'you are blocked ')
-            return redirect('login')
+                return render (request, 'home1.html',{'username': username.first_name,
+                                                    'product' : products, 
+                                                    'brand' : brands,
+                                                    'cartcount':cartcount,
+                                                    'wishcount':wishcount,
+                                                    'wishlist1':wishlist1
+                                                    })
+            else:
+                if 'users' in request.session:
+                    del request.session['users']
+                messages.error(request,'you are blocked ')
+                return redirect('login')
+        
+    except Exception as e:
+        print(e)
     return render (request, 'home1.html',context)
 
 
