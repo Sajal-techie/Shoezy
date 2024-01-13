@@ -5,22 +5,40 @@
 <!-- start nav -->
 {% block navbar %}
 {% include 'navbar.html' %}
-{% endblock navbar %}
 
+{% endblock navbar %}
 <!-- END nav -->
+
 {% block maincontent %}
-<link rel="stylesheet" href={% static 'css/height.css' %}>
-   
+<link rel="stylesheet" href={% static 'css/height.css' %} />
+
+
 <section class="ftco-section bg-light" >
     <h1 class=" text-center scs">SHOP</h1>
+    <!-- sort by section start -->
+    <div class="container d-flex justify-content-end">
+        <form id="filterForm" method="post" action="{% url 'shop' %}">
+        <label for="sort_by" class="labels">Sort By:</label>
+        <select name="sort_by" class="selects" id="sort_by">
+            <option value="latest" {% if sort_by == 'latest' %}selected{% endif %}>Latest</option>
+            <option value="price_high" {% if sort_by == 'price_high' %}selected{% endif %}>Price: High to Low</option>
+            <option value="price_low" {% if sort_by == 'price_low' %}selected{% endif %}>Price: Low to High</option>
+        </select>
+    </div>
+    <!-- sort by section end -->
+
+   
     <div class="container">
         <div class="row">
             <div class="col-md-8 col-lg-10 order-md-last ">
+
+            <!-- Products section start -->
                 <div class="row">
                     {% for prod in product %}
                         <div class="col-sm-12 col-md-6 col-lg-4 d-flex  "  id="divhgt">
                             <div class="product d-flex flex-column align-items-baseline justify-content-center align-content-center">
-                                <a href="/singleproduct/{{prod.id}}" class="img-prod "><img class="img-fluid" src="{{prod.image1.url}}" alt="shoe">
+                                <a href="/singleproduct/{{prod.id}}" class="img-prod ">
+                                    <img class="img-fluid" src="{{prod.image1.url}}" alt="shoe">
                                     <span class="status">{{prod.discount_percentage}}% Off</span>
                                     <div class="overlay"></div>
                                 </a>
@@ -30,11 +48,8 @@
                                         <p class="price"><span class="mr-2 price-dc">₹{{prod.original_price}}</span><span class="price-sale">₹{{prod.selling_price}}</span></p>
                                     </div>
                                     <p class="bottom-area d-flex px-3">
-                                        <!-- {% if prod.id in cartlist   %}  
-                                        <a href="/cart/" class="add-to-cart text-center py-2 mr-1"><span>view cart <i class="ion-ios-cart ml-1"></i></span></a>
-                                        {% else %} -->
+                                        <!-- add to cart and wish list button  -->
                                         <a href="{% url 'singleproduct' prod.id %}" class="add-to-cart text-center py-2 mr-1"><span>View details </span></a>
-                                        <!-- {% endif %} -->
                                         {% if prod.id in wishlist1 %}
                                         <a href="/wishlist/" class="buy-now text-center py-2">View wishlist<span><i class="ion-ios-heart ml-1"></i></span></a>
                                         {% else %}
@@ -46,7 +61,10 @@
                         </div>
                     {% endfor %}
                 </div>
-                <div class="row mt-5">
+                <!-- Products section End -->
+                
+                <!-- Pagination Start -->
+                <div class="row mt-5">  
                     <div class="col text-center">
                         <div class="block-27">
                             <ul>
@@ -61,199 +79,258 @@
                         </div>
                     </div>
                 </div>
+                <!-- Pagination END -->
             </div>
             
-          
+                <!-- Filter Section Start  -->
             <div class="col-md-4 col-lg-2 border border-muted">
                 <div class="sidebar">
-                    <!-- Your existing sidebar content --><div class="sidebar">
-                        <form id="filterForm" method="get" action="{% url 'shop' %}">
+                   <div class="sidebar">
+                        {% csrf_token %}
 							<div class="sidebar-box-2">
-								<h2 class="heading">Filter</h2>
+								<h2 class="heading">Filters</h2>
 								<div class="fancy-collapse-panel">
-                  <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
-                     <div class="panel panel-default">
-                         <div class="panel-heading" role="tab" id="headingOne">
-                             <h4 class="panel-title">
-                                 <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">Category
-                                 </a>
-                             </h4>
-                         </div>
-                         <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
-                             <div class="panel-body">
-                                <label>
-                                    <input type="radio" name="category" value="men"> Men
-                                </label>
-                            
-                                <label>
-                                    <input type="radio" name="category" value="women"> Women
-                                </label>
-                            
-                             </div>
-                         </div>
-                     </div>
-                     <div class="panel panel-default">
-                         <div class="panel-heading" role="tab" id="headingTwo">
-                             <h4 class="panel-title">
-                                 <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">Brand
-                                 </a>
-                             </h4>
-                         </div>
-                         <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
-                             <div class="panel-body">
-                                <ul>
-                                    {% for brand in brand %}
-                                 	<li class="text-capitalize"><a href="?brand={{brand.brand_name}}">{{brand.brand_name}}</a></li>
-                                    {% endfor %}
-                                </ul>
-                             </div>
-                         </div>
-                     </div>
-                     <div class="panel panel-default">
-                         <div class="panel-heading" role="tab" id="headingThree">
-                             <h4 class="panel-title">
-                                 <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">Color
-                                 </a>
-                             </h4>
-                         </div>
-                         <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
-                             <div class="panel-body">
-                                <ul>
-                                 	<li><a href="#">Red</a></li>
-                                 	<li><a href="#">Black</a></li>
-                                 	<li><a href="#">White</a></li>
-                                 	<li><a href="#">Blue</a></li>
-                                 </ul>
-                             </div>
-                         </div>
-                     </div>
-                     <div class="panel panel-default">
-                         <div class="panel-heading" role="tab" id="headingFour">
-                             <h4 class="panel-title">
-                                 <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseThree">Size
-                                 </a>
-                             </h4>
-                         </div>
-                         <div id="collapseFour" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFour">
-                             <div class="panel-body">
-                                <ul>
-                                 	<li><a href="#">9</a></li>
-                                 	<li><a href="#">8</a></li>
-                                 	<li><a href="#">7</a></li>
-                                 	<li><a href="#">6</a></li>
-                                 </ul>
-                             </div>
-                         </div>
-                     </div>
-                  </div>
-               </div>
-							</div>
-							<div class="sidebar-box-2">
-								<h2 class="heading">Price Range</h2>
-								<!-- <form method="post" class="colorlib-form-2"> -->
-		              <div class="row">
-		                <div class="col-md-12">
-		                  <div class="form-group">
-		                    <label for="guests">Price from:</label>
-		                    <div class="form-field">
-		                      <i class="icon icon-arrow-down3"></i>
-		                      <select name="people" id="people" class="form-control">
-		                        <option value="#">1</option>
-		                        <option value="#">500</option>
-		                        <option value="#">1000</option>
-		                        <option value="#">2000</option>
-		                        <option value="#">3000</option>
-		                      </select>
-		                    </div>
-		                  </div>
-		                </div>
-		                <div class="col-md-12">
-		                  <div class="form-group">
-		                    <label for="guests">Price to:</label>
-		                    <div class="form-field">
-		                      <i class="icon icon-arrow-down3"></i>
-		                      <select name="people" id="people" class="form-control">
-		                        <option value="#">1000</option>
+                                    <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
 
-		                        <option value="#">2000</option>
-		                        <option value="#">4000</option>
-		                        <option value="#">6000</option>
-		                        <option value="#">8000</option>
-		                        <option value="#">10000</option>
-		                      </select>
-		                    </div>
-		                  </div>
-		                </div>
-		              </div>
-					  
-		            <!-- </form> -->
-							</div>
-						</div>
+                                        <!-- category section -->
+                                        <div class="panel panel-default">
+                                            <div class="panel-heading" role="tab" id="headingOne">
+                                                <h4 class="panel-title">
+                                                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">Category
+                                                    </a>
+                                                </h4>
+                                            </div>
+                                            <div id="collapseOne" class="panel-collapse collapse {% if men or women %}show{% endif %}" role="tabpanel" aria-labelledby="headingOne">
+                                                <div class="panel-body">
+                                                    <label>
+                                                        <input type="checkbox" name="men" value="men" {% if men %}checked{% endif %} > Men
+                                                    </label>
+                                                    <label>
+                                                        <input type="checkbox" name="women" value="women" {% if women %}checked{% endif %}> Women
+                                                    </label> 
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- brand section -->
+                                        <div class="panel panel-default">
+                                            <div class="panel-heading" role="tab" id="headingTwo">
+                                                <h4 class="panel-title">
+                                                    <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">Brand
+                                                    </a>
+                                                </h4>
+                                            </div>
+                                            <div id="collapseTwo" class="panel-collapse collapse {% if brand_names %}show{% endif %} " role="tabpanel" aria-labelledby="headingTwo">
+                                                <div class="panel-body">
+                                                    <ul>
+                                                        {% for brand in brand %}
+                                                        <label>
+                                                            <input type="checkbox" name="brandname" value="{{brand.brand_name}}" {% if brand.brand_name in brand_names %}checked {% endif %} > {{brand.brand_name}}
+                                                        </label> <br>
+                                                        {% endfor %}
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Color section -->
+                                        <div class="panel panel-default">
+                                            <div class="panel-heading" role="tab" id="headingThree">
+                                                <h4 class="panel-title">
+                                                    <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">Color
+                                                    </a>
+                                                </h4>
+                                            </div>
+                                            <div id="collapseThree" class="panel-collapse collapse  {% if  color_names %} show {% endif %} " role="tabpanel" aria-labelledby="headingThree">
+                                                <div class="panel-body">
+                                                    <ul>
+                                                        {% for col in color_list %}
+                                                        <label>
+                                                            <input type="checkbox" name="colors" value="{{col.color}}" {% if col.color in color_names %} checked {% endif %} > {{col.color}}
+                                                        </label> <br>
+                                                        {% endfor %}
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- size section -->
+                                        <div class="panel panel-default">
+                                            <div class="panel-heading" role="tab" id="headingFour">
+                                                <h4 class="panel-title">
+                                                    <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour">Size
+                                                    </a>
+                                                </h4>
+                                            </div>
+                                            <div id="collapseFour" class="panel-collapse collapse {% if sizes %}show{% endif %} " role="tabpanel" aria-labelledby="headingFour">
+                                                <div class="panel-body">
+                                                    <ul>
+                                                        {% for siz  in size_list  %}
+                                                        <label>
+                                                            <input type="checkbox" name="size" value="{{siz.size}}" {% if siz.size in sizes %} checked {% endif %} > {{siz.size}} 
+                                                        </label><br>
+                                                        {% endfor %}
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Discount section -->
+                                        <div class="panel panel-default">
+                                            <div class="panel-heading" role="tab" id="headingFive">
+                                                <h4 class="panel-title">
+                                                    <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="false" aria-controls="collapseFive">Discount %
+                                                    </a>
+                                                </h4>
+                                            </div>
+                                            <div id="collapseFive" class="panel-collapse collapse {% if discount and discount != '0'  %}show{% endif %} " role="tabpanel" aria-labelledby="headingFive">
+                                                <div class="panel-body">
+                                                <ul>
+                                                    <label>
+                                                        <input type="radio" name="dis" value="0" {% if discount == '0' %} checked {% endif %}> All <br>
+                                                    </label>
+                                                    <label>
+                                                        <input type="radio" name="dis" value="50" {% if discount == '50' %} checked {% endif %}> Above 50% <br>
+                                                    </label>
+                                                    <label>
+                                                        <input type="radio" name="dis" value="40" {% if discount == '40' %} checked {% endif %}> Above 40% <br>
+                                                    </label>
+                                                    <label>
+                                                        <input type="radio" name="dis" value="30" {% if discount == '30' %} checked {% endif %}> Above 30% <br>
+                                                    </label>
+                                                    <label>
+                                                        <input type="radio" name="dis" value="20" {% if discount == '20' %} checked {% endif %}> Above 20% <br>
+                                                    </label>
+                                                    <label>
+                                                        <input type="radio" name="dis" value="10" {% if discount == '10' %} checked {% endif %}> Above 10% <br>
+                                                    </label>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+			                </div>
+
+                            <!-- prize range section  -->
+                            <div class="sidebar-box-2">
+                                <h2 class="heading">Price Range</h2>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                        <label for="guests">Price from:</label>
+                                            <div class="form-field">
+                                                <i class="icon icon-arrow-down3"></i>
+                                                <select name="lowest" id="lowest" class="form-control" >
+                                                <option value="1" {% if lowest == "1" %}selected{% endif %} >1</option>
+                                                <option value="500" {% if lowest == "500" %}selected{% endif %}>500</option>
+                                                <option value="1000" {% if lowest == "1000" %}selected{% endif %}>1000</option>
+                                                <option value="2000" {% if lowest == "2000" %}selected{% endif %}>2000</option>
+                                                <option value="3000" {% if lowest == "3000" %}selected{% endif %}>3000</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                
+                                    <div class="col-md-12">
+                                            <!-- error message for prize  backend -->
+                                        {% if messages %}
+                                        {% for message in messages %}
+                                            <h6 class=" text-danger"> {{ message }} </h6>
+                                        {% endfor %}
+                                            {% endif %}
+                                            <!-- error message for prize  front end -->
+                                            <span id="price-message" class="text-danger"></span>
+                                            <!-- error message END -->
+
+                                    <div class="form-group">
+                                    <label for="guests">Price to:</label>
+                                        <div class="form-field">
+                                            <i class="icon icon-arrow-down3"></i>
+                                            <select name="highest" id="highest" class="form-control">
+                                            <option value="1000" {% if highest == "1000" %}selected{% endif %}>1000</option>
+                                            <option value="2000" {% if highest == "2000" %}selected{% endif %}>2000</option>
+                                            <option value="4000" {% if highest == "4000" %}selected{% endif %}>4000</option>
+                                            <option value="5000" {% if highest == "5000" %}selected{% endif %}>6000</option>
+                                            <option value="8000" {% if highest == "8000" %}selected{% endif %}>8000</option>
+                                            <option value="10000" {% if highest == "10000" %}selected{% endif %} 
+                                                                            {% if highest == null %}selected {% endif %} >10000</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div> 
+                            </div> 
+                            <div class="text-center"> <a href="/reset_filters/" class="btn btn-outline-danger"> Reset filters</a></div>                           
+                          
+					</div>
                 </div>
             </div>
-        
-</form>
+                <!-- Filter Section End  -->        
+            </form>
+        </div>
+    </div>
+    <!-- products section end -->
+</section>
+
+<!-- insta section start -->
+<section class="ftco-gallery">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8 heading-section text-center mb-4 ftco-animate">
+                <h2 class="mb-4">Follow Us On Instagram</h2>
+                <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts. Separated they live in</p>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid px-0">
+        <div class="row no-gutters">
+                <div class="col-md-4 col-lg-2 ftco-animate">
+                    <a href={% static 'images/gallery-1.jpg' %} class="gallery image-popup img d-flex align-items-center" style="background-image: url({% static 'images/gallery-1.jpg' %});">
+                        <div class="icon mb-4 d-flex align-items-center justify-content-center">
+                            <span class="icon-instagram"></span>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-md-4 col-lg-2 ftco-animate">
+                    <a href={% static 'images/gallery-2.jpg' %} class="gallery image-popup img d-flex align-items-center" style="background-image: url({% static 'images/gallery-2.jpg' %});">
+                        <div class="icon mb-4 d-flex align-items-center justify-content-center">
+                            <span class="icon-instagram"></span>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-md-4 col-lg-2 ftco-animate">
+                    <a href={% static 'images/gallery-3.jpg' %} class="gallery image-popup img d-flex align-items-center" style="background-image: url({% static 'images/gallery-3.jpg' %});">
+                        <div class="icon mb-4 d-flex align-items-center justify-content-center">
+                            <span class="icon-instagram"></span>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-md-4 col-lg-2 ftco-animate">
+                    <a href={% static 'images/gallery-4.jpg' %} class="gallery image-popup img d-flex align-items-center" style="background-image: url({% static 'images/gallery-4.jpg' %});">
+                        <div class="icon mb-4 d-flex align-items-center justify-content-center">
+                            <span class="icon-instagram"></span>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-md-4 col-lg-2 ftco-animate">
+                    <a href={% static 'images/gallery-5.jpg' %} class="gallery image-popup img d-flex align-items-center" style="background-image: url({% static 'images/gallery-5.jpg' %});">
+                        <div class="icon mb-4 d-flex align-items-center justify-content-center">
+                            <span class="icon-instagram"></span>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-md-4 col-lg-2 ftco-animate">
+                    <a href={% static 'images/gallery-6.jpg' %} class="gallery image-popup img d-flex align-items-center" style="background-image: url({% static 'images/gallery-6.jpg' %});">
+                        <div class="icon mb-4 d-flex align-items-center justify-content-center">
+                            <span class="icon-instagram"></span>
+                        </div>
+                    </a>
+                </div>
         </div>
     </div>
 </section>
-		
-		<section class="ftco-gallery">
-    	<div class="container">
-    		<div class="row justify-content-center">
-    			<div class="col-md-8 heading-section text-center mb-4 ftco-animate">
-            <h2 class="mb-4">Follow Us On Instagram</h2>
-            <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts. Separated they live in</p>
-          </div>
-    		</div>
-    	</div>
-    	<div class="container-fluid px-0">
-    		<div class="row no-gutters">
-					<div class="col-md-4 col-lg-2 ftco-animate">
-						<a href={% static 'images/gallery-1.jpg' %} class="gallery image-popup img d-flex align-items-center" style="background-image: url({% static 'images/gallery-1.jpg' %});">
-							<div class="icon mb-4 d-flex align-items-center justify-content-center">
-    						<span class="icon-instagram"></span>
-    					</div>
-						</a>
-					</div>
-					<div class="col-md-4 col-lg-2 ftco-animate">
-						<a href={% static 'images/gallery-2.jpg' %} class="gallery image-popup img d-flex align-items-center" style="background-image: url({% static 'images/gallery-2.jpg' %});">
-							<div class="icon mb-4 d-flex align-items-center justify-content-center">
-    						<span class="icon-instagram"></span>
-    					</div>
-						</a>
-					</div>
-					<div class="col-md-4 col-lg-2 ftco-animate">
-						<a href={% static 'images/gallery-3.jpg' %} class="gallery image-popup img d-flex align-items-center" style="background-image: url({% static 'images/gallery-3.jpg' %});">
-							<div class="icon mb-4 d-flex align-items-center justify-content-center">
-    						<span class="icon-instagram"></span>
-    					</div>
-						</a>
-					</div>
-					<div class="col-md-4 col-lg-2 ftco-animate">
-						<a href={% static 'images/gallery-4.jpg' %} class="gallery image-popup img d-flex align-items-center" style="background-image: url({% static 'images/gallery-4.jpg' %});">
-							<div class="icon mb-4 d-flex align-items-center justify-content-center">
-    						<span class="icon-instagram"></span>
-    					</div>
-						</a>
-					</div>
-					<div class="col-md-4 col-lg-2 ftco-animate">
-						<a href={% static 'images/gallery-5.jpg' %} class="gallery image-popup img d-flex align-items-center" style="background-image: url({% static 'images/gallery-5.jpg' %});">
-							<div class="icon mb-4 d-flex align-items-center justify-content-center">
-    						<span class="icon-instagram"></span>
-    					</div>
-						</a>
-					</div>
-					<div class="col-md-4 col-lg-2 ftco-animate">
-						<a href={% static 'images/gallery-6.jpg' %} class="gallery image-popup img d-flex align-items-center" style="background-image: url({% static 'images/gallery-6.jpg' %});">
-							<div class="icon mb-4 d-flex align-items-center justify-content-center">
-    						<span class="icon-instagram"></span>
-    					</div>
-						</a>
-					</div>
-        </div>
-    	</div>
-    </section>
-
+<!-- insta section END -->
 
   <!-- loader -->
   <div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px"><circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/><circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00"/></svg></div>
@@ -261,19 +338,51 @@
 
 {% include "footer.html" %}
 
-
+<!-- script for submit (without button ) -->
 <script>
-    document.querySelectorAll('select').forEach(select => {
-        select.addEventListener('change', () => {
+    document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+        checkbox.addEventListener('change', () => {
             document.getElementById('filterForm').submit();
         });
     });
 </script>
 <script>
-    document.querySelectorAll('input[type="radio"]').forEach(radio => {
+    document.querySelectorAll('input[type="radio"]').forEach(radio =>{
         radio.addEventListener('change', () => {
             document.getElementById('filterForm').submit();
         });
     });
 </script>
+
+<!-- search bar autosubmit  -->
+<script>
+    document.querySelectorAll('input[type="search"]').forEach(input  => {
+        input.addEventListener('change', () => {
+            document.getElementById('search-form').submit();
+        });
+    });
+</script>
+
+<!-- for prize range validation -->
+<script>
+    
+    const lowestSelect = document.getElementById("lowest");
+    const highestselect = document.getElementById("highest"); 
+    const sorting = document.getElementById("sort_by"); 
+
+    function checkValues() {
+      if (parseInt( lowestSelect.value) >parseInt( highestselect.value)) {
+        document.getElementById("price-message").textContent = "Starting prize must be less than or equal to Highest prize";
+      } else {
+        document.getElementById('filterForm').submit();
+      }
+    }
+    
+    lowestSelect.addEventListener("change", checkValues);
+    highestselect.addEventListener("change", checkValues);
+    sorting.addEventListener("change", () => {
+        document.getElementById('filterForm').submit(); 
+    });
+</script>
+
 {% endblock maincontent %}

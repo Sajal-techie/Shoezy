@@ -7,7 +7,7 @@
 <div class="container mt-5 p-3 mb-4">
     <div class="card bg-light p-4 mx-auto" style="max-width: 600px;">
         <h2 class="mb-4 text-center">Edit Address</h2>
-        <form method="post" action="{% url 'edit_address' address %}">
+        <form method="post" action="{% url 'edit_address' address %}" id="myForm">
             {% csrf_token %}
             {% if messages %}
                 {% for message in messages %}
@@ -41,8 +41,8 @@
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
-                        <label for="number">Mobile Number</label>
-                        {{ form.number }}
+                        <label id="number_label" for="id_number">{{ form.number.label }}(+91)</label>
+                        <input type="number" id="id_number" name="number" value="{{form.number.value}}" required>
                     </div>
                     <div class="form-group">
                         <label for="state">State</label>
@@ -53,8 +53,8 @@
                         {{ form.town }}
                     </div>
                     <div class="form-group">
-                        <label for="pincode">Pincode</label>
-                        {{ form.pincode }}
+                        <label id="pinlabel" for="id_pin">{{ form.pincode.label }}</label>
+                        <input type="number" id="id_pin" name="pincode" value="{{form.pincode.value}}" required>
                     </div>
                     <div class="form-group">
                         <label for="alternate_number">Alternate Number</label>
@@ -68,5 +68,23 @@
         </form>
     </div>
 </div>
+<script>
+    const form = document.getElementById("myForm");
+    form.addEventListener("submit", function(event) {
+        const numberInput = document.getElementById("id_number");
+        const number = numberInput.value;
+        const pincode = document.getElementById("id_pin");
+        const pin =  pincode.value;
+
+      if (number.length !== 10) { 
+        event.preventDefault();
+        alert("Enter valid mobile number !!");
+      }
+      else if(pin.length !== 6) {
+        event.preventDefault();
+        alert("Enter a valid PINCODE (6-digits) !!")
+      }
+    });
+</script>
 {% include "footer.html" %}
 {% endblock maincontent %}

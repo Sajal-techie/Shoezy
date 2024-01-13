@@ -1,77 +1,91 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 {% block navbar %}
-{% include "navbar.html" %}
-{% endblock navbar %}
-
-
+  {% include 'navbar.html' %}
+{% endblock %}
 
 {% block maincontent %}
-
-
-<div class="container mt-5 d-flex  justify-content-center mb-4 p-3">
-  <div class="card bg-light p-4  ">
+  <div class="container mt-5 d-flex justify-content-center mb-4 p-3">
+    <div class="card bg-light p-4">
       <h2 class="mb-4 text-center">Add Address</h2>
-      <form method="post" action="{% url 'add_address' %}?next={{ request.GET.next }}">
-          {% csrf_token %}
-          {% if messages %}
-              {% for message in messages %}
-                  <h5 class="text-danger text-center">{{ message }}</h5>
-              {% endfor %}
-          {% endif %}
-          <div class="row">
-              <div class="col-md-6">
-                  <div class="form-group">
-                      <label for="name">Name</label>
-                      {{ form.name }}
-                  </div>
-                  <div class="form-group">
-                      <label for="country">Country</label>
-                      {{ form.country }}
-                  </div>
-
-                  <div class="form-group">
-                      <label for="district">District</label>
-                      {{ form.district }}
-                  </div>
-
-                <div class="form-group">
-                  <label for="house">House</label>
-                  {{ form.house }}
-              </div>
-              <div class="form-group">
-                <label for="land_mark">Landmark</label>
-                {{ form.land_mark }}
+      <form method="post" action="{% url 'add_address' %}?next={{ request.GET.next }}" id="myForm">
+        {% csrf_token %}
+        {% if messages %}
+          {% for message in messages %}
+            <h5 class="text-danger text-center">{{ message }}</h5>
+          {% endfor %}
+        {% endif %}
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="name">Name</label>
+              {{ form.name }}
             </div>
-              </div>
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label for="number">Mobile Number</label>
-                  {{ form.number }}
-              </div>
-              <div class="form-group">
-                <label for="state">State</label>
-                {{ form.state }}
+            <div class="form-group">
+              <label for="country">Country</label>
+              {{ form.country }}
+            </div>
+
+            <div class="form-group">
+              <label for="district">District</label>
+              {{ form.district }}
+            </div>
+
+            <div class="form-group">
+              <label for="house">House</label>
+              {{ form.house }}
+            </div>
+            <div class="form-group">
+              <label for="land_mark">Landmark</label>
+              {{ form.land_mark }}
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label id="number_label" for="id_number">{{ form.number.label }}(+91)</label>
+              <input type="number" id="id_number" name="number" maxlength="10" required/>
+            </div>
+            <div class="form-group">
+              <label for="state">State</label>
+              {{ form.state }}
             </div>
             <div class="form-group">
               <label for="town">Town</label>
               {{ form.town }}
+            </div>
+            <div class="form-group">
+              <label id="pinlabel" for="id_pin">{{ form.pincode.label }}</label>
+              <input type="number" id="id_pin" name="pincode" required/>
+            </div>
+
+            <div class="form-group">
+              <label for="alternate_number">Alternate Number</label>
+              {{ form.alternate_number }}
+            </div>
           </div>
-                  <div class="form-group">
-                      <label for="pincode">Pincode</label>
-                      {{ form.pincode }}
-                  </div>
-                
-                  <div class="form-group">
-                      <label for="alternate_number">Alternate Number</label>
-                      {{ form.alternate_number }}
-                  </div>
-              </div>
-          </div>
-          <div class="text-center">
-              <button type="submit" class="btn btn-primary px-4">Save Address</button>
-          </div>
+        </div>
+        <div class="text-center">
+          <button type="submit" class="btn btn-primary px-4">Save Address</button>
+        </div>
       </form>
+    </div>
   </div>
-</div>
-{% include "footer.html" %}
-{% endblock maincontent %}
+  <script>
+    const form = document.getElementById("myForm")
+    form.addEventListener("submit", function(event){
+        const inputnumber =  document.getElementById("id_number")
+        const pincode =  document.getElementById("id_pin")
+        const number = inputnumber.value;
+        const pin = pincode.value;
+
+        if (number.length != 10){
+            event.preventDefault();
+            alert("enter a valid number !")
+        }
+        else if(pin.length !=6 ){
+            event.preventDefault();
+            alert("enter valid pincode (6-digits)!")
+        }
+    });
+</script>
+  {% include 'footer.html' %}
+{% endblock %}

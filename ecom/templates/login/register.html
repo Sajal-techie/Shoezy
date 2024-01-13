@@ -21,12 +21,13 @@
                     <div class="login_part_form_iner">
                         <h3>Welcome ! <br>
                             Register with  the details</h3>  
+                            <!-- showing error messages  -->
                             {% if messages %}
                             {% for message in messages %}
                             <h6 class=" text-danger"> {{ message }} </h6>
                           {% endfor %}
                           {% endif %}
-                      <form class="row contact_form" action="/register/" method="post" >
+                      <form class="row contact_form" action="/register/" method="post" onsubmit="return checkbox()" >
                         {% csrf_token %}
                             <div class="col-md-12 form-group p_star">
                                 <input   type="text" class="form-control" id="fname" name="fname" 
@@ -50,9 +51,10 @@
                             </div>
                             <div class="col-md-12 form-group">
                                  <div class="creat_account d-flex align-items-center">
-                                    <input type="checkbox" id="f-option" name="selector">
-                                    <label for="f-option">I agree to the  <a href="#">terms and conditions</a> </label>
+                                    <input type="checkbox" id="term" name="selector" >
+                                    <label for="term">I agree to the  <a href="/terms/">terms and conditions</a> </label>
                                 </div> 
+                                <p id="checkboxMessage" class="text-danger"></p>
                                  <button type="submit" value="submit" class="btn_3 border-dark lgn">
                                     Register
                                  </button>
@@ -61,67 +63,25 @@
                          </div>
                         
                        </form>
-                                <!-- Modal -->
-                              <!-- <div class="modal fade" id="otpModal" tabindex="-1" role="dialog" aria-labelledby="otpModalLabel" aria-hidden="true">
-                                <div class="modal-dialog" role="document">
-                                  <div class="modal-content">
-                                    <div class="modal-header">
-                                      <h5 class="modal-title text-center" id="otpModalLabel">OTP Verification</h5>
-                                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                      </button>
-                                    </div>
-                                    <div class="modal-body">
-              
-                                      <div class="d-flex justify-content-center align-items-center container kk">
-                                        <form method="post" action="/register/">
-                                            {% csrf_token %}
-                                            
-                                                <div class="card py-5 px-3">
-                                                  <span class="mobile-text text-center h5">
-                                                    4 digit Verification code send into your email<br>
-                                                    <b class="bbb">Check mail !!</b>
-                                                  </span>
-                                                  
-                                                  <div class="d-flex flex-row mt-5">
-                                                    <input type="text" maxlength="1" class="form-control" autofocus="" />
-                                                    <input type="text" maxlength="1" class="form-control" />
-                                                    <input type="text" maxlength="1" class="form-control" />
-                                                    <input type="text" maxlength="1" class="form-control" />
-                                                    <input type="text" maxlength="1" class="form-control" />
-                                                    <input type="text" maxlength="1" class="form-control" />
-
-                                                  </div>
-                                                  <div class="m-4 text-center">
-                                                    {% comment %} <a class="btn-custom btn-light px-5 py-3 validate ">Cancel</a>  {% endcomment %}
-                                                    <button class="px-5 py-3  validate1" type="button">Verify</button>
-                                                  </div>
-                                                  <div class="text-center mt-5 bbb">
-                                                    <span class="d-block mobile-text" id="countdown"></span>
-                                                    <span class="d-block mobile-text" id="resend"></span>
-                                                  </div>
-                                                </div>
-                                            </div>
-                                          </form>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div> -->
-                              <!-- modal end -->
-                              
                       </div>
             </div>
         </div>
     </div>
 </section>
-<!-- <script>
-  $(document).ready(function () {
-    // Function to show the modal when the button is clicked
-    $('#otpModalBtn').click(function () {
-      $('#otpModal').modal('show');
-    });
-  });
-</script> -->
+<!-- check box validation -->
+<script>
+  function checkbox(){
+    const term1 = document.getElementById('term') ;
+    const checkmsg = document.getElementById('checkboxMessage');
+    if (term.checked){
+        return true;
+    }
+    else{
+      checkmsg.textContent = "⬆️ Agree the terms and conditions" ;
+      return false
+
+    }
+  }
+</script>
 {% include 'footer.html' %}
 {% endblock maincontent %}

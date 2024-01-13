@@ -43,9 +43,9 @@ def about_us(request):
     return render(request, 'about.html')
 
 
-
-
-
+def terms(request):
+    return render(request, 'terms.html')
+    
 
 
 def send_message(request):

@@ -11,6 +11,8 @@ def admorders(request):
         for order in orders:
             if order.delivery_date < datetime.now().date():
                 order.status = 'delivered'
+                order.save()
+                
             if order.delivery_date == datetime.now().date() and (order.status == 'ordered' or order.status == 'shipped'):
                 order.status = 'out for delivery'
                 order.save()

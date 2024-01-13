@@ -4,6 +4,7 @@
 
 <section class="login_part padding_top">
     <div class="container">
+        <!-- register side left -->
         <div class="row align-items-center">
             <div class="col-lg-6 col-md-6">
                 <div class="login_part_text text-center">
@@ -19,6 +20,7 @@
                     <div class="login_part_form_iner">
                         <h3>Welcome Back ! <br>
                             Please Sign in now</h3>
+                            <!-- show error message  -->
                             {% if messages %}
                                     {% for message in messages %}
                                         <h6 class=" text-danger"> {{ message }} </h6>
@@ -33,10 +35,10 @@
                                 <input type="password" class="form-control" id="password" name="password" value="" placeholder="password" required >
                             </div>
                             <div class="col-md-12 form-group">
-                                {% comment %} <div class="creat_account d-flex align-items-center">
-                                    <input type="checkbox" id="f-option" name="selector">
-                                    <label for="f-option">Remember me</label>
-                                </div> {% endcomment %}
+                                <div class="creat_account d-flex align-items-center">
+                                    <input type="checkbox" id="showpass" name="selector">
+                                    <label for="showpass">Show password</label>
+                                </div> 
                                 <button type="submit" value="submit" class="btn_3 border-dark lgn">
                                     Login
                                 </button>
@@ -48,7 +50,7 @@
             </div>
         </div>
     </div>
-
+<!-- modal for forget password  -->
     <div id="forgetpass" class="modal fade">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -72,7 +74,22 @@
             </div>
         </div>
     </div>
-    
+    <!-- modal end -->
+<script>
+const pass = document.getElementById('password')
+const show = document.getElementById('showpass')
 
+show.addEventListener("change",() =>{
+    if (show.checked){
+        pass.type = 'text';
+    }
+    else{
+        pass.type = 'password';
+    }
+
+});
+
+
+</script>
 {% include 'footer.html' %}
 {% endblock maincontent %}

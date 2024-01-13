@@ -1,106 +1,72 @@
 {% load static %}
-<style>
-  .search-container {
-    position: relative;
-    display: inline-block;
-}
-
-.search-icon {
-    cursor: pointer;
-}
-
-.search-box {
-    display: none;
-    position: absolute;
-    top: 100%;
-    left: 0;
-    background-color: #fff;
-    border: 1px solid #ccc;
-    padding: 10px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.search-container:hover .search-box {
-    display: block;
-}
-
-.search-box form {
-    display: flex;
-}
-
-.search-box input {
-    flex: 1;
-    padding: 8px;
-    font-size: 14px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-}
-
-.search-box button {
-    padding: 8px 12px;
-    font-size: 14px;
-    background-color: #C6E2FF ;
-    color: black;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-}
-</style>
 
 
 <div style="height: 90px;" id="visibdiv"></div>
 <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
-    <div class="container">
-      <a class="navbar-brand" href="">SHOEZY</a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="oi oi-menu"></span> 
-      </button>
+  <div class="container">
+    <a class="navbar-brand" href="">SHOEZY</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav"
+      aria-expanded="false" aria-label="Toggle navigation">
+      <span class="oi oi-menu"></span>
+    </button>
 
-      <div class="collapse navbar-collapse" id="ftco-nav">
-        <ul class="navbar-nav ml-auto">
-          <li class="nav-item "><a href="/" class="nav-link">Home</a></li>
-          <li class="nav-item"><a href="/shop/" class="nav-link">Shop</a></li>
-          <li class="nav-item"><a href="/about_us/" class="nav-link">About</a></li>
+    <div class="collapse navbar-collapse" id="ftco-nav">
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item "><a href="/" class="nav-link">Home</a></li>
+        <li class="nav-item"><a href="/shop/" class="nav-link">Shop</a></li>
+        <li class="nav-item"><a href="/about_us/" class="nav-link">About</a></li>
         <li class="nav-item dropdown">
-          {%  if 'users' in request.session %}
-          <a class="nav-link dropdown-toggle" href="" id="dropdown04" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{username}}</a>
+          <!-- display the drop down checking the session in user -->
+          {% if 'users' in request.session %}
+          <a class="nav-link dropdown-toggle" href="" id="dropdown04" data-toggle="dropdown" aria-haspopup="true"
+            aria-expanded="false">{{username}}</a>
           {% else %}
-          <a class="nav-link dropdown-toggle" href="/login/" id="dropdown04" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Login</a>
-          {% endif %} 
+          <a class="nav-link dropdown-toggle" href="/login/" id="dropdown04" data-toggle="dropdown" aria-haspopup="true"
+            aria-expanded="false">Login</a>
+          {% endif %}
           <div class="dropdown-menu" aria-labelledby="dropdown04">
-            {%  if 'users' in request.session %}            
+            {% if 'users' in request.session %}
             <a class="dropdown-item" href="/view_profile/">Profile</a>
             <a class="dropdown-item" href="/order_history/">order details</a>
             <a class="dropdown-item" href="/contact_us/">Contact us</a>
             <a class="dropdown-item" href="/logout/">Logout</a>
             {% else %}
-              <a class="dropdown-item" href="/login/">Login</a>
+            <a class="dropdown-item" href="/login/">Login</a>
             <a class="dropdown-item" href="/register/">Register</a>
-
-            
-            {% endif %} 
-            <!-- <a class="dropdown-item" href="checkout.html">Checkout</a> -->
+            {% endif %}
         </li>
-          <!-- <li class="nav-item"><a href="blog.html" class="nav-link">Name</a></li> -->
-          <li class="nav-item"> <div class="search-container">
-            <div class="search-icon pt-3">
-                <i class="fa-solid fa-magnifying-glass fa-sm" style="color: #000000;"></i>
-            </div>
-            <div class="search-box">
-                <form action="/seachitems/">
-                    <input type="text" placeholder="Search..." name="search_items" >
-                    <button type="submit"><i class="fa-solid fa-magnifying-glass text-primary"></i></button>
-                </form>
-            </div>
-        </div></li>
-          {%  if 'users' in request.session %}
-          <li class="nav-item  cta cta-colored"><a href="/wishlist/" class="nav-link"><img class="heart1" src={% static 'images/heart.svg' %} alt="wishlist">[{{wishcount}}]</a></li> 
-          
-          <li class="nav-item cta cta-colored"><a href="/cart/" class="nav-link"><span class="icon-shopping_cart"></span>[{{cartcount}}]</a></li>
-          {% endif %} 
-        </ul>
-      </div>
+        <!-- wishlist and cart is vivsible only after loggin in -->
+        {% if 'users' in request.session %}
+        <li class="nav-item  cta cta-colored">
+          <a href="/wishlist/" class="nav-link"><img class="heart1" src={% static 'images/heart.svg' %}
+           alt="wishlist">[{{wishcount}}]</a>
+        </li>
+
+        <li class="nav-item cta cta-colored"><a href="/cart/" class="nav-link"><span
+              class="icon-shopping_cart"></span>[{{cartcount}}]</a></li>
+        {% endif %}
+        <li class="nav-item">
+          <a class="nav-link" href="#" id="search-icon" title="search">
+            <i class="fas fa-search"></i>
+          </a>
+        </li>
+      </ul>
+      <form class="form-inline my-2 my-lg-0 d-none {% if srcitem %} d-block {% endif %} " action="/shop/" method="post" id="search-form">
+        {% csrf_token %}
+        <div class="input-group input-group-sm">
+          <input id="srctm" class="form-control" type="search" placeholder="Search" aria-label="Search" name="search_items" {% if srcitem %}value="{{srcitem}}" {% endif %}  >
+          <div class="input-group-append">
+            <button class="btn btn-outline-warning bg-light text-dark px-2" type="submit">Search</button>
+          </div>
+        </div>
+      </form>
     </div>
-  </nav>
-  
-  <script src="https://kit.fontawesome.com/412a20d28b.js" crossorigin="anonymous"></script>
+  </div>
+</nav>
+
+<script src="https://kit.fontawesome.com/412a20d28b.js" crossorigin="anonymous"></script>
+<script>
+  document.getElementById('search-icon').addEventListener('click', function () {
+    document.getElementById('search-form').classList.toggle('d-block');
+  });
+</script>

@@ -68,21 +68,32 @@ def admhome(request):
             last_year_first_day = last_year_last_day.replace(day=1, month=1)
             
             daily = OrderProducts.objects.filter(order_id__order_date = today).exclude(status = 'cancelled').aggregate(daily = Sum('amount'))['daily'] or 0
-            yesterday = OrderProducts.objects.filter(order_id__order_date = yesterday).exclude(status = 'cancelled').aggregate(yesterday = Sum('amount'))['yesterday'] or 0      
-            daily_perc = -round((((yesterday - daily)/yesterday) *100),2)
+            yesterday = OrderProducts.objects.filter(order_id__order_date = yesterday).exclude(status = 'cancelled').aggregate(yesterday = Sum('amount'))['yesterday'] or 0   
+            try:   
+                daily_perc = -round((((yesterday - daily)/yesterday) *100),2)
+            except ZeroDivisionError:
+                daily_perc = 0
             
             weekly_sales = OrderProducts.objects.filter(order_id__order_date__gte = this_week).exclude(status = 'cancelled').aggregate(weekly_sales = Sum('amount'))['weekly_sales'] or 0
             last_week_sales = OrderProducts.objects.filter(order_id__order_date__gte = last_week).exclude(status = 'cancelled').aggregate(last_week_sales = Sum('amount'))['last_week_sales'] or 0
-            weekly_perc = -round((((last_week_sales - weekly_sales)/last_week_sales) * 100),2)
+            try:
+                weekly_perc = -round((((last_week_sales - weekly_sales)/last_week_sales) * 100),2)
+            except ZeroDivisionError:
+                weekly_perc = 0
             
             monthly_sales = OrderProducts.objects.filter(order_id__order_date__gte = this_month).exclude(status = 'cancelled').aggregate(monthly_sales = Sum('amount'))['monthly_sales'] or 0
             last_month_sales = OrderProducts.objects.filter(order_id__order_date__range = (last_month_first_day,last_month_last_day)).exclude(status = 'cancelled').aggregate(last_month_sales = Sum('amount'))['last_month_sales'] or 0
-            monthly_perc = -round((((last_month_sales - monthly_sales)/last_month_sales)*100),2)
+            try:
+                monthly_perc = -round((((last_month_sales - monthly_sales)/last_month_sales)*100),2)
+            except ZeroDivisionError:
+                monthly_perc = 0
             
             yearly_sales = OrderProducts.objects.filter(order_id__order_date__gte = this_year).exclude(status = 'cancelled').aggregate(yearly_sales = Sum('amount'))['yearly_sales'] or 0
             last_year_sales = OrderProducts.objects.filter(order_id__order_date__range = (last_year_first_day,last_year_last_day)).exclude(status = 'cancelled').aggregate(last_year_sales = Sum('amount'))['last_year_sales'] or 0
-            yearly_perc = -round((((last_year_sales - yearly_sales)/last_year_sales)*100),2)
-            
+            try:
+                yearly_perc = -round((((last_year_sales - yearly_sales)/last_year_sales)*100),2)
+            except ZeroDivisionError:
+                yearly_perc = 0
             
             labels = ['January','February','March','April','May','June','July','August','September','October','November','December']
             monthly_sales_data = OrderProducts.objects.filter(order_id__order_date__gte=this_year,
@@ -98,14 +109,12 @@ def admhome(request):
             order_status_data = OrderProducts.objects.values('status').annotate(status_count=Count('status'))
             pielabel = []
             piedata = []
-            for item in order_status_data:
+            for item in order_status_data: 
                 pielabel.append(item['status'])
                 piedata.append(item['status_count'])
                  
             
-            
-                    
-                    
+
             last_10_days = [today - timedelta(days=i) for i in range(9, -1, -1)]
             daily_sales_data = OrderProducts.objects.filter(
                 order_id__order_date__in=last_10_days).exclude(status = 'cancelled'
