@@ -1,8 +1,20 @@
 
 /* height of the image and div */
+
+   #divhgt{
+    margin-bottom: 50px !important;
+  }
+
+
+@media (min-width: 400px){
+  #divhgt{
+      height: 600px  !important  ;
+    }
+    }
+
       @media (min-width: 768px){
         #divhgt{
-            height: 500px !important  ;
+            height: 361px  !important  ;
           }
           }
 
@@ -17,11 +29,19 @@
           }
           }
                  
- #divhgt{
-        margin-bottom: 40px !important;
-      }
-      
-   
+          @media (max-width: 992px){
+            #divhg{
+                height: 450px  !important;
+
+              }
+              .mainprod #divhgt{
+                margin-bottom: 120px !important;
+              }
+              .sunon{
+                margin-bottom: 0px !important ;
+              }
+              }
+    
 /* sortby (high or low) */
 .labels {
   font-weight: 600; 

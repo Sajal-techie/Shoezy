@@ -24,7 +24,7 @@
                 </div>
             </div>
         </div>
-        <form action="/search_brand/">
+        <form action="/viewbrand/">
         <div class="row input-group ">
             <input type="search" name="name" class="form-control rounded offset-1 col-lg-8 col-sm-4 " placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
             <button type="submit" class="btn btn-outline-primary btn-primary col-lg-2 col-sm-3 " data-mdb-ripple-init>search</button>
@@ -57,18 +57,30 @@
                 
             </tbody>
         </table>
-        <!-- <div class="clearfix">
-            <div class="hint-text">Showing <b>5</b> out of <b>25</b> entries</div>
+       <div class="clearfix">
+            <div class="hint-text"> <b>{{brand}} </b>  </div>
+            {% if brand.has_other_pages %}
             <ul class="pagination">
-                <li class="page-item disabled"><a href="#">Previous</a></li>
-                <li class="page-item"><a href="#" class="page-link">1</a></li>
-                <li class="page-item"><a href="#" class="page-link">2</a></li>
-                <li class="page-item active"><a href="#" class="page-link">3</a></li>
-                <li class="page-item"><a href="#" class="page-link">4</a></li>
-                <li class="page-item"><a href="#" class="page-link">5</a></li>
-                <li class="page-item"><a href="#" class="page-link">Next</a></li>
+                {% if brand.has_previous %}
+                    <li class="page-item"><a href="?page={{brand.previous_page_number}} " class="page-link">&lt; </a></li>
+                {% else %}
+                    <li class="page-item disabled"><a href="#">&lt;</a></li>
+                {% endif %}
+                {% for i in brand.paginator.page_range  %}
+                    {% if brand.number == i %}
+                    <li class="active"><span>{{ i }} <span class="sr-only"> (current) </span></span></li>
+                    {% else %}
+                        <li class="page-item"><a href="?page={{ i }}" class="page-link">{{ i }} </a></li>
+                    {% endif %}
+                {% endfor %}
+                {% if brand.has_next %}
+                    <li class="page-item"><a href="?page={{brand.next_page_number}}" class="page-link">&gt;</a></li>
+                {% else %}
+                    <li class="page-item disabled"><a href="#" class="page-link">&gt;</a></li>
+                {% endif %}
             </ul>
-        </div> -->
+            {% endif %}
+        </div> 
     </div>
 </div>
 <!-- ADD Modal HTML -->

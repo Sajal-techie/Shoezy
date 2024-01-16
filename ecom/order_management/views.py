@@ -1,27 +1,39 @@
 from django.shortcuts import render,redirect
 from .models import *
 from datetime import datetime
-# Create your views here.
+from django.core.paginator import Paginator,EmptyPage,PageNotAnInteger
+from django.db.models import Q
+
 
 def admorders(request):
     if 'users' in request.session:
         return redirect('page_not_found')
     if 'admin' in request.session:
         orders = OrderProducts.objects.all().order_by('-id')
-        for order in orders:
-            if order.delivery_date < datetime.now().date():
-                order.status = 'delivered'
-                order.save()
-                
-            if order.delivery_date == datetime.now().date() and (order.status == 'ordered' or order.status == 'shipped'):
-                order.status = 'out for delivery'
-                order.save()
-        context = {
-            'order_items':orders
+
+        search = request.GET.get('search','')
+        if search:
+            orders = orders.filter(Q( id__contains = search) | Q(status__icontains = search ))
+            
+        # paginator
+        page = request.GET.get('page',1)
+        paginator = Paginator(orders,10)
+        try:
+            orders = paginator.page(page)
+        except PageNotAnInteger:
+            orders = paginator.page(1)
+        except EmptyPage:
+            orders = paginator.page(paginator.num_pages)
+            
+            
+        context = { 
+            'order_items':orders,
+            'search':search
         }
         return render(request,'admin/admorders.html',context )
 
     return redirect('admlogin')
+
 
 
 def update_status(request,id):

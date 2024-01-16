@@ -1,11 +1,26 @@
 from django.shortcuts import render,redirect
 from . models import Brand
+from django.core.paginator import Paginator,EmptyPage,PageNotAnInteger
 # Create your views here.
 def viewbrand(request):
     if 'users' in request.session:
         return redirect('page_not_found')
     if 'admin' in request.session:
         brands = Brand.objects.all().order_by('id')
+        
+        brandname = request.GET.get('name')
+        if brandname:
+            brands = brands.filter(brand_name__icontains = brandname )
+            
+        page = request.GET.get('page',1)
+        paginator = Paginator(brands,10)  
+        try:
+            brands =  paginator.page(page)
+        except PageNotAnInteger:
+            brands =  paginator.page(1)
+        except EmptyPage:
+            brands =  paginator.page(paginator.num_pages)
+            
         context = {
             'brand': brands
         }
@@ -48,10 +63,3 @@ def delete_brand(request,id):
     brand.delete()
     return redirect('viewbrand')
 
-def search_brand(request):
-    brandname = request.GET['name']
-    brands = Brand.objects.filter(brand_name__icontains = brandname )
-    context = {
-        'brand': brands
-    }
-    return render(request,'admin/admcategory.html',context)

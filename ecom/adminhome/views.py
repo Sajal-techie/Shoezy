@@ -9,6 +9,7 @@ from datetime import datetime
 from order_management.models import *
 from django.db.models.aggregates import Sum,Count
 from django.db.models.functions import ExtractMonth
+from django.core.paginator import Paginator,PageNotAnInteger,EmptyPage
 
 
 
@@ -99,7 +100,7 @@ def admhome(request):
             monthly_sales_data = OrderProducts.objects.filter(order_id__order_date__gte=this_year,
                                                               order_id__order_date__lte=this_year_end
                                                               ).exclude(status='cancelled').values(month=ExtractMonth('order_id__order_date')
-                                                                                                   ).annotate(monthly_sales=Sum('amount')).order_by('month')
+                                                                                                   ).annotate(monthly_sales=Sum('amount')).order_by('month') 
             
             data = [0] * 12
             for item in monthly_sales_data:
@@ -160,6 +161,22 @@ def admusers(request):
         return redirect('page_not_found')
     if 'admin' in request.session and request.user.is_staff:
         user_list = Customuser.objects.all().order_by('id')
+        
+        searchs = request.GET.get('searchuser')
+        if searchs:
+            print('hai') 
+            user_list =  user_list.filter(Q(first_name__icontains = searchs ) | Q(last_name__icontains = searchs ) | Q(email__icontains = searchs) ).order_by('id')
+
+        # paginator 
+        page = request.GET.get('page',1)
+        paginator = Paginator(user_list,10) 
+        try:
+            user_list = paginator.page(page)
+        except PageNotAnInteger:
+            user_list = paginator.page(1)
+        except EmptyPage:
+            user_list = paginator.page(paginator.num_pages)
+            
         context = {
             'user_details': user_list
         }
@@ -182,16 +199,6 @@ def unblock_user(request,id):
         return redirect('admusers') 
     return redirect('admusers')
 
-
-def user_search(request):
-    if 'users' in request.session:
-        return redirect('page_not_found')
-    sname = request.GET['searchuser']
-    user_list = Customuser.objects.filter(Q(first_name__icontains = sname ) | Q(email__icontains = sname) ).order_by('id')
-    context = {
-        'user_details': user_list
-    }
-    return render(request,'admin/admusers.html',context)
 
 def admbanners(request):
     return render(request,'admin/admbanners.html')

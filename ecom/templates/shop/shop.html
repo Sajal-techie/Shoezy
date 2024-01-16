@@ -15,9 +15,10 @@
 
 <section class="ftco-section bg-light" >
     <h1 class=" text-center scs">SHOP</h1>
+
     <!-- sort by section start -->
     <div class="container d-flex justify-content-end">
-        <form id="filterForm" method="post" action="{% url 'shop' %}">
+        <form id="filterForm"  action="{% url 'shop' %}">
         <label for="sort_by" class="labels">Sort By:</label>
         <select name="sort_by" class="selects" id="sort_by">
             <option value="latest" {% if sort_by == 'latest' %}selected{% endif %}>Latest</option>
@@ -27,7 +28,6 @@
     </div>
     <!-- sort by section end -->
 
-   
     <div class="container">
         <div class="row">
             <div class="col-md-8 col-lg-10 order-md-last ">
@@ -35,7 +35,7 @@
             <!-- Products section start -->
                 <div class="row">
                     {% for prod in product %}
-                        <div class="col-sm-12 col-md-6 col-lg-4 d-flex  "  id="divhgt">
+                        <div class="col-sm-12 col-md-6 col-lg-4 d-flex sunon "  id="divhgt">
                             <div class="product d-flex flex-column align-items-baseline justify-content-center align-content-center">
                                 <a href="/singleproduct/{{prod.id}}" class="img-prod ">
                                     <img class="img-fluid" src="{{prod.image1.url}}" alt="shoe">
@@ -67,15 +67,27 @@
                 <div class="row mt-5">  
                     <div class="col text-center">
                         <div class="block-27">
+                            {% if product.has_other_pages %}
                             <ul>
-                                <li><a href="#">&lt;</a></li>
-                                <li class="active"><span>1</span></li>
-                                <li><a href="#">2</a></li>
-                                <li><a href="#">3</a></li>
-                                <li><a href="#">4</a></li>
-                                <li><a href="#">5</a></li>
-                                <li><a href="#">&gt;</a></li>
+                                {% if product.has_previous %}
+                                    <li><a href="?page={{ product.previous_page_number }}{% if men %}&men={{ men }}{% endif %}{% if women %}&women={{ women }}{% endif %}{% for brand in brand_names %}&brandname={{ brand }}{% endfor %}{% for color in color_names %}&colors={{ color }}{% endfor %}{% for size in sizes %}&size={{ size }}{% endfor %}{% if discount %}&dis={{ discount }}{% endif %}{% if lowest %}&lowest={{ lowest }}{% endif %}{% if highest %}&highest={{ highest }}{% endif %}{% if sort_by %}&sort_by={{ sort_by }}{% endif %}">&lt;</a></li>
+                                {% else %}
+                                    <li class="disabled"><span>&lt;</span></li>
+                                {% endif %}
+                                {% for i in product.paginator.page_range %}
+                                    {% if product.number == i %}
+                                        <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+                                    {% else %}
+                                        <li><a href="?page={{ i }}{% if men %}&men={{ men }}{% endif %}{% if women %}&women={{ women }}{% endif %}{% for brand in brand_names %}&brandname={{ brand }}{% endfor %}{% for color in color_names %}&colors={{ color }}{% endfor %}{% for size in sizes %}&size={{ size }}{% endfor %}{% if discount %}&dis={{ discount }}{% endif %}{% if lowest %}&lowest={{ lowest }}{% endif %}{% if highest %}&highest={{ highest }}{% endif %}{% if sort_by %}&sort_by={{ sort_by }}{% endif %}">{{ i }}</a></li>
+                                    {% endif %}
+                                {% endfor %}
+                                {% if product.has_next %}
+                                    <li><a href="?page={{ product.next_page_number }}{% if men %}&men={{ men }}{% endif %}{% if women %}&women={{ women }}{% endif %}{% for brand in brand_names %}&brandname={{ brand }}{% endfor %}{% for color in color_names %}&colors={{ color }}{% endfor %}{% for size in sizes %}&size={{ size }}{% endfor %}{% if discount %}&dis={{ discount }}{% endif %}{% if lowest %}&lowest={{ lowest }}{% endif %}{% if highest %}&highest={{ highest }}{% endif %}{% if sort_by %}&sort_by={{ sort_by }}{% endif %}">&gt;</a></li>
+                                {% else %}
+                                    <li class="disabled"><span>&gt;</span></li>
+                                {% endif %}
                             </ul>
+                        {% endif %}
                         </div>
                     </div>
                 </div>
@@ -86,7 +98,6 @@
             <div class="col-md-4 col-lg-2 border border-muted">
                 <div class="sidebar">
                    <div class="sidebar">
-                        {% csrf_token %}
 							<div class="sidebar-box-2">
 								<h2 class="heading">Filters</h2>
 								<div class="fancy-collapse-panel">

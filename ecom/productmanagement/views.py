@@ -2,6 +2,8 @@ from django.shortcuts import render,redirect
 from .models import *
 from categorymanagement. models import Brand
 import os
+from django.db.models import Q
+from django.core.paginator import Paginator,PageNotAnInteger,EmptyPage
 
 # view products
 def view_products(request):
@@ -12,6 +14,7 @@ def view_products(request):
         productvariant = ProductVariant.objects.all()
         brands = Brand.objects.all()
 
+        
         mulimage = ProductImages.objects.all()
         context = {  
             'product':products,
@@ -32,7 +35,6 @@ def add_product(request):
             noofferprice = request.POST['noofferprice']
             offerprice = request.POST['offerprice']
             desc = request.POST['desc']
-            # quantity = request.POST['quantity']
             img_name = request.FILES.get('image1') if 'image1' in request.FILES else None
             brand = Brand.objects.get(id = brand_id)
             pro = Product(name = name,
@@ -41,7 +43,6 @@ def add_product(request):
                         original_price = noofferprice,
                         selling_price = offerprice,
                         description = desc,
-                        # quantity = quantity,
                         )
             
             # add image to product table
@@ -73,11 +74,7 @@ def add_variant(request,id):
 def edit_variant(request,id):
     if request.method == 'POST':
         quantity = request.POST['quantity']
-        # color = request.POST['color']
-        # size = request.POST['size']
         variant = ProductVariant.objects.get(id = id)
-        # variant.size = size
-        # variant.color = color
         variant.stock = quantity
         variant.save()
         

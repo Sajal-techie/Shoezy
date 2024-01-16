@@ -7,8 +7,9 @@ from categorymanagement.models import Brand
 from cart.views import check_cart,check_wishlist
 from cart.models import *
 from django.db.models import Q
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
-def shop(request):
+def shop(request): 
     try:
         context = {}
         try:
@@ -19,6 +20,10 @@ def shop(request):
             brands = Brand.objects.filter(is_listed = True).order_by('id')
         except Product.DoesNotExist:
             brands = None
+        
+        #paginator
+        page = request.GET.get('page',1)  
+          
         # list all available color and size 
         try:
             color_list =  ProductVariant.objects.values('color').distinct()
@@ -31,18 +36,18 @@ def shop(request):
             size_list = None
                 
         #  filtering products  
-        try:
-            if request.method == 'POST':
-                men = request.POST.get('men')
-                women = request.POST.get('women')
-                brand_names = request.POST.getlist('brandname')
-                color_names = request.POST.getlist('colors')
-                sizes = request.POST.getlist('size') 
-                discount = request.POST.get('dis') 
-                lowest = request.POST.get('lowest')
-                highest = request.POST.get('highest')
-                sortby = request.POST.get('sort_by')
-                itm = request.POST.get('search_items') 
+        try: 
+
+                men = request.GET.get('men')  
+                women = request.GET.get('women')
+                brand_names = request.GET.getlist('brandname')
+                color_names = request.GET.getlist('colors')
+                sizes = request.GET.getlist('size') 
+                discount = request.GET.get('dis') 
+                lowest = request.GET.get('lowest')
+                highest = request.GET.get('highest')
+                sortby = request.GET.get('sort_by') 
+                itm = request.GET.get('search_items') 
                 
                 if itm:
                     products = products.filter(Q( Q(name__icontains = itm) | Q(brand__brand_name__icontains = itm) )) 
@@ -93,12 +98,21 @@ def shop(request):
                         products = products.order_by('selling_price')   
                         
                 context['sort_by'] = sortby
-                    
-            context['product'] = products
-            context['brand'] = brands
-            context['color_list'] = color_list
-            context['size_list'] = size_list
             
+
+                paginator = Paginator(products,9) 
+                try: 
+                    products = paginator.page(page)
+                except PageNotAnInteger:
+                    products.page(1)
+                except EmptyPage:
+                    products = paginator.page(paginator.num_pages)
+                    
+                context['product'] = products
+                context['brand'] = brands
+                context['color_list'] = color_list
+                context['size_list'] = size_list
+             
         except Exception as e:
             print(e)
         
@@ -160,8 +174,8 @@ def singleproduct(request,id):
                     del request.session['users']
                 messages.error(request,'you are blocked ')
                 return redirect('login') 
-            # is_in_cart = check_cart(username,id)          # dubt area
-            # context['is_in_cart']= is_in_cart             # doubt area
+            # is_in_cart = check_cart(username,id)          
+            # context['is_in_cart']= is_in_cart             
             is_in_wish = check_wishlist(username,id)      
             context['is_in_wish']= is_in_wish            
             context['username'] = username

@@ -25,7 +25,7 @@
             </div>
         </div>
         <div class="row input-group ">
-            <form action="/user_search/">
+            <form action="/admusers/">
             <input type="search"  name="searchuser" class="form-control rounded offset-1 col-lg-8" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
             <button type="submit" class="btn btn-outline-primary btn-primary col-lg-2" data-mdb-ripple-init>search</button>
             </form>
@@ -61,16 +61,30 @@
             </tbody>
         </table>
         <div class="clearfix">
-            <div class="hint-text">Showing <b>5</b> out of <b>25</b> entries</div>
+            <div class="hint-text">{{user_details}}</b></div>
+            {% if user_details.has_other_pages  %}
             <ul class="pagination">
-                <li class="page-item disabled"><a href="#">Previous</a></li>
-                <li class="page-item"><a href="#" class="page-link">1</a></li>
-                <li class="page-item"><a href="#" class="page-link">2</a></li>
-                <li class="page-item active"><a href="#" class="page-link">3</a></li>
-                <li class="page-item"><a href="#" class="page-link">4</a></li>
-                <li class="page-item"><a href="#" class="page-link">5</a></li>
-                <li class="page-item"><a href="#" class="page-link">Next</a></li>
+                {% if user_details.has_previous %}
+                    <li class="page-item"><a href="?page={{ user_details.previous_page_number }} ">&lt;</a></li>
+                {% else %}
+                    <li class="disabled"><span>&lt;</span></li>
+                {% endif %}
+                {% for i in user_details.paginator.page_range %}
+                    {% if user_details.number == i  %}
+                        <li class="active"><span>{{ i }} <span class="sr-only"> (current) </span></span></li>
+                    {% else %}
+                        <li><a href="?page={{ i }}">{{ i }}</a></li>
+                    {% endif %}
+                {% endfor %}
+                {% if user_details.has_next %}
+                    <li ><a href="?page={{user_details.next_page_number}}">&gt; </a></li>
+                {% else %}
+                    <li class="disabled"><span>&gt;</span></li>
+                {% endif %}
+                
+                
             </ul>
+            {% endif %}
         </div>
     </div>
 </div>

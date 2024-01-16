@@ -7,7 +7,5 @@ urlpatterns = [
     path('edit_brand/<str:id>', views.edit_brand, name='edit_brand'),
     path('list_brand/<str:id>', views.list_brand, name='list_brand'),
     path('delete_brand/<str:id>', views.delete_brand, name='delete_brand'),
-    path('search_brand/', views.search_brand, name='search_brand'),
-
 
 ]
