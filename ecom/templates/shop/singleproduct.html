@@ -29,6 +29,7 @@
     <body class="goto-here">
  <!-- <h1 class="mb-0 bread text-center">Shop</h1> -->
     <section class="ftco-section">
+		{% if productvariant %}
 		{% for prod in productvariant %}
     	<div class="container">
     		<div class="row">
@@ -129,7 +130,7 @@
 				{% comment %} <a href="" class="btn btn-primary py-3 px-5" style="color: black; border-radius: 0cm;"  data-toggle="modal" data-target="#sizeModal">Buy Now</a> {% endcomment %}
 				&nbsp; &nbsp;
 				{% if not is_in_wish %}
-				<a href="{% url 'add_to_wish' prod.product_id.id %}?next={{request.path}} " title="add to wishlist"> <i class="fa-regular fa-heart fa-beat fa-2xl" style="color: #ff3246;"></i></a>
+				<a href="{% url 'add_to_wish' prod.product_id.id %}?next={{request.path}}" data-toggle="collapse" data-target="#sizecollapse" title="add to wishlist"> <i class="fa-regular fa-heart fa-beat fa-2xl" style="color: #ff3246;"></i></a>
 				{% else %}
 				<a href="{% url 'remove_wish' prod.product_id.id %}?next={{request.path}}" title="remove from wishlist"><i class="fa-solid fa-heart fa-2xl" style="color: #ff3246;"></i></a>
 				{% endif %}
@@ -354,6 +355,12 @@
         </div>
     	</div>
 		{% endfor %}
+	{% else %}
+	<div class="bg-light m-4 p-4">
+		<div class="h4  text-center mb-4"> Product Unavailable </div>
+		<div class="text-center mb-4"> <a href="/shop/" class="btn btn-primary py-3 px-4">Continue Shopping</a>   </div>
+	</div>
+	{% endif %}
     </section>
 {% include 'footer.html' %}
 

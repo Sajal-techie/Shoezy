@@ -3,6 +3,7 @@ from .models import *
 from datetime import datetime
 from django.core.paginator import Paginator,EmptyPage,PageNotAnInteger
 from django.db.models import Q
+from django.contrib import messages
 
 
 def admorders(request):
@@ -52,6 +53,11 @@ def update_date(request,id):
         new_date1 = request.POST['date']
         new_date = datetime.strptime(new_date1, '%Y-%m-%d').date()
         orders = OrderProducts.objects.get(id = id)
+        
+        if new_date < orders.order_id.order_date:
+            messages.error(request, 'Delivery date must be after order date')
+            return redirect('admorders')
+        
         orders.delivery_date = new_date
         orders.save()
         

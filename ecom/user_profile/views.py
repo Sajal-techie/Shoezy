@@ -40,9 +40,13 @@ def view_profile(request):
             context['wishcount']=wishcount
             
             return render(request, 'profile/user_details.html',context)
+        
     except Exception as e:
         print(e)
-        return render(request, 'profile/user_details.html',context)
+        return redirect('home')
+    
+    return redirect('login')
+    
     
 @never_cache
 def edit_profile(request,id):
@@ -89,11 +93,12 @@ def edit_profile(request,id):
             username.gender = gender
             username.save()
             return redirect('view_profile')
-        
+        return render(request, 'profile/edit_profile.html',context)
+    
     except Exception as e:
         print(e)
         
-    return render(request, 'profile/edit_profile.html',context)
+    return redirect('view_profile')
 
 
 # reset password from profile after logging in
@@ -138,7 +143,8 @@ def reset_password(request):
         
     except Exception as e:
         print(e)
-
+        return redirect('view_profile')
+    return redirect('login')
 
 def add_address(request):
     try:
@@ -176,10 +182,11 @@ def add_address(request):
                         return redirect('home')
             else: 
                 form = Adressform()
-        return render(request,'profile/add_address.html',{'form':form,'username':username})
+            return render(request,'profile/add_address.html',{'form':form,'username':username})
     except Exception as e:
         print(e)
-    return render(request,'profile/add_address.html',{'form':form,'username':username})
+        return redirect('view_profile')
+    return redirect('login')
 
 
 def edit_address(request,id):
@@ -248,44 +255,49 @@ def order_history(request):
         
     except Exception as e:
         print(e)
-        
-    return render(request, 'profile/order_history.html',context)
+        return redirect('home')
+    return redirect('login')
 
 def track_order(request,id):
-    if 'users' in request.session:
-        usm = request.session.get('users')
-        username = Customuser.objects.get(email = usm)
-        try:
-            order_items = OrderProducts.objects.get(id = id)
-        except OrderProducts.DoesNotExist:
-            order_items = None
-            
-        cartcount = Cart.objects.filter(user_id = username).count()
-        tracking_steps = [
-            {'description': 'ordered'},
-            {'description': 'shipped'},
-            {'description': 'out_for_delivery'},
-            {'description': 'delivered'},
-        ]
+    try:
+        if 'users' in request.session:
+            usm = request.session.get('users')
+            username = Customuser.objects.get(email = usm)
+            try:
+                order_items = OrderProducts.objects.get(id = id)
+            except OrderProducts.DoesNotExist:
+                order_items = None
+                
+            cartcount = Cart.objects.filter(user_id = username).count()
+            tracking_steps = [
+                {'description': 'ordered'},
+                {'description': 'shipped'},
+                {'description': 'out for delivery'},
+                {'description': 'delivered'},
+            ]
 
-        current_status = order_items.status
-        current_step_index = next((i for i, step in enumerate(tracking_steps) if step['description'] == current_status), None)
-        previous_steps = tracking_steps[:current_step_index + 1 ] 
-        context = {
-            'order': order_items,
-            'tracking_steps': tracking_steps,
-            'previous_steps': previous_steps,
-            'username':username,
-            'cartcount':cartcount,
-        }
-        wishcount = Wishlist.objects.filter(user_id = username).count()
-        context['wishcount']=wishcount
-        return render(request, 'profile/track_order.html',context)
-    
+            current_status = order_items.status
+            current_step_index = next((i for i, step in enumerate(tracking_steps) if step['description'] == current_status), None)
+            previous_steps = tracking_steps[:current_step_index + 1 ] 
+            context = {
+                'order': order_items,
+                'tracking_steps': tracking_steps,
+                'previous_steps': previous_steps,
+                'username':username,
+                'cartcount':cartcount,
+            }
+            wishcount = Wishlist.objects.filter(user_id = username).count()
+            context['wishcount']=wishcount
+            return render(request, 'profile/track_order.html',context)
+        
+    except Exception as e:
+        print(e)
+        return redirect('order_history')
     return redirect('login')
 
 
 def cancel_order(request,id):
+    try:
         if 'users' in request.session:
             usm = request.session.get('users')
             username = Customuser.objects.get(email = usm)
@@ -307,10 +319,16 @@ def cancel_order(request,id):
                     
                     return redirect('order_history')
             return redirect('order_history')
-        return redirect('login')
+        
+    except Exception as e:
+        print(e)
+        return redirect('order_history')
     
-    
+    return redirect('login')
+
+
 def view_order_details(request,id):
+    try:
         if 'users' in request.session:
             usm = request.session.get('users')
             username = Customuser.objects.get(email = usm)
@@ -324,4 +342,7 @@ def view_order_details(request,id):
                 'order_item': order 
             }
             return render(request, 'profile/view_order_details.html',context)
-        return redirect('login')
+    except Exception as e:
+        print(e)
+        return redirect('order_history')
+    return redirect('login')

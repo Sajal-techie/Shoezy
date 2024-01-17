@@ -30,9 +30,9 @@ class ProductImages(models.Model):
     
 @receiver(pre_save,sender = Product)
 def calc_discount_percentage(sender,instance,**kwargs):
-    if not instance.discount_percentage:
-        og = int(instance.original_price)
-        sp = int(instance.selling_price)
+    # if not instance.discount_percentage:
+        og = float(instance.original_price) 
+        sp = float(instance.selling_price)
         instance.discount_percentage = round(((og-sp) / og ) * 100) 
 
 

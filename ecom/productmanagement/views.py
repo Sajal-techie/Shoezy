@@ -4,6 +4,7 @@ from categorymanagement. models import Brand
 import os
 from django.db.models import Q
 from django.core.paginator import Paginator,PageNotAnInteger,EmptyPage
+from django.contrib import messages
 
 # view products
 def view_products(request):
@@ -36,6 +37,11 @@ def add_product(request):
             offerprice = request.POST['offerprice']
             desc = request.POST['desc']
             img_name = request.FILES.get('image1') if 'image1' in request.FILES else None
+            
+            if noofferprice <=0 or offerprice <= 0:
+                messages.error(request, 'Enter a valid price (greater than 0)')
+                return redirect('view_products')
+            
             brand = Brand.objects.get(id = brand_id)
             pro = Product(name = name,
                         category = category,
@@ -66,7 +72,17 @@ def add_variant(request,id):
         color = request.POST['color']
         size = request.POST['size']
         quantity = request.POST['quantity']
+        
         product = Product.objects.get(id = id)
+        
+        if ProductVariant.objects.filter(product_id = product,size = size,color = color).exists():
+            messages.error(request, 'Variant already Exists ')
+            return redirect('view_products')
+        
+        if int(quantity) <= 0:
+                messages.error(request, 'Enter a valid Quantity (greater than 0)')
+                return redirect('view_products')
+            
         ProductVariant.objects.create(product_id = product,size = size,stock = quantity,color = color)
   
     return redirect('view_products')
@@ -74,6 +90,10 @@ def add_variant(request,id):
 def edit_variant(request,id):
     if request.method == 'POST':
         quantity = request.POST['quantity']
+        if int(quantity) <= 0:
+                messages.error(request, 'Enter a valid Quantity (greater than 0)')
+                return redirect('view_products')
+            
         variant = ProductVariant.objects.get(id = id)
         variant.stock = quantity
         variant.save()
@@ -99,9 +119,12 @@ def edit_product(request,id):
         noofferprice = request.POST['noofferprice']
         offerprice = request.POST['offerprice']
         desc = request.POST['desc']
-        
         img_name = request.FILES.get('image1',None) 
         
+        if noofferprice or offerprice <= 0:
+                messages.error(request, 'Enter a valid price (greater than 0)')
+                return redirect('view_products')
+            
         exist.name = name
         exist.category = category
         exist.brand = Brand.objects.get(id = brand )

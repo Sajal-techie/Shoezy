@@ -65,11 +65,11 @@
 									</div>
 									{% endfor %}
 									{% else %}
-									{% if messages %}
-                                    {% for message in messages %}
-                                        <h5 class=" text-danger"> {{ message }} </h5>
-                                    {% endfor %}
-                            		{% endif %}
+										{% if messages %}
+											{% for message in messages %}
+												<h5 class=" text-danger"> {{ message }} </h5>
+											{% endfor %}
+										{% endif %}
 									{% endif %}
 								<div class="mb-3 text-center">
 									{% if not buy_item %}

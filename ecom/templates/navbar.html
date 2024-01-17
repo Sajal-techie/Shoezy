@@ -51,8 +51,7 @@
           </a>
         </li>
       </ul>
-      <form class="form-inline my-2 my-lg-0 d-none {% if srcitem %} d-block {% endif %} " action="/shop/" method="post" id="search-form">
-        {% csrf_token %}
+      <form class="form-inline my-2 my-lg-0 d-none {% if srcitem %} d-block {% endif %} " action="/shop/" id="search-form">
         <div class="input-group input-group-sm">
           <input id="srctm" class="form-control" type="search" placeholder="Search" aria-label="Search" name="search_items" {% if srcitem %}value="{{srcitem}}" {% endif %}  >
           <div class="input-group-append">

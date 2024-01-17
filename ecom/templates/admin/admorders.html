@@ -26,6 +26,14 @@
             <button type="submit" class="btn btn-outline-primary btn-primary col-lg-2 col-sm-3 " data-mdb-ripple-init>search</button>
             </form>
           </div>
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="text-center">
+                            <h3 class=" text-danger"> {{ message }} </h3>
+                        </div>
+                        
+                    {% endfor %}
+                {% endif %}
         <table class="table table-striped table-hover ms-3">
             <thead>
                 <tr>
@@ -97,7 +105,7 @@
         </div> 
     </div>
 </div>
-<!-- edit Modal HTML -->
+<!-- edit status Modal HTML -->
 {% for item in order_items %}
 <div id="editstatus{{item.id}}" class="modal fade">
     <div class="modal-dialog">

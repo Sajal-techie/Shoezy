@@ -20,7 +20,8 @@
 						        <th>&nbsp;</th>
 						        <th>Product</th>
 						        <th>Price</th>
-						        <!-- <th>Stock</th> -->
+						        <th>Size</th>
+						        <th>Stock</th>
 						        <th></th>
 						      </tr>
 						    </thead>
@@ -39,10 +40,11 @@
 						        </td>
 						        
 						        <td class="price">₹{{ wishlist_item.product_id.selling_price }}</td>
+						        <td class="price">₹{{ wishlist_item.size}}</td>
 						        <!-- {% if wishlist_item.stock == 'In Stock' %} -->
 						        <!-- <td class="total"><span class="bg-success p-1 text-white">  {{wishlist_item.product.stock}}</span></td> -->
                                 <!-- <td class="total"><a href="/addto_cart/{{wishlist_item.product_id.id}}?next={{ request.path }}" class="btn btn-primary "> Add to Cart </a></td> -->
-                                <td class="total"><a href="/singleproduct/{{wishlist_item.product_id.id}}/" class="btn btn-primary "> View detaisl </a></td>
+                                <td class="total"><a href="/singleproduct/{{wishlist_item.product_id.id}}/" class="btn btn-primary "> View details </a></td>
                                 <!-- {% else %}
                                 <td class="total"><span class="bg-danger p-1 text-white"> {{wishlist_item.stock}}</span></td>
                                 {% endif %} -->

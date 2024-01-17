@@ -114,7 +114,7 @@
             {% else %}
             <span>Cancelled Date : {{item.delivery_date}}</span>
             {% endif %}
-            {% if item.status == 'ordered' or item.status == 'shipped' or item.status == 'out_for_delivery' %}
+            {% if item.status == 'ordered' or item.status == 'shipped' or item.status == 'out for delivery' %}
             <a href="/track_order/{{item.id}}" class="text-white"><span class="status status-processing text-center">Track order</span></a>
             {% elif item.status == 'delivered' %}
             <a href="" class="text-white"><span class="status status-delivered text-center">Delivered</a></span>
