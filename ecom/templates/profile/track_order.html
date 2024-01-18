@@ -167,7 +167,7 @@ justify-content: center;
           {% for step in tracking_steps %}
             <div class="step{% if step in previous_steps %} active {% endif %}">
               <span class="icon"> <i class="fa fa-check"></i> </span>
-              <span class="text">{% if step.description == 'out_for_delivery' %}outfor Delivery {% else %}{{ step.description }} {% endif %} </span>
+              <span class="text">{{ step.description }}  </span>
             </div>
           {% endfor %}
         </div>
@@ -178,11 +178,11 @@ justify-content: center;
                 <div class="aside"><img src="{{ order.product.product_id.image1.url }}" class="img-sm border"></div>
                 <figcaption class="info align-self-center">
                   <p class="title">{{ order.product.product_id.brand }} <br> {{ order.product.product_id.name }}</p>
-                  Size : {{order.size}}  &nbsp; &nbsp;
-                  <span class="text-muted">Price : ₹{{ order.product.product_id.selling_price }} </span>
+                  Size : {{order.size}}  &nbsp; &nbsp; Quantity : {{order.quantity}} &nbsp; &nbsp;
+                  <span class="text-muted">Price : ₹{{ order.amount }} </span>
                 </figcaption>
               </figure>
-                {% if order.status == 'ordered' or order.status == 'shipped' or order.status == 'out_for_delivery' %}
+                {% if order.status == 'ordered' or order.status == 'shipped' or order.status == 'out for delivery' %}
                 <div class="text-center"><a href="#" class="btn btn-danger" data-toggle="modal" data-target="#cancelOrderModal" data-abc="true">Cancel order</a></div>
                   {% endif %}
             </li>

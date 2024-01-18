@@ -24,9 +24,7 @@
                     <h2>Product <b>Management</b></h2>
                 </div>
                 <div class="col-sm-6">
-                    <a href="#addProduct" class="btn btn-success" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Add New Product</span></a>
-                    <!-- <a href="#deleteEmployeeModal" class="btn btn-danger" data-toggle="modal"><i class="material-icons">&#xE15C;</i> <span>Delete</span></a>						 -->
-                </div>
+                    <a href="#addProduct" class="btn btn-success" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Add New Product</span></a>                </div>
             </div>
         </div>
         <form action="/search_product/">
@@ -51,7 +49,6 @@
 
                     <th>Category</th>
                     <th>Selling price</th>
-                    {% comment %} <th>Quantity</th> {% endcomment %}
                     <th>Image</th>
                     <th>Actions</th>
                     <th>Add Variants</th>
@@ -65,9 +62,7 @@
                         {{prod.name}}</td>
                     <td>{{prod.category}}</td>
                     <!-- <td>{{prod.original_price}}</td> -->
-                    {% comment %} <td>{{prod.size}}</td> {% endcomment %}
                     <td>{{prod.selling_price}}</td>
-                    {% comment %} <td>{{prod.stock}}</td> {% endcomment %}
                     <td>
                     {% if prod.image1 %}<img src="{{prod.image1.url }}" alt="nike" style="width: 60px; height: 60px; ">{% else %} <h5>no image</h5> {% endif %}
                     </td>

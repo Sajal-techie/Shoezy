@@ -26,8 +26,8 @@
         flex: 1;
         padding: 30px;
         border-radius: 10px;
-        text-align: center;
-        margin-right: 20px;
+      /* text-align: center; */ 
+       margin-right: 20px;
       }
   
       .profile-details h2 {
@@ -87,9 +87,11 @@
       <p><span> Number:</span> {{username.number}}</p>
 
       <!-- Edit profile button -->
-
-      <a href="/edit_profile/{{username.id}}" class="edit-profile-btn px-3" type="button">Edit Profile</a> <br>
-        <div class="p-3 "><a href="/reset_password/" class="text-danger">Reset password</a></div>
+      <div class=" text-center">
+          <a href="/edit_profile/{{username.id}}" class="edit-profile-btn px-3" type="button">Edit Profile</a> <br>
+      </div>
+        <div class="p-3  text-center"><a href="/reset_password/" class="text-danger">Reset password</a></div>
+        <span style="font-size: 30px; color: #008448;">Wallet balance: {{wallet.amount}} </span>
     </div>
 
     <!-- Address section -->

@@ -127,8 +127,6 @@
 											  </p>
 											  </div>
 											  <input type="hidden" value="{{total}}" name="total_prize">
-											  <input type="hidden" value="{{username.first_name}} {{username.last_name}}" name="usersname">
-											  <input type="hidden" value="{{username.number}}" name="number1">
 								</div>
 								<!-- Payment Method Section -->
 								<div class="col-md-6">
@@ -136,6 +134,15 @@
 										<h3 class="billing-heading mb-4">Payment Method</h3>
 										<!-- Display payment options -->
 										<div class="form-group">
+											<div  class="text-center">
+												<span style="font-size: 20px; color: black">Wallet balance: {{wallet.amount}} </span>
+											</div>
+											
+										<p class="text-center walletpays">
+											<button type="button" class="btn btn-info walletpay" id="walletpay" style="padding:15px{% if wallet.amount < total %} 140px; cursor:default; {% else %} 200px {% endif %};"
+											 {% if wallet.amount < total %} disabled  {% endif %}> Pay with Wallet {% if wallet.amount < total %}(Insuffisient balance) {% endif %} </button>
+										</p>
+
 										<p><button type="submit" class="btn btn-success" style="padding:15px 161px ;">Place  Order (Cash on delivery)</button></p>
 										<p><button type="button" class="btn btn-secondary razor" id="rzp-button1" style="padding:15px 194px ;">Pay with Razorpay</button></p>
 										</div>
@@ -158,5 +165,38 @@
   <script src={% static 'js/checkout.js' %}></script>
   <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     
+  <script>
+    $(document).ready(function() {
+		$('.walletpay').click(function (e){
+        e.preventDefault();
+        
+        var sel_address = $('input[name="address"]:checked').val();
+        var token = $('input[name=csrfmiddlewaretoken]').val();
+        $.ajax({
+            method: "POST",
+            url: '/wallet_pay/',
+            data:  {
+                'address':sel_address,
+                csrfmiddlewaretoken:token
+            },
+			
+            success: function(data) {
+					if (data.completed){
+						window.location.href = data.redirect_url  + data.order_id1;
+					}
+					else{
+						window.location.href = data.redirect_url 
+
+					}
+			}
+          });
+
+    });
+});
+</script>
+
+
+
+
   </body>
   {% endblock maincontent %}

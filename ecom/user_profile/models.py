@@ -18,3 +18,12 @@ class Address(models.Model):
     
     def __str__(self) -> str:
         return f"{self.name}'s Address "
+    
+    
+class Wallet(models.Model):
+    user_id = models.ForeignKey(Customuser, on_delete = models.CASCADE)
+    amount = models.IntegerField(null = True, blank = True) 
+    
+    def __str__(self):
+        return self.user_id.first_name 
+    

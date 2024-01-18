@@ -1,5 +1,5 @@
 from django.shortcuts import render,redirect
-from .models import Address
+from .models import *
 from .forms import Adressform
 from home.models import Customuser
 from order_management.models import *
@@ -28,6 +28,12 @@ def view_profile(request):
             try:
                 addressess = Address.objects.filter(Q(user = username) & Q(is_available= True))
                 cartcount = Cart.objects.filter(user_id = username).count()
+                
+                try:
+                    wallet = Wallet.objects.get(user_id = username)
+                except Wallet.DoesNotExist:
+                    wallet = None
+                    
             except Exception as e:
                 print(e)
                 
@@ -35,6 +41,7 @@ def view_profile(request):
                 'username':username,
                 'address':addressess,
                 'cartcount':cartcount,
+                'wallet':wallet
             }
             wishcount = Wishlist.objects.filter(user_id = username).count()
             context['wishcount']=wishcount
@@ -317,6 +324,15 @@ def cancel_order(request,id):
                     current_order.product.stock = current_order.product.stock + current_order.quantity
                     current_order.product.save()
                     
+                    if current_order.order_id.payment_mode != 'Cash on delivery':
+                        try:
+                            wallet = Wallet.objects.get(user_id = username)
+                        except Wallet.DoesNotExist:
+                            wallet = None
+                        if wallet is not None:
+                            wallet.amount = wallet.amount + current_order.amount
+                            wallet.save()
+                    
                     return redirect('order_history')
             return redirect('order_history')
         
@@ -346,3 +362,5 @@ def view_order_details(request,id):
         print(e)
         return redirect('order_history')
     return redirect('login')
+
+

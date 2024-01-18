@@ -4,8 +4,6 @@ $(document).ready(function (){
         e.preventDefault();
         var selectedValue = $('input[name="address"]:checked').val();
         var total_prize = $('input[name="total_prize"]').val();
-        var name = $('input[name="usersname"]').val();
-        var number = $('input[name="number"]').val();
         var token = $('input[name=csrfmiddlewaretoken]').val();
 
                 var options = {

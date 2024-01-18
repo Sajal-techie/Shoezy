@@ -7,7 +7,7 @@ from django.views.decorators.cache import never_cache
 from productmanagement.models import Product,ProductImages
 from categorymanagement.models import Brand
 from cart.models import *
-
+from user_profile.models import *
 
 @never_cache
 def home(request):
@@ -124,8 +124,9 @@ def register(request):
                 return redirect('register')
             
             user  = Customuser(first_name = fname,last_name = lname,email = email,password = password,datejoined=date_joined)
+            
             user.save()
-
+            Wallet.objects.create(user_id = user, amount = 0) 
             return redirect('verifyreg',id = user.id )
         
     except Exception as e:

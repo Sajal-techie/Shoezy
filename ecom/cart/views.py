@@ -4,7 +4,7 @@ from django.contrib import messages
 from home.models import Customuser
 from productmanagement.models import *
 from . models import *
-from user_profile.models import Address
+from user_profile.models import *
 from order_management.models import *
 
 # Create your views here.
@@ -119,13 +119,14 @@ def checkout(request):
             cart_items = Cart.objects.filter(user_id = username.id).select_related('product__product_id')
             total = sum(i.sub_total for i in cart_items)
             cartcount = Cart.objects.filter(user_id = username).count()
-
+            wallet = Wallet.objects.get(user_id = username)
             context = {
                 'address':address,
                 'cart_items':cart_items,
                 'username' :username,
                 'total':total,
-                'cartcount':cartcount
+                'cartcount':cartcount,
+                'wallet':wallet,
             }
             wishcount = Wishlist.objects.filter(user_id = username).count()
             context['wishcount']=wishcount
@@ -198,6 +199,48 @@ def razor_pay(request):
                         }
                 return JsonResponse(data) 
             
+
+
+def wallet_pay(request):
+    if 'users' in request.session:
+            usm = request.session.get('users')
+            username = Customuser.objects.get(email = usm)
+            cart_items = Cart.objects.filter(user_id = username.id).select_related('product__product_id')
+            total = sum(i.sub_total for i in cart_items)
+            
+            if request.method == 'POST':
+                adress1 = request.POST.get('address',None)
+                payment = 'Wallet'
+                adress =  Address.objects.get(id = adress1)
+                current_order = Order.objects.create(user = username, address = adress,total = total,payment_mode = payment)
+                
+                try:
+                    wallet = Wallet.objects.get(user_id = username)
+                except Wallet.DoesNotExist:
+                    wallet = None
+                if wallet is not None:
+                    wallet.amount = wallet.amount - total
+                    wallet.save()
+
+                for i in cart_items:
+                    obj = OrderProducts(order_id = current_order,user1 = username,product = i.product ,address1 = adress,quantity = i.quantity,amount = i.sub_total,status = 'ordered',size = i.size)
+                    if obj.product.stock > 0: 
+                        obj.product.stock = obj.product.stock - obj.quantity
+                        obj.product.save()
+                    else:
+                        messages.error(request, 'out of stock')
+                        data = {'redirect_url':'/checkout/',
+                                'error': True
+                        }
+                        return JsonResponse(data)
+                    obj.save()
+                    i.delete()
+                data = {'redirect_url':'/confirm/',
+                        'order_id1' : current_order.id ,
+                        'completed': True 
+                        }
+                return JsonResponse(data) 
+
 
 
 # not working make it work
