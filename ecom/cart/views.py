@@ -6,8 +6,7 @@ from productmanagement.models import *
 from . models import *
 from user_profile.models import *
 from order_management.models import *
-
-# Create your views here.
+from django.utils import timezone
 
 
 def cart(request):   
@@ -120,24 +119,44 @@ def checkout(request):
             total = sum(i.sub_total for i in cart_items)
             cartcount = Cart.objects.filter(user_id = username).count()
             wallet = Wallet.objects.get(user_id = username)
+            try:
+                checkout = Checkout.objects.get(user_id=username)
+                checkout.sub_total=total
+                checkout.payable_amount=total 
+                checkout.save()
+                if checkout.coupon_active:
+                    checkout.payable_amount = float(checkout.sub_total) - checkout.discount_amount 
+                    total = float(checkout.sub_total) - checkout.discount_amount
+                    checkout.save()
+
+            except Checkout.DoesNotExist:
+                checkout = Checkout(user_id=username, sub_total=total, payable_amount=total)
+                checkout.save()
+            print('1')
             context = {
                 'address':address,
                 'cart_items':cart_items,
-                'username' :username,
+                'username' :username, 
                 'total':total,
+                'checkout':checkout,
                 'cartcount':cartcount,
                 'wallet':wallet,
             }
             wishcount = Wishlist.objects.filter(user_id = username).count()
             context['wishcount']=wishcount
+            print('before post')
             if request.method == 'POST':
+                print('hi')
                 adress1 = request.POST.get('address',None)
                 if not adress1:
                     messages.error(request,'add address for delivery')
                     return redirect('checkout')
                 payment = 'Cash on delivery'
                 adress =  Address.objects.get(id = adress1)
-                current_order = Order.objects.create(user = username, address = adress,total = total,payment_mode = payment)
+                if checkout.coupon_active:
+                    current_order = Order.objects.create(user = username, address = adress,total = total,payment_mode = payment,coupon_applied = True,coupon_id = checkout.coupon,og_amount = checkout.sub_total )
+                else:
+                    current_order = Order.objects.create(user = username, address = adress,total = total,payment_mode = payment,coupon_applied = False,coupon_id = None,og_amount = total )
                 for i in cart_items:
                     obj = OrderProducts(order_id = current_order,user1 = username,product = i.product ,address1 = adress,quantity = i.quantity,amount = i.sub_total,status = 'ordered',size = i.size)
                     if obj.product.stock > 0: 
@@ -148,13 +167,65 @@ def checkout(request):
                         return redirect('checkout')
                     obj.save()
                     i.delete()
-            
+                checkout.delete()
+                print(current_order.id,'comf')
                 return redirect('confirm',current_order.id)
+            print('checkout')
             
-              
             return render(request, 'cart/checkout.html',context)
     
     return redirect('login')
+
+
+def apply_coupon(request):
+    if 'users' in request.session:
+        usm = request.session.get('users')
+        username = Customuser.objects.get(email = usm)
+        orders = Order.objects.filter(user = username)
+        checkouted = Checkout.objects.get(user_id = username)
+        if request.method == 'POST':
+            code = request.POST.get('code')
+            try:
+                coupons = Coupen.objects.get(code = code)
+            except Coupen.DoesNotExist:
+                checkouted.coupon_active = False
+                checkouted.discount_amount = 0
+                checkouted.coupon = None
+                checkouted.save()
+                coupons = None
+                return JsonResponse({'error':'Invalid Coupon code'})
+            if coupons is not None:
+                today = timezone.now().date()
+                if coupons.valid_from > today:
+                    checkouted.coupon_active = False
+                    checkouted.coupon = None
+                    checkouted.discount_amount = 0
+                    checkouted.save()
+                    return JsonResponse({'error':'Coupon  not started'})
+                if coupons.valid_to < today:
+                    checkouted.coupon_active = False
+                    checkouted.coupon = None
+                    checkouted.discount_amount = 0
+                    checkouted.save()
+                    return JsonResponse({'error':'Coupon expired'})
+                used_coupons = []
+                for i in orders:
+                    if i.coupon_applied and i.coupon_id is not None:
+                        used_coupons.append(i.coupon_id.id)
+                if coupons.id in used_coupons:
+                    checkouted.coupon_active = False
+                    checkouted.coupon = None
+                    checkouted.discount_amount = 0
+                    checkouted.save() 
+                    return JsonResponse({'error':"This coupon has already been used. Please choose another one."})
+        
+                checkouted.payable_amount = checkouted.sub_total - coupons.discount_amount
+                checkouted.coupon_active = True
+                checkouted.coupon = coupons
+                checkouted.discount_amount = coupons.discount_amount
+                checkouted.save()
+                return JsonResponse({'success':'Coupon Applied '})
+        return JsonResponse({'error': 'Invalid request'})
 
 
 def razor_pay(request):
@@ -165,7 +236,10 @@ def razor_pay(request):
             cart_items = Cart.objects.filter(user_id = username.id).select_related('product__product_id')
             total = sum(i.sub_total for i in cart_items)
             cartcount = Cart.objects.filter(user_id = username).count()
-
+            try:
+                checkout = Checkout.objects.get(user_id=username)
+            except Checkout.DoesNotExist or Checkout.MultipleObjectsReturned:
+                checkout = None
             context = {
                 'address':address,
                 'cart_items':cart_items,
@@ -179,7 +253,14 @@ def razor_pay(request):
                 adress1 = request.POST.get('address',None)
                 payment = 'Razorpay'
                 adress =  Address.objects.get(id = adress1)
-                current_order = Order.objects.create(user = username, address = adress,total = total,payment_mode = payment)
+                if checkout is not None:
+                    if checkout.coupon_active:
+                        total = checkout.payable_amount
+                        current_order = Order.objects.create(user = username, address = adress,total = total,payment_mode = payment,coupon_applied = True,coupon_id = checkout.coupon,og_amount = checkout.sub_total )
+                    else:
+                        current_order = Order.objects.create(user = username, address = adress,total = total,payment_mode = payment,coupon_applied = False,coupon_id = None,og_amount = total )
+                else:
+                    current_order = Order.objects.create(user = username, address = adress,total = total,payment_mode = payment,coupon_applied = False,coupon_id = None,og_amount = total )
                 for i in cart_items:
                     obj = OrderProducts(order_id = current_order,user1 = username,product = i.product ,address1 = adress,quantity = i.quantity,amount = i.sub_total,status = 'ordered',size = i.size)
                     if obj.product.stock > 0: 
@@ -193,6 +274,7 @@ def razor_pay(request):
                         return JsonResponse(data)
                     obj.save()
                     i.delete()
+                checkout.delete()
                 data = {'redirect_url':'/confirm/',
                         'order_id1' : current_order.id ,
                         'completed': True 
@@ -203,17 +285,20 @@ def razor_pay(request):
 
 def wallet_pay(request):
     if 'users' in request.session:
+            print('hi')
             usm = request.session.get('users')
             username = Customuser.objects.get(email = usm)
             cart_items = Cart.objects.filter(user_id = username.id).select_related('product__product_id')
             total = sum(i.sub_total for i in cart_items)
-            
+            try:
+                checkout = Checkout.objects.get(user_id=username)
+                total = checkout.payable_amount
+            except Checkout.DoesNotExist or Checkout.MultipleObjectsReturned:
+                checkout = None
             if request.method == 'POST':
                 adress1 = request.POST.get('address',None)
                 payment = 'Wallet'
-                adress =  Address.objects.get(id = adress1)
-                current_order = Order.objects.create(user = username, address = adress,total = total,payment_mode = payment)
-                
+                adress =  Address.objects.get(id = adress1)                
                 try:
                     wallet = Wallet.objects.get(user_id = username)
                 except Wallet.DoesNotExist:
@@ -221,6 +306,14 @@ def wallet_pay(request):
                 if wallet is not None:
                     wallet.amount = wallet.amount - total
                     wallet.save()
+                if checkout is not None:
+                    if checkout.coupon_active:
+                        total = checkout.payable_amount
+                        current_order = Order.objects.create(user = username, address = adress,total = total,payment_mode = payment,coupon_applied = True,coupon_id = checkout.coupon,og_amount = checkout.sub_total )
+                    else:
+                        current_order = Order.objects.create(user = username, address = adress,total = total,payment_mode = payment,coupon_applied = False,coupon_id = None,og_amount = total )
+                else:
+                    current_order = Order.objects.create(user = username, address = adress,total = total,payment_mode = payment,coupon_applied = False,coupon_id = None,og_amount = total )
 
                 for i in cart_items:
                     obj = OrderProducts(order_id = current_order,user1 = username,product = i.product ,address1 = adress,quantity = i.quantity,amount = i.sub_total,status = 'ordered',size = i.size)
@@ -235,6 +328,7 @@ def wallet_pay(request):
                         return JsonResponse(data)
                     obj.save()
                     i.delete()
+                checkout.delete()
                 data = {'redirect_url':'/confirm/',
                         'order_id1' : current_order.id ,
                         'completed': True 

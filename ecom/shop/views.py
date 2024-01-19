@@ -110,7 +110,7 @@ def shop(request):
                     
                 context['product'] = products
                 context['brand'] = brands
-                context['color_list'] = color_list
+                context['color_list'] = color_list      
                 context['size_list'] = size_list
              
         except Exception as e:

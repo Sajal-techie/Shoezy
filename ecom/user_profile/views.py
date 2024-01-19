@@ -234,6 +234,7 @@ def delete_address(request,id):
     return redirect('view_profile')
 
 
+# for showing order history (Order) 
 def order_history(request):
     try:
         if 'users' in request.session:
@@ -245,7 +246,7 @@ def order_history(request):
                 messages.error(request,'you are blocked ')
                 return redirect('login') 
             try:
-                order_items = OrderProducts.objects.filter(user1 = username).order_by('-id')
+                order_items = Order.objects.filter(user = username).order_by('-id')
                 cartcount = Cart.objects.filter(user_id = username).count()
             except Exception as e:
                 print(e)
@@ -264,6 +265,38 @@ def order_history(request):
         print(e)
         return redirect('home')
     return redirect('login')
+
+
+# for shwowing order history products(OrderProducts)
+def order_history_items(request,id):
+    if 'users' in request.session:
+        try:
+            usm = request.session.get('users')
+            username = Customuser.objects.get(email = usm)
+            if username.is_blocked:
+                if 'users' in request.session:
+                    del request.session['users']
+                messages.error(request,'you are blocked ')
+                return redirect('login') 
+            order = Order.objects.get(id = id)
+            order_items = OrderProducts.objects.filter(order_id = order)
+            cartcount = Cart.objects.filter(user_id = username).count()
+            context = {
+                'order_items': order_items,
+                'cartcount':cartcount,
+                'username':username,
+            }
+            wishcount = Wishlist.objects.filter(user_id = username).count()
+            context['wishcount']=wishcount
+            return render(request, 'profile/order_history_items.html',context) 
+        
+        except Exception as e:
+            print(e)
+            return redirect('order_history')
+        return redirect('order_history')
+    else:
+        return redirect('login')
+        
 
 def track_order(request,id):
     try:
@@ -329,12 +362,25 @@ def cancel_order(request,id):
                             wallet = Wallet.objects.get(user_id = username)
                         except Wallet.DoesNotExist:
                             wallet = None
+                        try:
+                           order = Order.objects.get(id = current_order.order_id.id)
+                        except Order.DoesNotExist:
+                            order = None
+                        if order is not None:
+                            if order.coupon_applied and order.coupon_id:
+                                count = OrderProducts.objects.filter(order_id = order).count()
+                                print(count)
+                                deduc = int(order.coupon_id.discount_amount) // count
+                                print(deduc)
+                                rtn_amount = current_order.amount - deduc
+                                print(rtn_amount) 
+                        
                         if wallet is not None:
-                            wallet.amount = wallet.amount + current_order.amount
+                            wallet.amount = wallet.amount + rtn_amount
                             wallet.save()
                     
-                    return redirect('order_history')
-            return redirect('order_history')
+                    return redirect('order_history_items',current_order.order_id.id)
+            return redirect('order_history_items',current_order.order_id.id)
         
     except Exception as e:
         print(e)
@@ -343,6 +389,7 @@ def cancel_order(request,id):
     return redirect('login')
 
 
+# for showing order details for single product
 def view_order_details(request,id):
     try:
         if 'users' in request.session:
@@ -352,15 +399,18 @@ def view_order_details(request,id):
                 order = OrderProducts.objects.get(id = id )
             except OrderProducts.DoesNotExist:
                 order = None
-                
+            cartcount = Cart.objects.filter(user_id = username).count()
             context = {
                 'username': username,
-                'order_item': order 
+                'order_item': order ,
+                'cartcount':cartcount
             }
+            wishcount = Wishlist.objects.filter(user_id = username).count()
+            context['wishcount']=wishcount
             return render(request, 'profile/view_order_details.html',context)
     except Exception as e:
         print(e)
-        return redirect('order_history')
+        return redirect('order_history_items',order.order_id.id)
     return redirect('login')
 
 

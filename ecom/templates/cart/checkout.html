@@ -87,29 +87,30 @@
 							<div class="row mt-5 pt-3 d-flex">
 								<div class="col-md-6 d-flex">
 									<div class="cart-detail cart-total bg-light p-3 p-md-4">
-										<!-- <form method="post" action="" > -->
-											{% csrf_token %}
-								
+										<!-- coupon section Start -->
+
 											<div class="form-row p-4 ">
-												
 												<div class="col-8 col-md-6 " >
-											 
-													<!-- <label for="coupon" class="sr-only">Apply Coupon:</label> -->
-													<input type="text" class="form-control" id="coupon" name="coupon_code" placeholder="Enter coupon code">
+													<label for="coupon" class="sr-only">Apply Coupon:</label>
+													<input type="text" value="{{checkout.coupon.code}}" class="form-control" id="coupon" name="coupon_code" placeholder="Enter coupon code">
 												</div>
 												<div class="">
-													<button type="submit" class=" btn-warning  p-2 px-3"> Apply</button>
+													<button type="button"  class=" btn-warning  p-2 px-3 apply"> Apply</button>
 												</div>
 												<div class="">
-													<button type="button" class=" btn-danger p-2" id="removeCoupon">Remove</button>
-												</div>
+													<button type="button" class=" btn-danger p-2 remove" id="removeCoupon">Remove</button>
+												</div> 
+												<div id="cmessage" class="text-danger"> </div>
+												<div id="smessage" class="text-success"></div>
 											</div>
-							
-										<!-- </form> -->
+											
+
+										<!-- End coupon sectiono -->
+										<div id="reload">
 										<h3 class="billing-heading mb-4">Cart Total</h3>
 										<p class="d-flex">
 												  <span>Subtotal</span>
-												  <span>₹{{total}}</span>
+												  <span>₹{{checkout.sub_total}}</span>
 											  </p>
 											  <p class="d-flex">
 												  <span>Delivery</span>
@@ -117,7 +118,7 @@
 											  </p>
 											  <p class="d-flex">
 												  <span>Discount</span>
-												  <span>₹0.00</span>
+												  <span>₹{{checkout.discount_amount}}</span>
 											  </p>
 											  <hr>
 											  
@@ -125,9 +126,11 @@
 												  <span>Total</span>
 												  <span>₹{{total}}</span>
 											  </p>
-											  </div>
+											  
 											  <input type="hidden" value="{{total}}" name="total_prize">
+											</div>
 								</div>
+							</div>
 								<!-- Payment Method Section -->
 								<div class="col-md-6">
 									<div class="cart-detail bg-light p-3 p-md-4">
@@ -138,7 +141,7 @@
 												<span style="font-size: 20px; color: black">Wallet balance: {{wallet.amount}} </span>
 											</div>
 											
-										<p class="text-center walletpays">
+										<p class="text-center walletpays" id="changed">
 											<button type="button" class="btn btn-info walletpay" id="walletpay" style="padding:15px{% if wallet.amount < total %} 140px; cursor:default; {% else %} 200px {% endif %};"
 											 {% if wallet.amount < total %} disabled  {% endif %}> Pay with Wallet {% if wallet.amount < total %}(Insuffisient balance) {% endif %} </button>
 										</p>
@@ -167,8 +170,8 @@
     
   <script>
     $(document).ready(function() {
-		$('.walletpay').click(function (e){
-        e.preventDefault();
+		$(document).on('click', '.walletpay', function (e) {
+			e.preventDefault();
         
         var sel_address = $('input[name="address"]:checked').val();
         var token = $('input[name=csrfmiddlewaretoken]').val();
@@ -195,6 +198,46 @@
 });
 </script>
 
+<!-- apply coupon script -->
+<script>
+    $(document).ready(function() {
+		$('.apply').click(function (e){
+        e.preventDefault();
+        
+        var code = $('input[name="coupon_code"]').val();
+        var token = $('input[name=csrfmiddlewaretoken]').val();
+        $.ajax({
+            method: "POST",
+            url: '/apply_coupon/',
+            data:  {
+                'code':code,
+                csrfmiddlewaretoken:token
+            },
+			
+            success: function(data) {
+					if (data.error){
+						document.getElementById("cmessage").innerText = data.error
+						document.getElementById("smessage").innerText = ""
+						$('#reload').load('/checkout/ #reload');
+						$('#changed').load('/checkout/ #changed');
+					}
+					else if(data.success){
+						document.getElementById("cmessage").innerText = ""
+						document.getElementById("smessage").innerText = data.success
+						$('#reload').load('/checkout/ #reload');
+						$('#changed').load('/checkout/ #changed');
+					}
+					else{
+						document.getElementById("cmessage").innerText = data.error
+						$('#reload').load('/checkout/ #reload');
+						$('#changed').load('/checkout/ #changed');
+					}
+			}
+          });
+
+    });
+});
+</script>
 
 
 

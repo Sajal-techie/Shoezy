@@ -1,19 +1,22 @@
 from django.db import models
 from home.models import Customuser
-from user_profile.models import Address
+from user_profile.models import *
 from productmanagement.models import *
 from datetime import timedelta
-from django.utils import timezone
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
+from coupon.models import *
 # Create your models here.
-
+ 
 class Order(models.Model):
     user = models.ForeignKey(Customuser, on_delete= models.SET_NULL, null = True,blank = True) 
     address = models.ForeignKey(Address, on_delete= models.SET_NULL,null = True,blank = True) 
     total = models.DecimalField(max_digits=10, decimal_places=2, default=0.00,blank = True,null = True)
     order_date = models.DateField(auto_now_add = True)
     payment_mode = models.CharField(max_length = 20)
+    coupon_applied = models.BooleanField(default = False,null = True)
+    coupon_id = models.ForeignKey(Coupen, on_delete = models.SET_NULL, null = True)
+    og_amount = models.FloatField( null = True,blank = True)
     
 
 class OrderProducts(models.Model):

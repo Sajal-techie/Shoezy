@@ -11,11 +11,11 @@ def admorders(request):
     if 'users' in request.session:
         return redirect('page_not_found')
     if 'admin' in request.session:
-        orders = OrderProducts.objects.all().order_by('-id')
+        orders = Order.objects.all().order_by('-id')
 
         search = request.GET.get('search','')
         if search:
-            orders = orders.filter(Q( id__contains = search) | Q(status__icontains = search ))
+            orders = orders.filter(payment_mode__icontains = search )
             
         # paginator
         page = request.GET.get('page',1)
@@ -30,20 +30,37 @@ def admorders(request):
             
         context = { 
             'order_items':orders,
-            'search':search
+            # 'search':search
         }
         return render(request,'admin/admorders.html',context )
 
     return redirect('admlogin')
 
 
+def admorderitems(request, id):
+    if 'users' in request.session:
+        return redirect('page_not_found')
+    if 'admin' in request.session:
+        try:
+            order = Order.objects.get(id = id)
+        except Order.DoesNotExist:
+            order = None
+        context = {}
+        if order is not None:
+            order_items = OrderProducts.objects.filter(order_id = order).order_by('-id')
+            context = {
+                'order_items':order_items
+            }    
+        return render(request, 'admin/admorderitems.html',context) 
+
+    return redirect('admlogin')
 
 def update_status(request,id):
     if request.method == 'POST': 
         status1 = request.POST['status']
         orders = OrderProducts.objects.get(id = id)
         if orders.status == status1:
-            return redirect('admorders')
+            return redirect('admorderitems',orders.order_id.id)
         orders.status = status1
                 
         if status1 == 'cancelled': 
@@ -59,7 +76,7 @@ def update_status(request,id):
         if status1 == 'delivered' or status1 =='out for delivery':
             orders.delivery_date = datetime.now().date() 
         orders.save()
-    return redirect('admorders')
+    return redirect('admorderitems',orders.order_id.id)
 
 
 def update_date(request,id):
@@ -70,9 +87,9 @@ def update_date(request,id):
         
         if new_date < orders.order_id.order_date:
             messages.error(request, 'Delivery date must be after order date')
-            return redirect('admorders')
+            return redirect('admorderitems',orders.order_id.id)
         
         orders.delivery_date = new_date
         orders.save()
         
-    return redirect('admorders')
+    return redirect('admorderitems',orders.order_id.id)
