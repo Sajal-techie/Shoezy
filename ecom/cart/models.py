@@ -14,7 +14,8 @@ class Cart(models.Model):
     
     
     def save(self, *args, **kwargs):
-        self.sub_total = self.quantity * self.product.product_id.selling_price
+        price = self.product.product_id.offer_price()
+        self.sub_total = self.quantity * float(price[0]) 
         super().save(*args, **kwargs)
     
     

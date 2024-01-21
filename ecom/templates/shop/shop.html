@@ -39,13 +39,28 @@
                             <div class="product d-flex flex-column align-items-baseline justify-content-center align-content-center">
                                 <a href="/singleproduct/{{prod.id}}" class="img-prod ">
                                     <img class="img-fluid" src="{{prod.image1.url}}" alt="shoe">
-                                    <span class="status">{{prod.discount_percentage}}% Off</span>
+                                    {% with status1=prod.offer_price.1 %}
+                                        {% if status1 > prod.discount_percentage  %}
+                                        <span class="status text-danger">{{status1}}% Off </span>
+                                        {% else %}
+                                        <span class="status">{{prod.discount_percentage}}% Off </span>
+                                        {% endif %}
+                                    {% endwith %}
+                                    
                                     <div class="overlay"></div>
                                 </a>
                                 <div class="text py-3 pb-4 px-3  ">
                                     <h3><a href="/singleproduct/{{prod.id}}">{% for brad in brand  %}{% if prod.brand_id == brad.id %}{{brad.brand_name}}{% endif %}{% endfor %} &nbsp; {{prod.name}}</a></h3>
                                     <div class="pricing">
-                                        <p class="price"><span class="mr-2 price-dc">₹{{prod.original_price}}</span><span class="price-sale">₹{{prod.selling_price}}</span></p>
+                                        <!-- checking if offer available or not -->
+                                        {% with offer_price=prod.offer_price.0 %}
+                                            {% if offer_price < prod.selling_price %}
+                                            <p class="price"><span class="mr-2 price-dc">₹{{prod.original_price}}</span><span class="price-sale text-decoration-line-through"> <del>₹{{prod.selling_price}}</del></span></p>
+                                                <h6 class="text-danger" >Special Price: ₹{{ offer_price }}</h6>
+                                            {% else %}
+                                                <p class="price"><span class="mr-2 price-dc">₹{{prod.original_price}}</span><span class="price-sale">₹{{prod.selling_price}}</span></p>
+                                            {% endif %}
+                                        {% endwith %}		
                                     </div>
                                     <p class="bottom-area d-flex px-3">
                                         <!-- add to cart and wish list button  -->

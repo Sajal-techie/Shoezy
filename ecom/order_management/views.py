@@ -64,13 +64,28 @@ def update_status(request,id):
         orders.status = status1
                 
         if status1 == 'cancelled': 
+            orders.product.stock = orders.product.stock + orders.quantity
+            orders.product.save()
             if orders.order_id.payment_mode != 'Cash on delivery':
                 try:
                     wallet = Wallet.objects.get(user_id = orders.user1)
                 except Wallet.DoesNotExist:
                     wallet = None
+                try:
+                    order = Order.objects.get(id = orders.order_id.id)
+                except Order.DoesNotExist:
+                    order = None
+                if order is not None:
+                    if order.coupon_applied and order.coupon_id:
+                        count = OrderProducts.objects.filter(order_id = order).count()
+                        print(count)
+                        deduc = int(order.coupon_id.discount_amount) // count
+                        print(deduc)
+                        rtn_amount = orders.amount - deduc
+                        print(rtn_amount) 
+                        
                 if wallet is not None:
-                    wallet.amount = wallet.amount + orders.amount
+                    wallet.amount = wallet.amount + rtn_amount
                     wallet.save()
                 
         if status1 == 'delivered' or status1 =='out for delivery':

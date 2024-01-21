@@ -40,8 +40,13 @@
 						        </td>
 						        
 						        <td class="price">{{ cart_item.size }}</td>
-						        <td class="price">{{ cart_item.product.product_id.selling_price }}</td>
-						        
+                                {% with offer_price=cart_item.product.product_id.offer_price.0 %}
+                                    {% if offer_price < cart_item.product.product_id.selling_price %}
+                                    <td class="price">{{ offer_price }}</td>
+                                    {% else %}
+                                    <td class="price">{{ cart_item.product.product_id.selling_price }}</td>
+                                    {% endif %}
+                                {% endwith %}						        
 						        <td class="quantity">
                                     <input type="hidden" class="pro_id" value="{{cart_item.id}}">
                                    {% csrf_token %} 

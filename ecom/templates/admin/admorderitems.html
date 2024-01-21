@@ -80,7 +80,7 @@
             </tbody>
         </table>
        <div class="clearfix">
-            <div class="hint-text"><b>{{order_items}} </b> </div>
+            {% comment %} <div class="hint-text"><b>{{order_items}} </b> </div> {% endcomment %}
             {% if order_items.has_other_pages %}
             <ul class="pagination">
                 {% if order_items.has_previous %}

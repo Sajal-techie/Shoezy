@@ -2,7 +2,7 @@ from django.shortcuts import render,redirect
 from .models import *
 from .forms import Adressform
 from home.models import Customuser
-from order_management.models import *
+from order_management.models import * 
 from django.views.decorators.cache import never_cache,cache_control
 from django.contrib import messages
 from cart.models import *
@@ -182,12 +182,12 @@ def add_address(request):
                     address.user = username
                     address.save()
                     next_url = request.GET.get('next', None)
-
+ 
                     if next_url:
                         return redirect(next_url)
                     else:
                         return redirect('home')
-            else: 
+            else:  
                 form = Adressform()
             return render(request,'profile/add_address.html',{'form':form,'username':username})
     except Exception as e:

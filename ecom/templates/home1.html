@@ -106,7 +106,13 @@
     				<div class="product d-flex flex-column hgt align-items-center justify-content-center align-content-center " id="divhg">
 						<div class="">
     					<a href="/singleproduct/{{prod.id}}" class="img-prod"><img class="img-fluid" src="{{ prod.image1.url }}" alt=" shoes pic">
-							<span class="status">{{prod.discount_percentage}}% Off</span>
+									{% with status=prod.offer_price.1 %}
+                                        {% if status > prod.discount_percentage  %}
+                                        <span class="status text-danger"> {{status}}% Off</span>
+                                        {% else %}
+                                        <span class="status">{{prod.discount_percentage}}% Off</span>
+                                        {% endif %}
+                                    {% endwith %}
 						</div>
 						
 						<div class="overlay"></div>
@@ -116,7 +122,14 @@
     						<h3><a href="/singleproduct/{{prod.id}}">{% for brad in brand  %}{% if prod.brand_id == brad.id %}{{brad.brand_name}}{% endif %}{% endfor %} &nbsp; {{prod.name}}</a></h3>
 							
     						<div class="pricing">
-	    						<p class="price"><span class="mr-2 price-dc">₹{{prod.original_price}}</span><span class="price-sale">₹{{prod.selling_price}}</span></p>
+								{% with offer_price=prod.offer_price.0 %}
+                                            {% if offer_price < prod.selling_price %}
+											<p class="price"><span class="mr-2 price-dc">₹{{prod.original_price}}</span><span class="price-sale"><del>₹{{prod.selling_price}}</del> </span></p>
+											<h6 class="text-danger" > Special Price: ₹{{ offer_price }}</h6>
+                                            {% else %}
+												<p class="price"><span class="mr-2 price-dc">₹{{prod.original_price}}</span><span class="price-sale">₹{{prod.selling_price}}</span></p>
+                                            {% endif %}
+                                {% endwith %}
 	    					</div>
 	    					<p class="bottom-area d-flex px-3">
     							<a href="{% url 'singleproduct' prod.id %}" class="add-to-cart text-center py-2 mr-1"><span>View details </span></a>

@@ -66,7 +66,16 @@
 								<a href="#" class="mr-2" style="color: #000;">500 <span style="color: #bbb;">Sold</span></a>
 							</p>
 						</div> -->
+
+						<!-- checking if offer available -->
+						{% with offer_price=prod.product_id.offer_price.0 %}
+						{% if offer_price < prod.product_id.selling_price %}
+                        <div class="ppp"><p class="price"><span class="mr-2 price-dc">₹{{prod.product_id.original_price}}</span><span class="price-sale"><del>₹{{prod.product_id.selling_price}}</del> </span></p></div>
+							<h4 class="text-danger" >Special Price: ₹{{ offer_price }}</h4>
+						{% else %}
                         <div class="ppp"><p class="price"><span class="mr-2 price-dc">₹{{prod.product_id.original_price}}</span><span class="price-sale">₹{{prod.product_id.selling_price}}</span></p></div>
+						{% endif %}
+						{% endwith %}
 						<p>
                             Brand : {{prod.product_id.brand.brand_name}}  <br> 
                             Name : {{prod.product_id.name}} <br>
@@ -79,8 +88,9 @@
 
 						<div class="row mt-4">
 							<div class="col-md-6" id="reloadArea">
-								<div class="form-group d-flex">
+								<div class="form-group d-flex">size:
 									<div class="select-wrap">
+										
 										<div class="icon"><span class="ion-ios-arrow-down"></span></div>
 										<select name="size" id="size" class="form-control" onchange="updateQuantity()">
 											<option value="7">7</option>

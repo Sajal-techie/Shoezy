@@ -37,7 +37,7 @@
         <table class="table table-striped table-hover ms-3">
             <thead>
                 <tr>
-                    <th>No.</th>
+                    <th>Order No.</th>
                     <th>User Name</th>
                     <th>Address</th>
                     <th>Order Date</th>
@@ -50,7 +50,7 @@
             <tbody>
                 {% for item in order_items  %}
                 <tr>
-                    <td>{{forloop.counter}}</td>
+                    <td>{{item.id }} </td>
                     <td> {{item.user}} </td>
                     <td style=" word-wrap: break-word; max-width:130px"> {{item.address.state}},{{item.address.district}} <br>
                         {{item.address.house}},{{item.address.town}}, PIN: {{item.address.pincode}} <br> {{item.address.number}}

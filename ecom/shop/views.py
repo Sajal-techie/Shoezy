@@ -16,6 +16,9 @@ def shop(request):
             products = Product.objects.filter(is_listed = True, brand_id__is_listed = True).order_by('-id')
         except Product.DoesNotExist:
             products = None
+        # for i in products:
+        #     offer = i.offer_price()
+        #     print(offer,i.name)
         try:
             brands = Brand.objects.filter(is_listed = True).order_by('id')
         except Product.DoesNotExist:
@@ -142,7 +145,7 @@ def shop(request):
             else:
                 if 'users' in request.session:
                     del request.session['users']
-                messages.error(request,'you are blocked ')
+                messages.error(request,'you are blocked ') 
                 return redirect('login')
             
     except Exception as e:

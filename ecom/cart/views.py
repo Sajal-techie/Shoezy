@@ -20,6 +20,8 @@ def cart(request):
             messages.error(request,'you are blocked ')
             return redirect('login')       
         cart_items = Cart.objects.filter(user_id = username).select_related('product__product_id__brand').order_by('-id') 
+        for i in cart_items:
+            i.save()
         total = sum(i.sub_total for i in cart_items)
         cartcount = Cart.objects.filter(user_id = username).count()
         context = {
@@ -196,6 +198,12 @@ def apply_coupon(request):
                 return JsonResponse({'error':'Invalid Coupon code'})
             if coupons is not None:
                 today = timezone.now().date()
+                if not coupons.is_active: 
+                    checkouted.coupon_active = False
+                    checkouted.coupon = None
+                    checkouted.discount_amount = 0
+                    checkouted.save()
+                    return JsonResponse({'error':'Coupon is not available now'})
                 if coupons.valid_from > today:
                     checkouted.coupon_active = False
                     checkouted.coupon = None
@@ -218,8 +226,15 @@ def apply_coupon(request):
                     checkouted.discount_amount = 0
                     checkouted.save() 
                     return JsonResponse({'error':"This coupon has already been used. Please choose another one."})
-        
                 checkouted.payable_amount = checkouted.sub_total - coupons.discount_amount
+                if checkouted.payable_amount < 500:
+                    checkouted.coupon_active = False
+                    checkouted.coupon = None
+                    checkouted.discount_amount = 0
+                    print(checkouted.payable_amount)
+                    checkouted.payable_amount = checkouted.sub_total
+                    checkouted.save()
+                    return JsonResponse({'error':"Not available for this order Order more items."})
                 checkouted.coupon_active = True
                 checkouted.coupon = coupons
                 checkouted.discount_amount = coupons.discount_amount
