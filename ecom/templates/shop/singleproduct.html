@@ -49,23 +49,87 @@
             
     			<div class="col-lg-6 product-details pl-md-5 ftco-animate">
     				<h3>{{prod.product_id.brand.brand_name}} &nbsp; {{prod.product_id.name}}</h3>
-    				<!-- 
+    				
                      <div class="rating d-flex">
-							<p class="text-left mr-4">
-								<a href="#" class="mr-2">5.0</a>
-								<a href="#"><span class="ion-ios-star-outline"></span></a>
-								<a href="#"><span class="ion-ios-star-outline"></span></a>
-								<a href="#"><span class="ion-ios-star-outline"></span></a>
-								<a href="#"><span class="ion-ios-star-outline"></span></a>
-								<a href="#"><span class="ion-ios-star-outline"></span></a>
+							<p class="text-left mr-4" style="font-size: 20px ; color: #dbcc8f;">
+								<span  class="mr-2">{{avg_rating}}</span>
+								{% if avg_rating == 5  %}
+								<span class="ion-ios-star"></span>
+								<span class="ion-ios-star"></span>
+								<span class="ion-ios-star"></span>
+								<span class="ion-ios-star"></span>
+								<span class="ion-ios-star"></span>
+								{% elif avg_rating > 4.4 %}
+								<span class="ion-ios-star"></span>
+								<span class="ion-ios-star"></span>
+								<span class="ion-ios-star"></span>
+								<span class="ion-ios-star"></span>
+								<span class="ion-ios-star-half"></span>
+								{% elif avg_rating > 3.9 %}
+								<span class="ion-ios-star"></span>
+								<span class="ion-ios-star"></span>
+								<span class="ion-ios-star"></span>
+								<span class="ion-ios-star"></span>
+								<span class="ion-ios-star-outline"></span>
+								{% elif avg_rating > 3.4 %}
+								<span class="ion-ios-star"></span>
+								<span class="ion-ios-star"></span>
+								<span class="ion-ios-star"></span>
+								<span class="ion-ios-star-half"></span>
+								<span class="ion-ios-star-outline"></span>
+								{% elif avg_rating > 2.9 %}
+								<span class="ion-ios-star"></span>
+								<span class="ion-ios-star"></span>
+								<span class="ion-ios-star"></span>
+								<span class="ion-ios-star-outline"></span>
+								<span class="ion-ios-star-outline"></span>
+								{% elif avg_rating > 2.4 %}
+								<span class="ion-ios-star"></span>
+								<span class="ion-ios-star"></span>
+								<span class="ion-ios-star-half"></span>
+								<span class="ion-ios-star-outline"></span>
+								<span class="ion-ios-star-outline"></span>
+								{% elif avg_rating > 1.9 %}
+								<span class="ion-ios-star"></span>
+								<span class="ion-ios-star"></span>
+								<span class="ion-ios-star-outline"></span>
+								<span class="ion-ios-star-outline"></span>
+								<span class="ion-ios-star-outline"></span>
+								{% elif avg_rating > 1.4 %}
+								<span class="ion-ios-star"></span>
+								<span class="ion-ios-star-half"></span>
+								<span class="ion-ios-star-outline"></span>
+								<span class="ion-ios-star-outline"></span>
+								<span class="ion-ios-star-outline"></span>
+								{% elif avg_rating > .9 %}
+								<span class="ion-ios-star"></span>
+								<span class="ion-ios-star-outline"></span>
+								<span class="ion-ios-star-outline"></span>
+								<span class="ion-ios-star-outline"></span>
+								<span class="ion-ios-star-outline"></span>
+								{% elif avg_rating > .4 %}
+								<span class="ion-ios-star-half"></span>
+								<span class="ion-ios-star-outline"></span>
+								<span class="ion-ios-star-outline"></span>
+								<span class="ion-ios-star-outline"></span>
+								<span class="ion-ios-star-outline"></span>
+								{% else %}
+								<span class="ion-ios-star-outline"></span>
+								<span class="ion-ios-star-outline"></span>
+								<span class="ion-ios-star-outline"></span>
+								<span class="ion-ios-star-outline"></span>
+								<span class="ion-ios-star-outline"></span>
+
+								{% endif %}
+							
 							</p>
 							<p class="text-left mr-4">
-								<a href="#" class="mr-2" style="color: #000;">100 <span style="color: #bbb;">Rating</span></a>
+								<span class="mr-2" style="color: #000;">{{review_count}} <span style="color: #bbb;">Rating</span></span>
 							</p>
 							<p class="text-left">
-								<a href="#" class="mr-2" style="color: #000;">500 <span style="color: #bbb;">Sold</span></a>
+								<span class="mr-2" style="color: #000;">{{order_count}} <span style="color: #bbb;">Sold</span></span>
 							</p>
-						</div> -->
+						</div>
 
 						<!-- checking if offer available -->
 						{% with offer_price=prod.product_id.offer_price.0 %}
@@ -185,14 +249,6 @@
 				
     			</div>
     		</div>
-            <div class="col-lg-6">
-                <!-- <div class="thumbnail-container">
-                    <img src="{% static 'images/nikeair1.jpg' %}" class="thumbnail" alt="Thumbnail 1" onclick="changeImage(this)">
-                    <img src="{% static 'images/pumashoee.jpg' %}" class="thumbnail" alt="Thumbnail 2" onclick="changeImage(this)">
-                    <img src="{% static 'images/pumashoee.jpg' %}" class="thumbnail" alt="Thumbnail 3" onclick="changeImage(this)">
-                    <img src="{% static 'images/pumashoee.jpg' %}" class="thumbnail" alt="Thumbnail 4" onclick="changeImage(this)">
-                </div> -->
-            </div> 
     		<div class="row mt-5">
           <div class="col-md-12 nav-link-wrap">
             <div class="nav nav-pills d-flex text-center" id="v-pills-tab" role="tablist" aria-orientation="vertical">
@@ -235,68 +291,49 @@
               </div>
               <div class="tab-pane fade" id="v-pills-3" role="tabpanel" aria-labelledby="v-pills-day-3-tab">
               	<div class="row p-4">
-						   		<div class="col-md-7">
-						   			<h3 class="mb-4">23 Reviews</h3>
-						   			<div class="review">
-								   		<div class="user-img" style="background-image: url(images/person_1.jpg)"></div>
+						   		<div class="col-md-10 ">
+						   			<h3 class="mb-4">{{review_count}} Reviews</h3>
+									{% for review in reviews %}
+
+						   			<div class="review border border-muted">
 								   		<div class="desc">
 								   			<h4>
-								   				<span class="text-left">Jacob Webb</span>
-								   				<span class="text-right">14 March 2018</span>
+								   				<span class="text-left">{{review.user.first_name}} {{review.user.last_name}}   </span>
+								   				<span class="text-right">{{review.created_at|date:"F j, Y " }} </span>
 								   			</h4>
 								   			<p class="star">
-								   				<span>
-								   					<i class="ion-ios-star-outline"></i>
-								   					<i class="ion-ios-star-outline"></i>
-								   					<i class="ion-ios-star-outline"></i>
-								   					<i class="ion-ios-star-outline"></i>
-								   					<i class="ion-ios-star-outline"></i>
+								   				<span  style="font-size: 25px; ">
+													{% if review.rating == 1 %}
+								   					<i class="ion-ios-star"></i>
+													{% elif review.rating == 2 %}
+								   					<i class="ion-ios-star"></i>
+								   					<i class="ion-ios-star"></i>
+													{% elif review.rating == 3 %}
+								   					<i class="ion-ios-star"></i>
+								   					<i class="ion-ios-star"></i>
+								   					<i class="ion-ios-star"></i>
+													{% elif review.rating == 4 %}
+								   					<i class="ion-ios-star"></i>
+								   					<i class="ion-ios-star"></i>
+								   					<i class="ion-ios-star"></i>
+								   					<i class="ion-ios-star"></i>
+													{% elif review.rating == 5 %}
+								   					<i class="ion-ios-star"></i>
+								   					<i class="ion-ios-star"></i>
+								   					<i class="ion-ios-star"></i>
+								   					<i class="ion-ios-star"></i>
+								   					<i class="ion-ios-star"></i>
+													{% else %}
+													No ratings
+													{% endif %}
 							   					</span>
-							   					<span class="text-right"><a href="#" class="reply"><i class="icon-reply"></i></a></span>
+							   					{% comment %} <span class="text-right"><a href="#" class="reply"><i class="icon-reply"></i></a></span> {% endcomment %}
 								   			</p>
-								   			<p>When she reached the first hills of the Italic Mountains, she had a last view back on the skyline of her hometown Bookmarksgrov</p>
+								   			<p>{{review.review}}</p>
 								   		</div>
 								   	</div>
-								   	<div class="review">
-								   		<div class="user-img" style="background-image: url(images/person_2.jpg)"></div>
-								   		<div class="desc">
-								   			<h4>
-								   				<span class="text-left">Jacob Webb</span>
-								   				<span class="text-right">14 March 2018</span>
-								   			</h4>
-								   			<p class="star">
-								   				<span>
-								   					<i class="ion-ios-star-outline"></i>
-								   					<i class="ion-ios-star-outline"></i>
-								   					<i class="ion-ios-star-outline"></i>
-								   					<i class="ion-ios-star-outline"></i>
-								   					<i class="ion-ios-star-outline"></i>
-							   					</span>
-							   					<span class="text-right"><a href="#" class="reply"><i class="icon-reply"></i></a></span>
-								   			</p>
-								   			<p>When she reached the first hills of the Italic Mountains, she had a last view back on the skyline of her hometown Bookmarksgrov</p>
-								   		</div>
-								   	</div>
-								   	<div class="review">
-								   		<div class="user-img" style="background-image: url(images/person_3.jpg)"></div>
-								   		<div class="desc">
-								   			<h4>
-								   				<span class="text-left">Jacob Webb</span>
-								   				<span class="text-right">14 March 2018</span>
-								   			</h4>
-								   			<p class="star">
-								   				<span>
-								   					<i class="ion-ios-star-outline"></i>
-								   					<i class="ion-ios-star-outline"></i>
-								   					<i class="ion-ios-star-outline"></i>
-								   					<i class="ion-ios-star-outline"></i>
-								   					<i class="ion-ios-star-outline"></i>
-							   					</span>
-							   					<span class="text-right"><a href="#" class="reply"><i class="icon-reply"></i></a></span>
-								   			</p>
-								   			<p>When she reached the first hills of the Italic Mountains, she had a last view back on the skyline of her hometown Bookmarksgrov</p>
-								   		</div>
-								   	</div>
+
+									{% endfor %}
 						   		</div>
 						   		<!-- <div class="col-md-4">
 						   			<div class="rating-wrap">

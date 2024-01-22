@@ -30,9 +30,8 @@
     }
 
     .order-card img {
-      width: 100%;
-      height: 407px; 
-      object-fit: cover;
+      width: 300px;
+      height: 300px; 
       
     }
 
@@ -81,30 +80,34 @@
       color: #fff;
     }
     .status-cancelled {
-      background-color: #ff1717; /* Yellow */
+      background-color: #ff1717; /* red */
       color: #fff;
     }
   </style>
 </head>
 <body>
   <div class="container order-history">
+    {% if messages %}
+    {% for message in messages %}
+    <div class="text-center"><h4 class=" {% if message.tags == 'success' %} text-success {% else %}  text-danger {% endif %} "> {{ message }} </h4></div>    
+    {% endfor %}
+    {% endif %}
     {% for item in order_items  %}
     <div class="row bb">
-      <div class="col-md-6">
+      <div class="col-md-4 ">
         <a href="/singleproduct/{{item.product.product_id.id}}">
-        <div class="order-card">
+        <div class="order-card ">
           <img src="{{item.product.product_id.image1.url}}" alt="Product Image">
         </div>
-      </a>
+        </a>      
       </div>
-      <div class="col-md-6">
+      <div class="col-md-4">
         <div class="order-card detl">
           <div class="order-details">
             <h3>Order ID: {{item.id}} </h3>
             <span>Product : {{ item.product.product_id.brand.brand_name}}  {{item.product.product_id.name}}</span>
             <span>Size: {{item.size}} </span>
-            <span>Price: ₹{{item.product.product_id.selling_price}}</span>
-            <span>Quantity: {{item.quantity}} </span>
+            <span>Price: ₹{{item.product.product_id.selling_price}} x Quantity: {{item.quantity}} </span>
             <span>Total: ₹{{item.amount}}</span>
             <span>Order Date: {{item.order_id.order_date}}</span>
             {% if item.status != 'cancelled' %}
@@ -112,24 +115,35 @@
             {% else %}
             <span>Cancelled Date : {{item.delivery_date}}</span>
             {% endif %}
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="order-card detl">
+          <div class="order-details">
+            <h3>Delivery Address </h3>
+            <span> {{ item.address1.country}},  {{item.address1.state}}, {{item.address1.district}} </span>
+            <span>House: {{item.address1.house}}, {{item.address1.town}} ,PIN:{{item.address1.pincode}} </span>
+            <span>Number: {{item.address1.number}} , {{ item.address1.name }}</span>
             {% if item.status == 'ordered' or item.status == 'shipped' or item.status == 'out for delivery' %}
             <a href="/track_order/{{item.id}}" class="text-white"><span class="status status-processing text-center">Track order</span></a>
             {% elif item.status == 'delivered' %}
-            <a href="" class="text-white"><span class="status status-delivered text-center">Delivered</a></span>
+            <a href="/track_order/{{item.id}}" class="text-white"><span class="status status-delivered text-center">Delivered</a></span>
+            <a href="/track_order/{{item.id}}"  class="btn btn-outline-info ">Add Review</a>
+            <!-- <a href="#" data-toggle="modal" data-target="#viewReviewModal" class="btn btn-outline-info ">Edit Review</a> -->
             {% elif item.status == 'cancelled' %}
             <span class="status status-cancelled text-center ">Cancelled</span>
             {% endif %}
             <span class="text-center"><a href="/view_order_details/{{item.id}}" class="view-details">View Details</a></span>
+            
             
           </div>
         </div>
       </div>
     </div>
 
-    
+  
     {% endfor %}
-
-    
   </div>
 </body>
 {% include "footer.html" %}

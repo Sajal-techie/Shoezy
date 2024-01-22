@@ -142,9 +142,16 @@ justify-content: center;
   }
 </style>
 <body>
+  {% if messages %}
+  {% for message in messages %}
+  <div class="text-center"><h4 class=" {% if message.tags == 'success' %} text-success {% else %}  text-danger {% endif %} "> {{ message }} </h4></div>    
+  {% endfor %}
+  {% endif %}
   <div class="container containe ">
     <article class="card ">
+      {% if order.status == 'ordered' or order.status == 'shipped' or order.status == 'out for delivery' %}
       <header class="card-header text-center"> <h4>Track Order </h4></header>
+      {% endif %}
       <div class="card-body">
         <h6>Order ID: {{ order.id }}</h6>
         <hr>
@@ -175,20 +182,86 @@ justify-content: center;
         <ul class="row">
             <li class="col-md-12">
               <figure class="itemside mb-6">
-                <div class="aside"><img src="{{ order.product.product_id.image1.url }}" class="img-sm border"></div>
+                <a href="/singleproduct/{{order.product.product_id.id}}">
+                  <div class="aside"><img src="{{ order.product.product_id.image1.url }}" class="img-sm border"></div>
+                </a>
+                
                 <figcaption class="info align-self-center">
                   <p class="title">{{ order.product.product_id.brand }} <br> {{ order.product.product_id.name }}</p>
                   Size : {{order.size}}  &nbsp; &nbsp; Quantity : {{order.quantity}} &nbsp; &nbsp;
                   <span class="text-muted">Price : ₹{{ order.amount }} </span>
                 </figcaption>
               </figure>
+
+              <!-- reviw if product is deliverd -->
+                {% if order.status == 'delivered'  %}
+
+                <!-- if review already added show it  -->
+                {% if review %}
+                <div class="text-center border border-dark p-1">
+
+                  <form method="post" action="/update_review/{{order.product.product_id.id}}/{{order.id}} ">
+                    {% csrf_token %}
+                    <div class="modal-body">					                          
+                      <div class="form-group">
+                        <label for="review"> Review</label>
+                          <textarea class="form-control" id="review" name='review' rows="3"  required  >{{review.review}}
+                          </textarea>
+                      </div>
+                      <label>Rate here</label>
+                      <div class="rating text-center"  style="color: yellow;  font-size: 30px; ">
+                        {% for _ in "12345" %}
+                        {% if forloop.counter <= review.rating %}
+                          <i class="rating__star fas fa-star"></i>
+                        {% else %}
+                          <i class="rating__star far fa-star"></i>
+                        {% endif %}
+                      {% endfor %}
+                    <input  type="hidden" name="rating" value="{{review.rating}}" id="selectedRating" value="0">
+                  </div>
+                    <button type="submit" class="btn btn-info">Update Review</button>
+                  </form>
+                  </div>
+
+
+                  <!-- if review not added add option -->
+                {% else %}
+
+                <div class="text-center border border-dark p-1">
+
+                <form method="post" action="/add_review/{{order.product.product_id.id}}/{{order.id}} ">
+                  {% csrf_token %}
+                  <div class="modal-body">					                          
+                    <div class="form-group">
+                        <textarea class="form-control" id="review" placeholder="write Your Review" name='review' rows="3"  required autofocus ></textarea>
+                    </div>
+                    <label>Rate here</label>
+                    <div class="rating text-center"  style="color: yellow;  font-size: 30px; ">
+                        <i class="rating__star far fa-star "></i>
+                        <i class="rating__star far fa-star"></i>
+                        <i class="rating__star far fa-star"></i>
+                        <i class="rating__star far fa-star"></i>
+                        <i class="rating__star far fa-star"></i>
+                  </div>
+                  <input  type="hidden" name="rating" id="selectedRating" value="0">
+                </div>
+                  <button type="submit" class="btn btn-success">Submit Review</button>
+                </form>
+                </div>
+                {% endif %}
+                {% endif %}
+                <!-- reviw end -->
+
+
+                <!-- cancel if item is not delivered -->
                 {% if order.status == 'ordered' or order.status == 'shipped' or order.status == 'out for delivery' %}
                 <div class="text-center"><a href="#" class="btn btn-danger" data-toggle="modal" data-target="#cancelOrderModal" data-abc="true">Cancel order</a></div>
                   {% endif %}
+                  <!-- end cancel -->
             </li>
         </ul>
         <hr>
-        <a href="/order_history/" class="btn btn-warning" data-abc="true"> <i class="fa fa-chevron-left"></i> Back to orders</a>
+        <a href="/order_history_items/{{order.order_id.id}}" class="btn btn-warning" data-abc="true"> <i class="fa fa-chevron-left"></i> Back to orders</a>
         
       </div>
     </article>
@@ -210,7 +283,6 @@ justify-content: center;
                       {% csrf_token %}
                       <div class="form-group ">
                           <label for="cancellation_reason">Reason for cancellation:</label> <br>
-                          <!-- <input type="text" class="form-control" id="cancellation_reason" name="cancellation_reason" required> -->
                           <textarea name="reason"  cols="55" rows="4" required></textarea>
                       </div>
                       <button type="submit" class="btn btn-danger">Submit </button>
@@ -220,6 +292,28 @@ justify-content: center;
       </div>
   </div>
   
+<script>
+  const ratingStars = [...document.getElementsByClassName("rating__star")];
+  const selectedRatingInput = document.getElementById("selectedRating");
+  function executeRating(stars) {
+      const starClassActive = "rating__star fas fa-star";
+      const starClassInactive = "rating__star far fa-star";
+      const starsLength = stars.length;
+      stars.map((star) => {
+          star.onclick = () => {
+              const selectedIndex = stars.indexOf(star);
+
+              for (let i = 0; i < starsLength; ++i) {
+                  stars[i].className = i <= selectedIndex ? starClassActive : starClassInactive;
+              }
+
+              // Set the value of the hidden input to the selected index + 1 (1-indexed)
+              selectedRatingInput.value = selectedIndex + 1;
+          };
+      });
+  }
+    executeRating(ratingStars);
+</script>
 </body>
 
 {% endblock maincontent %}

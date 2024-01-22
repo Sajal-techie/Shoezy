@@ -1,5 +1,6 @@
 from django.db import models
 from home.models import Customuser
+from productmanagement.models import Product
 # Create your models here.
 
 class Address(models.Model):
@@ -27,3 +28,13 @@ class Wallet(models.Model):
     def __str__(self):
         return self.user_id.first_name 
     
+    
+class ProductReview(models.Model):
+    user = models.ForeignKey(Customuser, on_delete = models.SET_NULL,null = True)
+    product = models.ForeignKey(Product, on_delete = models.CASCADE,null = True)
+    rating = models.IntegerField(null = True, blank = True)
+    review = models.TextField(null = True , blank = True)
+    created_at = models.DateTimeField(auto_now = True,null = True,blank = True)
+    
+    def __str__(self):
+        return f"{self.user} - {self.product}" 

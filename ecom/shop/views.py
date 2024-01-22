@@ -8,6 +8,9 @@ from cart.views import check_cart,check_wishlist
 from cart.models import *
 from django.db.models import Q
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from user_profile.models import ProductReview
+from django.db.models import Count,Sum
+from order_management.models import OrderProducts
 
 def shop(request): 
     try:
@@ -16,9 +19,6 @@ def shop(request):
             products = Product.objects.filter(is_listed = True, brand_id__is_listed = True).order_by('-id')
         except Product.DoesNotExist:
             products = None
-        # for i in products:
-        #     offer = i.offer_price()
-        #     print(offer,i.name)
         try:
             brands = Brand.objects.filter(is_listed = True).order_by('id')
         except Product.DoesNotExist:
@@ -157,17 +157,29 @@ def shop(request):
 def singleproduct(request,id):
     try:
         products = Product.objects.filter(id = id)
+        sproduct = Product.objects.get(id = id)
         brands = Brand.objects.filter(id = id)
         multiple = ProductImages.objects.filter(product_id = id )
         productvariant = ProductVariant.objects.filter(product_id = id)[:1]
         productvariants = ProductVariant.objects.filter(product_id = id)
-        
+        review = ProductReview.objects.filter(product = sproduct).order_by('-rating')
+        review_count = review.aggregate(num_reviews=Count('id'))['num_reviews'] 
+        sum_rating = review.aggregate(sum_rat = Sum('rating'))['sum_rat']
+        try:    
+            avg_rating = sum_rating / review_count if review_count else 0
+        except ZeroDivisionError:
+            avg_rating = 0
+        order_count = OrderProducts.objects.filter(product__product_id = sproduct,status = 'delivered').count()
         context = {
             'product' : products,
             'brand' : brands,
-            'multi_image' : multiple,
+            'multi_image' : multiple, 
             'productvariant':productvariant,
             'productvariants':productvariants,
+            'reviews':review,
+            'review_count':review_count,
+            'avg_rating':avg_rating,
+            'order_count':order_count
         }
         if 'users' in request.session:
             usm = request.session.get('users')
@@ -199,7 +211,7 @@ def singleproduct(request,id):
     except Exception as e:
         print(e)
         
-    return render(request, 'shop/singleproduct.html',context)
+    return render(request, 'shop/singleproduct.html')
 
 
 # resetting filters

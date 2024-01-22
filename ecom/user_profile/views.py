@@ -319,12 +319,19 @@ def track_order(request,id):
             current_status = order_items.status
             current_step_index = next((i for i, step in enumerate(tracking_steps) if step['description'] == current_status), None)
             previous_steps = tracking_steps[:current_step_index + 1 ] 
+            try:
+                review = ProductReview.objects.get( product = order_items.product.product_id, user = username)
+            except Exception as e:
+                print(e)
+                review = None
+                
             context = {
                 'order': order_items,
                 'tracking_steps': tracking_steps,
                 'previous_steps': previous_steps,
                 'username':username,
                 'cartcount':cartcount,
+                'review':review,
             }
             wishcount = Wishlist.objects.filter(user_id = username).count()
             context['wishcount']=wishcount
@@ -403,7 +410,7 @@ def view_order_details(request,id):
             context = {
                 'username': username,
                 'order_item': order ,
-                'cartcount':cartcount
+                'cartcount':cartcount,
             }
             wishcount = Wishlist.objects.filter(user_id = username).count()
             context['wishcount']=wishcount
@@ -414,3 +421,69 @@ def view_order_details(request,id):
     return redirect('login')
 
 
+
+# add review for delivered products 
+def add_review(request,pid,oid):
+    try:
+        if 'users' in request.session:
+            usm = request.session.get('users')
+            username = Customuser.objects.get(email = usm)
+            try:
+                product = Product.objects.get(id = pid)
+            except Exception as e:
+                product = None
+                print(e)
+                return redirect('track_order',oid)
+            if request.method == 'POST':
+                review = request.POST['review'] 
+                rating = request.POST['rating']
+                if ProductReview.objects.filter(product = product,user = username).exists():
+                    messages.error(request, 'You already added a review')
+                    return redirect('track_order',id = oid)
+                ProductReview.objects.create(product = product, user = username,rating = rating, review = review)
+                messages.success(request,'Review added succesfully')
+                return redirect('track_order',id = oid)
+            
+            return redirect('track_order',id = oid)
+        
+        return redirect('login')
+    except Exception as e:
+        print(e)
+    return redirect('home')
+    
+    
+# edit review 
+def update_review(request,pid,oid):
+    try:
+        if 'users' in request.session:
+            usm = request.session.get('users')
+            username = Customuser.objects.get(email = usm)
+            try:
+                product = Product.objects.get(id = pid)
+            except Exception as e:
+                product = None
+                print(e)
+                return redirect('track_order',oid)
+            if request.method == 'POST':
+                reviews = request.POST['review'] 
+                rating = request.POST['rating']
+                try:
+                    review = ProductReview.objects.get(product = product, user = username)
+                except Exception as e:
+                    review = None
+                if review is not None:
+                    review.review = reviews
+                    review.rating = rating
+                    review.save()
+                    messages.success(request,'Review Updated succesfully')
+
+                return redirect('track_order',id = oid)
+            
+            return redirect('track_order',id = oid)
+        
+        return redirect('login')
+    except Exception as e:
+        print(e)
+    return redirect('home')
+    
+    
