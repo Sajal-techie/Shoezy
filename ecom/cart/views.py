@@ -50,29 +50,41 @@ def addto_cart(request,p_id):
     if 'users' in request.session:
         usm = request.session.get('users')
         user2 = Customuser.objects.get(email = usm)
-        product = Product.objects.get(productvariant__id = p_id)
+        next_url = request.GET.get('next',None )
+        if next_url is not None:
+            product = Product.objects.get(id = p_id)
+        else:
+            product = Product.objects.get(productvariant__id = p_id)
+        print(p_id,product,next_url)
         size = request.GET.get('size',None)
-        quantity = int(request.GET.get('quantity',None))
-        try:
+        quantity = int(request.GET.get('quantity',1))
+        try: 
             product_size = ProductVariant.objects.get(product_id = product, size = size)  
         except ProductVariant.DoesNotExist:
             product_size = None
             
         if product_size is None:
             messages.error(request, 'Not available')
+            if next_url is not None:
+                return redirect(next_url)
             return redirect('singleproduct',product.id) 
         
         if product_size.stock < quantity:
             messages.error(request,'out of Stock')
+            if next_url is not None:
+                return redirect(next_url)
             return redirect('singleproduct',product.id) 
             
         if product_size.stock > 0:
             if  not Cart.objects.filter(user_id = user2, product = product_size, size = size).exists():
                  Cart.objects.create( user_id = user2 ,product = product_size, size = size, quantity = quantity ) 
+                 messages.success(request, f'{product.name} size({product_size.size}) added to Cart ')
             else:
-                messages.error(request, 'Already in Cart')
+                messages.error(request, f'{product.name} size({product_size.size}) Already in Cart')
         else:
             messages.error(request, 'Out of stock')
+        if next_url is not None:
+                return redirect(next_url)
         return redirect('singleproduct',product.id)      
     messages.error(request,'you need to login')
     return redirect('login')
@@ -107,8 +119,13 @@ def change_quantity(request):
 
     
 def remove_cart(request,id):
-    remove_item= Cart.objects.get(id = id)
-    remove_item.delete()
+    try:
+        remove_item= Cart.objects.get(id = id)
+    except Cart.DoesNotExist:
+        remove_item = None
+    if remove_item is not None:    
+        remove_item.delete()
+        messages.success(request, ' item removed from cart ')
     return redirect('cart')
 
 
@@ -457,7 +474,7 @@ def add_to_wish(request,id):
         products = Product.objects.get(id = id)
         if not Wishlist.objects.filter(product_id = products ,user_id = username):
             wish = Wishlist.objects.create(product_id = products,user_id = username)
-            wish.stock = 'In Stock' if wish.product_id.quantity > 0 else 'Out of Stock'
+            messages.success(request, f'{products.name} added to wishlist')
             wish.save()
         nxt_url = request.GET.get('next','/')
         return redirect(nxt_url)
@@ -472,6 +489,7 @@ def remove_wish(request,id):
         wish = Wishlist.objects.get(product_id = prod, user_id = username)
         wish.delete()
         nxt_url = request.GET.get('next','wishlist')
+        messages.error(request, f'{prod.name} removed from wishlist ') 
         return redirect(nxt_url)
     
     return redirect('login')

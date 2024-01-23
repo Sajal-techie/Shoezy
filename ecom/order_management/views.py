@@ -48,6 +48,13 @@ def admorderitems(request, id):
         context = {}
         if order is not None:
             order_items = OrderProducts.objects.filter(order_id = order).order_by('-id')
+            for order in order_items:
+                if order.delivery_date < datetime.now().date() and order.status != 'cancelled' :
+                    order.status = 'delivered'
+                    order.save()
+                if order.delivery_date == datetime.now().date() and (order.status == 'ordered' or order.status == 'shipped') :
+                    order.status = 'out for delivery'
+                    order.save()
             context = {
                 'order_items':order_items
             }    

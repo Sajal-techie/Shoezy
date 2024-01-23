@@ -8,7 +8,7 @@ from django.contrib import messages
 from cart.models import *
 from django.db.models import Q
 from django.utils import timezone
-from datetime import date
+from datetime import date,datetime
 
 
 def view_profile(request):
@@ -421,6 +421,27 @@ def view_order_details(request,id):
     return redirect('login')
 
 
+def order_invoice(request,id):
+    try:
+        if 'users' in request.session:
+            usm = request.session.get('users')
+            username = Customuser.objects.get(email = usm)
+            try:
+                order_item = OrderProducts.objects.get(id = id)
+            except Exception:
+                order_item = None
+            if order_item is not None:
+                current_date = datetime.now().date()
+                context = {
+                    'item':order_item,
+                    'date': current_date
+                }
+            return render(request, 'profile/invoice.html',context)
+        return redirect('login')
+    except Exception as e:
+        print(e)
+    return redirect('track_order',id)
+
 
 # add review for delivered products 
 def add_review(request,pid,oid):
@@ -437,6 +458,7 @@ def add_review(request,pid,oid):
             if request.method == 'POST':
                 review = request.POST['review'] 
                 rating = request.POST['rating']
+                review = str(review).strip()
                 if ProductReview.objects.filter(product = product,user = username).exists():
                     messages.error(request, 'You already added a review')
                     return redirect('track_order',id = oid)
@@ -461,12 +483,13 @@ def update_review(request,pid,oid):
             try:
                 product = Product.objects.get(id = pid)
             except Exception as e:
-                product = None
+                product = None 
                 print(e)
                 return redirect('track_order',oid)
             if request.method == 'POST':
                 reviews = request.POST['review'] 
                 rating = request.POST['rating']
+                reviews = str(reviews).strip()
                 try:
                     review = ProductReview.objects.get(product = product, user = username)
                 except Exception as e:

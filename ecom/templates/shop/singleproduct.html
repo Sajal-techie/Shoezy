@@ -27,9 +27,25 @@
 		color: #fff !important;
 	}</style>
     <body class="goto-here">
- <!-- <h1 class="mb-0 bread text-center">Shop</h1> -->
     <section class="ftco-section">
 		{% if productvariant %}
+		{% if messages %}
+		<div aria-live="polite" aria-atomic="true" style="position: fixed; top: 50%; right: 5%; min-height: 200px; min-width: 200px;">
+		  {% for message in messages %}
+			<div class="toast border {% if message.tags == 'success' %} border-success {% else %}border-danger{% endif %}" role="alert" aria-live="assertive" aria-atomic="true" data-delay="5000" style="margin-top: 10px;">
+			  <div class="toast-header">
+				<strong class="mr-auto {% if message.tags == 'success' %}text-success{% else %}text-danger{% endif %}   text-capitalize">{{ message.tags }}</strong>
+				<button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+				  <span aria-hidden="true">&times;</span>
+				</button>
+			  </div>
+			  <div class="toast-body">
+				{{ message }}
+			  </div>
+			</div>
+		  {% endfor %}
+		</div>
+	  {% endif %}
 		{% for prod in productvariant %}
     	<div class="container">
     		<div class="row">
@@ -193,18 +209,18 @@
 			 <!-- {% if is_in_cart %}
 				<a href="/cart/" class="btn btn-black py-3 px-5 mr-2">View  Cart</a>
 				{% else %}  -->
-				{% if messages %}
+				{% comment %} {% if messages %}
 				{% for message in messages %}
-					<h6 class=" text-danger"> {{ message }} </h6>
+				<div class=" "><h6 class=" {% if message.tags == 'success' %} text-success alert-success {% else %}  text-danger alert-danger {% endif %} py-2"> {{ message }} </h6></div>    
 				{% endfor %}
-				{% endif %}
+				{% endif %} {% endcomment %}
 				<button type="submit" class="btn btn-black px-5 py-3" style="border-radius: 0cm;">
 					<span>Add to Cart</span>
 				</button>&nbsp;
 				{% comment %} <a href="" class="btn btn-primary py-3 px-5" style="color: black; border-radius: 0cm;"  data-toggle="modal" data-target="#sizeModal">Buy Now</a> {% endcomment %}
 				&nbsp; &nbsp;
 				{% if not is_in_wish %}
-				<a href="{% url 'add_to_wish' prod.product_id.id %}?next={{request.path}}" data-toggle="collapse" data-target="#sizecollapse" title="add to wishlist"> <i class="fa-regular fa-heart fa-beat fa-2xl" style="color: #ff3246;"></i></a>
+				<a href="{% url 'add_to_wish' prod.product_id.id %}?next={{request.path}}"   title="add to wishlist"> <i class="fa-regular fa-heart fa-beat fa-2xl" style="color: #ff3246;"></i></a>
 				{% else %}
 				<a href="{% url 'remove_wish' prod.product_id.id %}?next={{request.path}}" title="remove from wishlist"><i class="fa-solid fa-heart fa-2xl" style="color: #ff3246;"></i></a>
 				{% endif %}
@@ -477,5 +493,10 @@ thumbnailContainer.addEventListener('mouseover', function () {
 			});
 		});
 	</script>
+	<script>
+		$(document).ready(function () {
+		  $('.toast').toast('show');
+		});
+	  </script>
   </body>
   {% endblock maincontent %} 

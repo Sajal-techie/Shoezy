@@ -22,7 +22,7 @@ class Cart(models.Model):
 class Wishlist(models.Model):
     user_id = models.ForeignKey(Customuser, on_delete = models.CASCADE, null = True)
     added_at = models.DateField(auto_now_add = True)
-    stock = models.CharField(max_length = 20, null = True,blank = True)
+    # stock = models.CharField(max_length = 20, null = True,blank = True)
     product_id = models.ForeignKey(Product, on_delete = models.SET_NULL, null = True)
 
 

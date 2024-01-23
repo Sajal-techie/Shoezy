@@ -9271,7 +9271,7 @@ h1, h2, h3, h4, h5,
       appearance: none; }
 
 .cart-list {
-  overflow-x: scroll; }
+  overflow-x: hidden; }
 
 .table {
   min-width: 1000px !important;

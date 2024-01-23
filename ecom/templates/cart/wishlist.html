@@ -9,6 +9,23 @@
     <section class="ftco-section ftco-cart">
         <h1 class=" text-center scs">Wishlist</h1>
         {% if wishlist_items %}
+		{% if messages %}
+		<div aria-live="polite" aria-atomic="true" style="position: fixed; top: 15%; right: 3%; min-height: 200px; min-width:300px;  z-index: 1000">
+		  {% for message in messages %}
+			<div class="toast   border  {% if message.tags == 'success' %} border-success {% else %}border-danger{% endif %}" role="alert" aria-live="assertive" aria-atomic="true" data-delay="5000" style="margin-top: 10px;;">
+			  <div class="toast-header">
+				<strong class="mr-auto {% if message.tags == 'success' %}text-success{% else %}text-danger{% endif %}  text-capitalize">{{ message.tags }}</strong>
+				<button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+				  <span aria-hidden="true">&times;</span>
+				</button>
+			  </div>
+			  <div class="toast-body">
+				{{ message }}
+			  </div>
+			</div>
+		  {% endfor %}
+		</div>
+	  {% endif %}
 			<div class="container">
 				<div class="row">
     			<div class="col-md-12 ">
@@ -16,6 +33,7 @@
 	    				<table class="table">
 						    <thead class="thead-primary">
 						      <tr class="text-center">
+								
 						        <th>&nbsp;</th>
 						        <th>&nbsp;</th>
 						        <th>Product</th>
@@ -26,7 +44,7 @@
 						      </tr>
 						    </thead>
 						    <tbody>
-                            
+								
                             {% for wishlist_item in wishlist_items %}
 						      <tr class="text-center">
                                 
@@ -40,15 +58,22 @@
 						        </td>
 						        
 						        <td class="price">₹{{ wishlist_item.product_id.selling_price }}</td>
-						        <td class="price">₹{{ wishlist_item.size}}</td>
-						        <!-- {% if wishlist_item.stock == 'In Stock' %} -->
-						        <!-- <td class="total"><span class="bg-success p-1 text-white">  {{wishlist_item.product.stock}}</span></td> -->
-                                <!-- <td class="total"><a href="/addto_cart/{{wishlist_item.product_id.id}}?next={{ request.path }}" class="btn btn-primary "> Add to Cart </a></td> -->
-                                <td class="total"><a href="/singleproduct/{{wishlist_item.product_id.id}}/" class="btn btn-primary "> View details </a></td>
-                                <!-- {% else %}
-                                <td class="total"><span class="bg-danger p-1 text-white"> {{wishlist_item.stock}}</span></td>
-                                {% endif %} -->
-						        
+								<form action="{% url 'addto_cart' wishlist_item.product_id.id  %}" method="get">
+									<input type="hidden" name="next" value="{{ request.path }}">
+								<td class="size-selector">
+									<select name="size" class="form-control" required>
+									<option value="" selected disabled>Select Size</option>
+									  <option value="7">7</option>
+									  <option value="8">8</option>
+									  <option value="9">9</option>
+									  <option value="10">10</option>
+									</select>
+								</td>
+
+                                <td class="total">
+									<button type="submit"  class="btn btn-primary  py-0 px-4"  style="border-radius: 0px ;"> Add to Cart </button>
+								</td>
+								</form>	
                         
 						      </tr>
                             {% endfor %}
@@ -74,7 +99,13 @@
   
 
   <!-- loader -->
-  {% comment %} <div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px"><circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/><circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00"/></svg></div> {% endcomment %}
+  <div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px"><circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/><circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00"/></svg></div> 
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 
+  <script>
+	$(document).ready(function () {
+	  $('.toast').toast('show');
+	});
+  </script>
       {% endblock maincontent %}
   </body>
