@@ -5,6 +5,10 @@ import os
 from django.db.models import Q
 from django.core.paginator import Paginator,PageNotAnInteger,EmptyPage
 from django.contrib import messages
+from django.core.files.base import ContentFile
+import base64
+import re
+
 
 # view products
 def view_products(request):
@@ -36,9 +40,25 @@ def add_product(request):
             noofferprice = request.POST['noofferprice']
             offerprice = request.POST['offerprice']
             desc = request.POST['desc']
-            img_name = request.FILES.get('image1') if 'image1' in request.FILES else None
             
-            if noofferprice <=0 or offerprice <= 0:
+            if 'croppedImageData' in request.POST:
+                cropped_image = request.POST.get('croppedImageData',None)
+                
+                if cropped_image:
+                    format, imgstr = cropped_image.split(";base64,")
+                    ext = re.search(r"/(.*?)$", format).group(1)
+                    
+                    # Convert base64 string to a Django ContentFile
+                    decoded_file = base64.b64decode(imgstr)
+                    img_name = ContentFile(decoded_file, name=f"cropped_image.{ext}")
+            else:
+                img_name = request.FILES.get('image1') if 'image1' in request.FILES else None
+
+            if int(noofferprice) < int(offerprice):
+                messages.error(request, 'Offer price must be less than no offer price')
+                return redirect('view_products')
+            
+            if int(noofferprice) <=0 or int(offerprice) <= 0:
                 messages.error(request, 'Enter a valid price (greater than 0)')
                 return redirect('view_products')
             

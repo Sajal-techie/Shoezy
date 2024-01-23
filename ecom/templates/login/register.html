@@ -27,7 +27,7 @@
                             <h6 class=" text-danger"> {{ message }} </h6>
                           {% endfor %}
                           {% endif %}
-                      <form class="row contact_form" action="/register/" method="post" onsubmit="return checkbox()" >
+                      <form class="row contact_form" action="/register/" method="post" onsubmit="return checkbox()"  id="regform">
                         {% csrf_token %}
                             <div class="col-md-12 form-group p_star">
                                 <input   type="text" class="form-control" id="fname" name="fname" 
@@ -50,6 +50,15 @@
                                     placeholder="confrim password" required >
                             </div>
                             <div class="col-md-12 form-group">
+                                <a class="text-info" data-toggle="collapse" href="#referralCodeCollapse" role="button" aria-expanded="false" aria-controls="referralCodeCollapse">
+                                    <span>I have a referral code?</span>
+                                </a>
+                            </div>
+                            <div class="collapse col-md-12 form-group" id="referralCodeCollapse">
+                                <input type="text" class="form-control" id="referralCode" name="referralCode" 
+                                        placeholder="referral code (optional) ">
+                            </div>
+                            <div class="col-md-12 form-group p_star">
                                  <div class="creat_account d-flex align-items-center">
                                     <input type="checkbox" id="term" name="selector" >
                                     <label for="term">I agree to the  <a href="/terms/">terms and conditions</a> </label>
@@ -70,6 +79,34 @@
 </section>
 <!-- check box validation -->
 <script>
+    const form = document.getElementById("regform")
+    form.addEventListener("submit", function(event){
+        const pass =  document.getElementById("password").value;
+        const pass1 =  document.getElementById("password1").value;
+        const ref =  document.getElementById("referralCode").value;
+        console.log(pass,pass1,typeof ref)
+        if (pass.length < 6 ){
+            event.preventDefault();
+            alert("Password length too short minimum 6 chararcters!")
+        }
+        else if(pass != pass1){
+            event.preventDefault();
+            alert("Passwords must be Same !")
+        }
+        else if(ref.length !=8  ){
+            if (ref.length == 0 ){
+                
+            }
+            else{
+            event.preventDefault();
+            alert("enter valid referral code (8-digits)!")
+            }
+        }
+    });
+</script>
+
+
+<script>
   function checkbox(){
     const term1 = document.getElementById('term') ;
     const checkmsg = document.getElementById('checkboxMessage');
@@ -83,5 +120,7 @@
     }
   }
 </script>
+
+
 {% include 'footer.html' %}
 {% endblock maincontent %}

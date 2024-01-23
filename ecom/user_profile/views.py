@@ -27,7 +27,6 @@ def view_profile(request):
                 return redirect('login') 
             try:
                 addressess = Address.objects.filter(Q(user = username) & Q(is_available= True))
-                cartcount = Cart.objects.filter(user_id = username).count()
                 
                 try:
                     wallet = Wallet.objects.get(user_id = username)
@@ -40,12 +39,8 @@ def view_profile(request):
             context = {
                 'username':username,
                 'address':addressess,
-                'cartcount':cartcount,
                 'wallet':wallet
             }
-            wishcount = Wishlist.objects.filter(user_id = username).count()
-            context['wishcount']=wishcount
-            
             return render(request, 'profile/user_details.html',context)
         
     except Exception as e:
@@ -62,17 +57,11 @@ def edit_profile(request,id):
             username = Customuser.objects.get(id = id)
         except Customuser.DoesNotExist:
             username = None
-        try:
-            cartcount = Cart.objects.filter(user_id = username).count()
-        except Exception as e:
-            print(e)
-            
+
         context = {
             'username':username,
-            'cartcount':cartcount
+            
         }
-        wishcount = Wishlist.objects.filter(user_id = username).count()
-        context['wishcount']=wishcount
         if request.method == 'POST':
             fname = request.POST['fname']
             lname = request.POST['lname']
@@ -120,13 +109,10 @@ def reset_password(request):
             except Customuser.DoesNotExist:
                 username = None
                 
-            cartcount = Cart.objects.filter(user_id = username).count()
             context = {
                 'username' : username,
-                'cartcount':cartcount
             }
-            wishcount = Wishlist.objects.filter(user_id = username).count()
-            context['wishcount']=wishcount
+            
             if request.method == 'POST':
                 old = request.POST['old_pass']
                 new = request.POST['new_pass']
@@ -247,18 +233,15 @@ def order_history(request):
                 return redirect('login') 
             try:
                 order_items = Order.objects.filter(user = username).order_by('-id')
-                cartcount = Cart.objects.filter(user_id = username).count()
+
             except Exception as e:
                 print(e)
                 
             context = {
                 'order_items': order_items,
                 'username':username,
-                'cartcount':cartcount
+                
             }
-            wishcount = Wishlist.objects.filter(user_id = username).count()
-            context['wishcount']=wishcount
-            
             return render(request, 'profile/order_history.html',context) 
         
     except Exception as e:
@@ -280,14 +263,12 @@ def order_history_items(request,id):
                 return redirect('login') 
             order = Order.objects.get(id = id)
             order_items = OrderProducts.objects.filter(order_id = order)
-            cartcount = Cart.objects.filter(user_id = username).count()
+
             context = {
                 'order_items': order_items,
-                'cartcount':cartcount,
                 'username':username,
             }
-            wishcount = Wishlist.objects.filter(user_id = username).count()
-            context['wishcount']=wishcount
+            
             return render(request, 'profile/order_history_items.html',context) 
         
         except Exception as e:
@@ -308,7 +289,7 @@ def track_order(request,id):
             except OrderProducts.DoesNotExist:
                 order_items = None
                 
-            cartcount = Cart.objects.filter(user_id = username).count()
+
             tracking_steps = [
                 {'description': 'ordered'},
                 {'description': 'shipped'},
@@ -330,11 +311,8 @@ def track_order(request,id):
                 'tracking_steps': tracking_steps,
                 'previous_steps': previous_steps,
                 'username':username,
-                'cartcount':cartcount,
                 'review':review,
             }
-            wishcount = Wishlist.objects.filter(user_id = username).count()
-            context['wishcount']=wishcount
             return render(request, 'profile/track_order.html',context)
         
     except Exception as e:
@@ -406,15 +384,14 @@ def view_order_details(request,id):
                 order = OrderProducts.objects.get(id = id )
             except OrderProducts.DoesNotExist:
                 order = None
-            cartcount = Cart.objects.filter(user_id = username).count()
+
             context = {
                 'username': username,
                 'order_item': order ,
-                'cartcount':cartcount,
             }
-            wishcount = Wishlist.objects.filter(user_id = username).count()
-            context['wishcount']=wishcount
+            
             return render(request, 'profile/view_order_details.html',context)
+        
     except Exception as e:
         print(e)
         return redirect('order_history_items',order.order_id.id)

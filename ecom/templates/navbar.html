@@ -39,11 +39,11 @@
         {% if 'users' in request.session %}
         <li class="nav-item  cta cta-colored">
           <a href="/wishlist/" class="nav-link"><img class="heart1" src={% static 'images/heart.svg' %}
-           alt="wishlist">[{{wishcount}}]</a>
+           alt="wishlist">[{{wish_count}}]</a>
         </li>
 
         <li class="nav-item cta cta-colored"><a href="/cart/" class="nav-link"><span
-              class="icon-shopping_cart"></span>[{{cartcount}}]</a></li>
+              class="icon-shopping_cart"></span>[{{cart_count}}]</a></li>
         {% endif %}
         <li class="nav-item">
           <a class="nav-link" href="#" id="search-icon" title="search">

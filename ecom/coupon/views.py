@@ -31,7 +31,6 @@ def add_coupon(request):
         
         if Coupen.objects.filter(code = code).exists():
             messages.error = (request,'entered  code already exists  try another')
-            print('hi')
             return redirect('view_coupon')
         
         Coupen.objects.create(title = title,
@@ -134,7 +133,6 @@ def active_brand_offer(request,id):
             boffer =  BrandOffer.objects.get(id = id)
         except:
             boffer = None
-            print('hi')
         if boffer is not None:
             if boffer.is_active:
                 boffer.is_active = False
@@ -200,7 +198,6 @@ def active_product_offer(request,id):
             poffer =  ProductOffer.objects.get(id = id)
         except:
             poffer = None
-            print('hi')
         if poffer is not None:
             if poffer.is_active:
                 poffer.is_active = False

@@ -51,7 +51,7 @@
                 {% for item in order_items  %}
                 <tr>
                     <td>{{item.id }} </td>
-                    <td> {{item.user}} </td>
+                    <td> {{item.user.first_name}} {{item.user.last_name}} </td>
                     <td style=" word-wrap: break-word; max-width:130px"> {{item.address.state}},{{item.address.district}} <br>
                         {{item.address.house}},{{item.address.town}}, PIN: {{item.address.pincode}} <br> {{item.address.number}}
                     </td>

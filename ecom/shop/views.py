@@ -128,13 +128,6 @@ def shop(request):
                 username = None
             
             context['username'] = username
-            cart_item = Cart.objects.filter(user_id = username).values('product_id')
-            cartcount = Cart.objects.filter(user_id = username).count()
-            context['cart_item'] = cart_item
-            context['cartcount'] = cartcount
-            wishcount = Wishlist.objects.filter(user_id = username).count()
-            context['wishcount']=wishcount
-            
             wishlist1 = []
             wishitems = Wishlist.objects.filter(user_id = username)
             for j in wishitems:
@@ -194,11 +187,7 @@ def singleproduct(request,id):
             is_in_wish = check_wishlist(username,id)      
             context['is_in_wish']= is_in_wish            
             context['username'] = username
-            cartcount = Cart.objects.filter(user_id = username).count()
-            context['cartcount']=cartcount
-            wishcount = Wishlist.objects.filter(user_id = username).count()
-            context['wishcount']=wishcount
-            
+
             if not username.is_blocked:     
                 return render(request, 'shop/singleproduct.html', context)
             else:
@@ -207,11 +196,11 @@ def singleproduct(request,id):
                 messages.error(request,'you are blocked ')
                 
                 return redirect('login')
-            
+        return render(request, 'shop/singleproduct.html',context)    
     except Exception as e:
         print(e)
         
-    return render(request, 'shop/singleproduct.html')
+    return render(request, 'shop/shop.html')
 
 
 # resetting filters

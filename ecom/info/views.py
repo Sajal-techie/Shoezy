@@ -15,11 +15,7 @@ def contact_us(request):
                 del request.session['users']
             messages.error(request,'you are blocked ')
             return redirect('login') 
-        cartcount = Cart.objects.filter(user_id = username).count()
-        wishcount = Wishlist.objects.filter(user_id = username).count()
-        return render(request, 'contact.html',{'username':username.first_name,
-                                               'cartcount':cartcount,
-                                               'wishcount':wishcount})
+        return render(request, 'contact.html',{'username':username.first_name})
         
         
     return render(request, 'contact.html')
@@ -33,11 +29,7 @@ def about_us(request):
                 del request.session['users']
             messages.error(request,'you are blocked ')
             return redirect('login') 
-        cartcount = Cart.objects.filter(user_id = username).count()
-        wishcount = Wishlist.objects.filter(user_id = username).count()
-        return render(request, 'about.html',{'username':username.first_name,
-                                             'cartcount':cartcount,
-                                             'wishcount':wishcount})
+        return render(request, 'about.html',{'username':username.first_name})
         
         
     return render(request, 'about.html')

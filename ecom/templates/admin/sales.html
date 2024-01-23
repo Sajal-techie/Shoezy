@@ -76,7 +76,7 @@
   <table class="flatTable">
     <tr class="titleTr">
       <td class="titleTd" colspan='11'>SALES REPORT</td>
-      <td > <a href="/admhome/" style="text-decoration: none;"><i class="fa-solid fa-house-user fa-lg" style="color: #00aeff;"></i> Home</a></td>
+      <td > <a id="hide2" href="/admhome/" style="text-decoration: none;"><i class="fa-solid fa-house-user fa-lg" style="color: #00aeff;"></i> Home</a></td>
     </tr>
     <tr class="headingTr">
       <td>Order ID</td>
@@ -112,10 +112,77 @@
     {% endfor %}
         
   </table>
-  <div style="padding-top: 10px;"><a href="/admhome/" style="background-color: red; color: white; padding: 10px; " ><i class="fa-solid fa-arrow-left fa-lg" style="color: #ffffff;"></i> Back</a></div>
+  <div style="padding-top: 10px;"  id="hidediv"><a href="/admhome/" style="background-color: red; color: white; padding: 10px; " ><i class="fa-solid fa-arrow-left fa-lg" style="color: #ffffff;"></i> Back</a>          
+    <div class="text-center"><a href=""class="btn btn-danger text-decoration-none" onclick="downloadInvoice()">download sales PDF</a>
+    <button class="btn btn-success" id="downloadExcelButton">Download Sales Excel</button>
+    </div>
+  </div>
  <!-- <div class="text-center "><a href="" class="text-danger "> Download </a></div> -->
-  
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.5/xlsx.full.min.js"></script>
+
   <script src="https://kit.fontawesome.com/412a20d28b.js" crossorigin="anonymous"></script>
+  <script>
+    function downloadInvoice() 
+	{     
+        hideDownloadButton()
+        window.print();
+        showDownloadButton()
+
+        function hideDownloadButton() {
+          const downloadButton = document.getElementById('hidediv');
+          const homeButton = document.getElementById('hide2');
+          if (downloadButton) {
+              downloadButton.style.display = 'none';
+              homeButton.style.display = 'none';
+          }
+      }
+  
+      function showDownloadButton() {
+          const downloadButton = document.getElementById('hidediv');
+          const homeButton = document.getElementById('hide2');
+
+          if (downloadButton) {
+              downloadButton.style.display = 'inline-block';
+              homeButton.style.display = 'inline-block';
+          }
+      }
+    }
+    function downloadExcel() {
+      var salesReportData = [
+        {% for order in orders %}
+        {
+          "order id":" {{order.id}}",
+          "product name": "{{ order.product.product_id.brand }} {{ order.product.product_id.name }}",
+          "User": "{{ order.user1 }}",
+          "size": "{{ order.size }}",
+          "address": "{{ order.address1.state }},{{ order.address1.district }}, {{ order.address1.house }},{{ order.address1.town }},pin: {{ order.address1.pincode }} , number {{ order.address1.number }} ",
+          "price": "{{ order.product.product_id.selling_price }} ",
+          " quantity": " {{ order.quantity }}",
+          "total amount": "₹{{ order.amount }}",
+          "order date": "{{ order.order_id.order_date }}",
+          "delivery date": "{{ order.delivery_date }}",
+          "payment method": "{{ order.order_id.payment_mode }}",
+          "coupen": "{{order.order_id.coupen_applied}}",
+          {% if order.order_id.coupon_applied %}
+          "coupen name": "{{ order.order_id.coupon_id.title }}",
+          {% else %}
+          "coupen name": "no coupen",
+          {% endif %}
+          "status": "{{order.status}}"
+        }
+        {% if not forloop.last %},{% endif %}
+        {% endfor %}
+      ];
+    
+      var ws = XLSX.utils.json_to_sheet(salesReportData);
+      var wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, "Sales Report");
+    
+      XLSX.writeFile(wb, "sales_report.xlsx");
+    }
+    
+    document.getElementById("downloadExcelButton").addEventListener("click", downloadExcel);
+</script>
 </body>
 </html>
     

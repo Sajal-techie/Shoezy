@@ -70,10 +70,17 @@
                         <a href="#listEmployeeModal" class="delete" data-toggle="modal"><i class="fa-solid fa-eye  fa-lg" style="color: #ffd500;"></i></a>
                         <a href="#deleteEmployeeModal" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a> -->
                     </td>
-                    <td> {{item.delivery_date}} 
-                        <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href="#editdate{{item.id}}" class="edit " data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a></td>
+                    <td> {{item.delivery_date}} {% if item.status == 'ordered' or item.status == 'shipped' or item.status == 'out for delivery' %}
+                        <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href="#editdate{{item.id}}" class="edit " data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
+                        {% endif %}    
                     </td>
-                    <td> {{item.status}} <a href="#editstatus{{item.id}}" class="edit" data-toggle="modal"><i class="material-icons " data-toggle="tooltip" title="Edit">&#xE254;</i></a></td>
+                    </td>
+                    <td> 
+                        {{item.status}} 
+                        {% if item.status == 'ordered' or item.status == 'shipped' or item.status == 'out for delivery' %}
+                         <a href="#editstatus{{item.id}}" class="edit" data-toggle="modal"><i class="material-icons " data-toggle="tooltip" title="Edit">&#xE254;</i></a>
+                         {% endif %}
+                    </td>
                 </tr>
                 {% endfor %}
                 

@@ -30,13 +30,8 @@ def home(request):
             username.otp = None 
             username.save()
 
-            
             if not username.is_blocked:  
-                # getting cart count and wishlist count for displaying badge
-                
-                cartcount = Cart.objects.filter(user_id = username).count()
-                wishcount = Wishlist.objects.filter(user_id = username).count()
-                        
+       
                 wishlist1 = []
                 wishitems = Wishlist.objects.filter(user_id = username)
                 for j in wishitems:
@@ -45,13 +40,11 @@ def home(request):
                 return render (request, 'home1.html',{'username': username.first_name,
                                                     'product' : products, 
                                                     'brand' : brands,
-                                                    'cartcount':cartcount,
-                                                    'wishcount':wishcount,
                                                     'wishlist1':wishlist1
                                                     })
             else:
-                # if users are blocked sessions are cleared and redirect to login 
                 
+                # if users are blocked sessions are cleared and redirect to login 
                 if 'users' in request.session:
                     del request.session['users']
                 messages.error(request,'you are blocked ')
@@ -109,7 +102,7 @@ def register(request):
             email = request.POST['email']
             password  = request.POST['password']
             confpassword = request.POST['password1']
-            date_joined  = timezone.now().date()
+            ref_code = request.POST.get('referralCode',None)
             
             if Customuser.objects.filter(email = email).exists():
                 messages.error(request,"Email already exists you can login ")
@@ -123,10 +116,30 @@ def register(request):
                 messages.error(request,"Passwords must be same")
                 return redirect('register')
             
-            user  = Customuser(first_name = fname,last_name = lname,email = email,password = password,datejoined=date_joined)
+            user  = Customuser(first_name = fname,last_name = lname,email = email,password = password)
+            wallet = Wallet(user_id = user, amount = 0) 
+            if ref_code is not None and len(ref_code) == 8 :
+                try:
+                    refered_user = Customuser.objects.get(referal_code = ref_code)
+                except Exception as e:
+                    print(e)
+                    refered_user = None
+                if refered_user is not None:
+                    # 100 rupees for new customer 
+                    wallet.amount = 100
+                    refer_wallet = Wallet.objects.get(user_id = refered_user)
+                    # 500 rupees for existing customer
+                    refer_wallet.amount = refer_wallet.amount + 500
+                    refer_wallet.save()
+                else:
+                    messages.error(request,"Enter a valid Referal code")
+                    return redirect('register')
+            else:
+                messages.error(request,"Enter a valid Referal code")
+                return redirect('register')
             
             user.save()
-            Wallet.objects.create(user_id = user, amount = 0) 
+            wallet.save()
             return redirect('verifyreg',id = user.id )
         
     except Exception as e:

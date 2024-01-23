@@ -2,7 +2,7 @@
 {% block navbar %}{% include 'navbar.html' %}{% endblock navbar %}
 {% block maincontent %}
 
-<form method="post" >
+<form method="post" id="otpform" >
 {% csrf_token %}
 <div class="d-flex justify-content-center align-items-center container kk">
     <div class="card py-5 px-3">
@@ -18,7 +18,7 @@
             {% endfor %}
         {% endif %}
       <div class="d-flex flex-row mt-5 p-5 mx-5 text-center">
-        <input type="number" name="otp" class="form-control" autofocus="" max="999999" min="99999"  required/>
+        <input id="otp" type="number" name="otp" class="form-control" autofocus="" required/>
       </div>
       <div class=" text-center">
         <button class="px-5 py-3  validate1" type="submit">Verify</button>
@@ -57,5 +57,17 @@
   timer(60);
   </script>
 
+<!-- validation for otp -->
+  <script>
+    const form = document.getElementById("otpform")
+    form.addEventListener("submit", function(event){
+        const otp =  document.getElementById("otp").value;
+
+        if(otp.length !=6 ){
+            event.preventDefault();
+            alert("enter valid otp (6-digits)!")
+        }
+    });
+</script>
 {% include 'footer.html' %}
 {% endblock maincontent %}

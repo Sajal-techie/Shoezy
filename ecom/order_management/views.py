@@ -85,11 +85,8 @@ def update_status(request,id):
                 if order is not None:
                     if order.coupon_applied and order.coupon_id:
                         count = OrderProducts.objects.filter(order_id = order).count()
-                        print(count)
                         deduc = int(order.coupon_id.discount_amount) // count
-                        print(deduc)
                         rtn_amount = orders.amount - deduc
-                        print(rtn_amount) 
                         
                 if wallet is not None:
                     wallet.amount = wallet.amount + rtn_amount

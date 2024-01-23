@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" rel="stylesheet">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <style>
@@ -217,10 +218,12 @@
                     </div>
                     <div class="form-group">
                         <label>Image 1</label>
-                        <input name="image1" type="file" class="form-control image-input" accept="image/*" required>
+                        <input id="image_1" name="image1" type="file" class="form-control image-input" accept="image/*" required>
+                        <input type="hidden" name="croppedImageData" id="croppedImageData" />
                         <div class="image-preview-container">
                             <img id="image-preview-1" src="#" alt="Image Preview" class="image-preview">
                         </div>
+                        <button id="cropButton" type="button">Crop Image</button>
                     </div>
                     <div class="form-group">
                         <label>Image 2</label>
@@ -408,7 +411,6 @@
 </div>
 {% endfor %}
 
-<!-- Add variant Modal HTML -->
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 <script>
     $(document).ready(function() {
@@ -484,5 +486,59 @@
     });
 
 </script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+
+<script>
+
+
+    document.addEventListener('DOMContentLoaded', function () {
+        let cropper;
+
+        function destroyCropper() {
+            if (cropper) {
+                cropper.destroy();
+                cropper = null;
+            }
+        }
+        const input = document.getElementById('image_1');
+        const image = document.getElementById('image-preview-1');
+      
+
+        input.addEventListener('change', function (e) {
+            const file = e.target.files[0];
+            const reader = new FileReader();
+
+            reader.onload = function (event) {
+                destroyCropper(); // Destroy existing Cropper instance
+                image.src = event.target.result;
+                cropper = new Cropper(image, {
+                    aspectRatio: 0,
+                    viewMode: 0,
+                    minCropBoxWidth: 100,    
+                    minCropBoxHeight: 200
+
+                });
+            };
+
+            reader.readAsDataURL(file);
+        });
+
+        const cropButton = document.getElementById('cropButton');
+        cropButton.addEventListener('click', function (e) {
+            e.preventDefault();
+
+            if (cropper) {
+                const canvas = cropper.getCroppedCanvas();
+                const croppedImageData = canvas.toDataURL(); // Get cropped image data as base64 string
+                document.getElementById('croppedImageData').value = croppedImageData;
+                // You can handle the cropped data as needed (e.g., send it to the server)
+            } else {
+                console.error('Cropper not initialized or no image selected.');
+            }
+        });
+    });
+</script>
+
 
 {% endblock content1 %}

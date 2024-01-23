@@ -164,7 +164,6 @@ def admusers(request):
         
         searchs = request.GET.get('searchuser')
         if searchs:
-            print('hai') 
             user_list =  user_list.filter(Q(first_name__icontains = searchs ) | Q(last_name__icontains = searchs ) | Q(email__icontains = searchs) ).order_by('id')
 
         # paginator 
@@ -198,6 +197,25 @@ def unblock_user(request,id):
         unblock.save()
         return redirect('admusers') 
     return redirect('admusers')
+
+
+def sales_report(request):
+    if 'admin' in request.session:
+            context = {}
+            if request.method == 'POST':
+                date1 = request.POST['date1']
+                date2 = request.POST['date2']
+                if date1 > date2:
+                    messages.error(request, 'Start date must be less than End date')
+                    return redirect('admhome')   
+                orders = OrderProducts.objects.filter(order_id__order_date__range = (date1,date2),status = 'delivered')
+
+                context = {
+                    'orders':orders
+                }   
+                return render(request, 'admin/sales.html',context)
+            return render(request, 'admin/sales.html',context)
+    return redirect('admlogin')
 
 
 def admbanners(request):
