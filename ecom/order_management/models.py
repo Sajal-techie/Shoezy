@@ -36,3 +36,11 @@ class OrderProducts(models.Model):
 def update_delivery_date(sender, instance, **kwargs):
     if not instance.delivery_date:
         instance.delivery_date = instance.order_id.order_date + timedelta(days=10)
+        
+        
+class Returns(models.Model):
+    order = models.ForeignKey(OrderProducts, on_delete = models.SET_NULL,null = True)
+    user = models.ForeignKey(Customuser, on_delete = models.SET_NULL, null = True)
+    reason = models.TextField(null = True,blank = True) 
+    request_date = models.DateField(auto_now_add = True,null = True)
+    return_date = models.DateField(null = True,blank = True) 

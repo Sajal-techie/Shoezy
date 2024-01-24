@@ -16,14 +16,14 @@
         <div class="table-title">
             <div class="row">
                 <div class="col-sm-12 text-center">
-                    <h2>Order <b>Management</b></h2>
+                    <h2>Return <b>Management</b></h2>
                 </div>
             </div>
         </div>
         <div class="row input-group mb-4 mt-4">
-            <form action="/admorders/">
+            <form action="/view_returns/">
             <input type="search" name="search" class="form-control rounded offset-1 col-lg-8 col-sm-4 " placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
-            <button type="submit" class="btn btn-outline-primary btn-primary col-lg-2 col-sm-3 " data-mdb-ripple-init>search</button>
+            <button type="submit" class="btn btn-outline-primary btn-primary col-lg-2 col-sm-3 " >search</button>
             </form>
           </div>
                 {% if messages %}
@@ -37,45 +37,47 @@
         <table class="table table-striped table-hover ms-3">
             <thead>
                 <tr>
-                    <th>id</th>
+                    <th>Order id</th>
                     <th>Product Name</th>
-                    <th>Image</th>
-                    <th>User</th>
                     <th>Address</th>
                     <th>Price x Quantity</th>
                     <th>Size</th>
-                    <th>Ordered date</th>
-                    <th>Delivery date</th>
+                    <th>Payment</th>
+                    <th>Ordered ,<br> Delivered date</th>
+                    <th>Reason</th>
+                    <th>Requested Date</th>
+                    <th>Return Date</th>
                     <th>Status</th>
                 </tr>
             </thead>
             <tbody>
-                {% for item in order_items  %}
+                {% for item in returns  %}
                 <tr>
                     <td> {{item.id}} </td>
-                    <td style=" word-wrap: break-word; max-width:100px"> {{item.product.product_id.brand}} <br> {{item.product.product_id.name}} </td>
-                    <td><img src=" {{ item.product.product_id.image1.url }} " alt="nike" style="width: 70px; height: 80px; "></td>
-                    <td> {{item.user1}} </td>
-                    <td style=" word-wrap: break-word; max-width:139px"> {{item.address1.state}},{{item.address1.district}} <br>
-                        {{item.address1.house}},{{item.address1.town}},<br> Pin {{item.address1.pincode}} <br> {{item.address1.number}}
+                    <td style=" word-wrap: break-word; max-width:100px"> {{item.order.product.product_id.brand}} <br> {{item.order.product.product_id.name}} </td>             
+                    <td style=" word-wrap: break-word; max-width:139px"> {{item.order.address1.state}},{{item.order.address1.district}} <br>
+                        {{item.order.address1.house}},{{item.order.address1.town}},  <br>Pin {{item.order.address1.pincode}} <br> {{item.order.address1.number}}
                     </td>
-                    <td> {{item.amount}} x {{item.quantity}}  </td>
-                    <td> {{item.size}}  </td>
-                    
+                    <td> {{item.order.amount}} x {{item.order.quantity}}  </td>
+                    <td> {{item.order.size}} </td>
+                    <td> {{item.order.order_id.payment_mode}} </td>
                     <td >
-                            {{item.order_id.order_date}} 
+                            {{item.order.order_id.order_date}}, <br> {{item.order.delivery_date}} 
                         <!-- <a href="#editEmployeeModal" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
                         <a href="#listEmployeeModal" class="delete" data-toggle="modal"><i class="fa-solid fa-eye  fa-lg" style="color: #ffd500;"></i></a>
                         <a href="#deleteEmployeeModal" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a> -->
                     </td>
-                    <td> {{item.delivery_date}} {% if item.status == 'ordered' or item.status == 'shipped' or item.status == 'out for delivery' %}
+                    <!-- <td> {% if item.status == 'ordered' or item.status == 'shipped' or item.status == 'out for delivery' %}
                         <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href="#editdate{{item.id}}" class="edit " data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
                         {% endif %}    
-                    </td>
-                    </td>
+                    </td> -->
+                    <!-- </td> -->
+                    <td> {{item.reason}} </td>
+                    <td> {{item.request_date}}  </td>
+                    <td> {{item.return_date}} </td>
                     <td> 
-                        {{item.status}} 
-                        {% if item.status == 'ordered' or item.status == 'shipped' or item.status == 'out for delivery' %}
+                        {{item.order.status}} 
+                        {% if item.order.status == 'return request' %}
                          <a href="#editstatus{{item.id}}" class="edit" data-toggle="modal"><i class="material-icons " data-toggle="tooltip" title="Edit">&#xE254;</i></a>
                          {% endif %}
                     </td>
@@ -111,11 +113,11 @@
     </div>
 </div>
 <!-- edit status Modal HTML -->
-{% for item in order_items %}
+{% for item in returns %}
 <div id="editstatus{{item.id}}" class="modal fade">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form method="post" action="/update_status/{{item.id}}">
+            <form method="post">
                 {% csrf_token %}
                 <div class="modal-header">						
                     <h4 class="modal-title">Update Status</h4>
@@ -125,23 +127,21 @@
                     <div class="form-group">
                         <label>Order ID</label>
                         <input type="text" class="form-control"  value="{{item.id}}"  disabled>
+                        <input name="id" type="text" class="form-control"  value="{{item.id}}"  hidden>
                     </div>
                     <div class="form-group">
                         <label>Product</label>
-                        <input type="email" class="form-control" value="{{item.product.product_id}}" disabled>
+                        <input type="name" class="form-control" value="{{item.order.product.product_id}}" disabled>
                     </div>
                     <div class="form-group">
-                        <label>Customer</label>
-                        <input type="text" class="form-control" value="{{item.user1}}" disabled>
+                        <label>Requested Date</label>
+                        <input type="text" class="form-control" value="{{item.request_date}}" disabled>
                     </div>
                     <div class="form-group">
                         <label for="category">Status</label>       
                         <select class="form-control" id="status" name="status" required>
-                            <option value="ordered" {% if item.status == 'ordered' %} selected {% endif %}> Ordered</option>
-                            <option value="shipped" {% if item.status == 'shipped' %} selected {% endif %} > Shipped</option>
-                            <option value="out for delivery" {% if item.status == 'out for delivery' %} selected {% endif %}> Out for delivery</option>
-                            <option value="delivered" {% if item.status == 'delivered' %} selected {% endif %}> Delivered</option>
-                            <option value="cancelled" {% if item.status == 'cancelled' %} selected {% endif %}>Cancelled </option>
+                            <option value="return accepted"> Accept Return Request</option>
+                            <option value="return denied"> Deny Return Request</option>
                         </select>
                         
                     </div>
@@ -158,7 +158,7 @@
 {% endfor %}
 
 <!-- update delivery date  -->
-{% for item in order_items %}
+{% for item in returns %}
 <div id="editdate{{item.id}}" class="modal fade">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -171,19 +171,19 @@
                 <div class="modal-body">					
                     <div class="form-group">
                         <label>Order ID</label>
-                        <input type="text" class="form-control"  value="{{item.id}}"  disabled>
+                        <input type="text" class="form-control"  value="{{item.order.id}}"  disabled>
                     </div>
                     <div class="form-group">
                         <label>Product</label>
-                        <input type="text" class="form-control" value="{{item.product.product_id}}" disabled>
+                        <input type="text" class="form-control" value="{{item.order.product.product_id}}" disabled>
                     </div>
                     <div class="form-group">
                         <label>Ordered Date</label>
-                        <input type="text" class="form-control" value="{{item.order_id.order_date}}" disabled>
+                        <input type="text" class="form-control" value="{{item.order.order_id.order_date}}" disabled>
                     </div>
                     <div class="form-group">
-                        <label for="category">Delivery Date : {{ item.delivery_date }}</label>       
-                        <input type="date" class="form-control" value="{{ item.delivery_date|date:'Y-m-d' }}" name="date" required>
+                        <label for="category">Delivery Date : {{ item.return_date }}</label>       
+                        <input type="date" class="form-control" value="{{ item.return_date|date:'Y-m-d' }}" name="date" required>
                         
                     </div>
                     

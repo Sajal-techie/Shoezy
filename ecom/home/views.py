@@ -118,9 +118,9 @@ def register(request):
             
             user  = Customuser(first_name = fname,last_name = lname,email = email,password = password)
             wallet = Wallet(user_id = user, amount = 0) 
-            if ref_code is not None and len(ref_code) == 8 :
+            if ref_code is not None and len(ref_code.strip()) == 8 :
                 try:
-                    refered_user = Customuser.objects.get(referal_code = ref_code)
+                    refered_user = Customuser.objects.get(referal_code = ref_code.strip())
                 except Exception as e:
                     print(e)
                     refered_user = None
@@ -132,7 +132,7 @@ def register(request):
                     refer_wallet.amount = refer_wallet.amount + 500
                     refer_wallet.save()
                 else:
-                    messages.error(request,"Enter a valid Referal code")
+                    messages.error(request,"Enter a valid Referal code !")
                     return redirect('register')
             else:
                 messages.error(request,"Enter a valid Referal code")

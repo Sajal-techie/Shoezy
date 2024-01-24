@@ -92,26 +92,6 @@
     		</div>
     		<div class="row justify-content-end mt-4">
                 <div class="col col-lg-6 col-md-6 mt-5 cart-wrap ftco-animate">
-                    <form method="post" action="" >
-                        {% csrf_token %}
-                        <hr>
-                        <div class="form-row p-4 ">
-                            
-                            <div class="col-8 col-md-6" >
-                         
-                                <!-- <label for="coupon" class="sr-only">Apply Coupon:</label> -->
-                                <input type="text" class="form-control" id="coupon" name="coupon_code" placeholder="Enter coupon code">
-                            </div>
-                            <div class="text-center">
-                                <button type="submit" class=" btn-warning  p-2"> Apply</button>
-                            </div>
-                            <div class="">
-                                <button type="button" class=" btn-danger p-1" id="removeCoupon">Remove</button>
-                            </div>
-                        </div>
-                        <hr>
-                    </form>
-            
                     <div class="cart-total mb-3" id="2load">
                         <h3>Cart Totals</h3>
                         <p class="d-flex">
@@ -132,7 +112,7 @@
                             <span>₹{{total}}</span>
                         </p>
                     </div>
-                    <p class="text-center"><a href="/checkout/" class="btn btn-primary py-3 px-4">Proceed to Checkout</a></p>
+                    <p class="text-center"><a href="/checkout/" class="btn btn-primary py-3 px-3">Proceed to Checkout</a></p>
                 </div>
                 
             </div>

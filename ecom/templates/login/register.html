@@ -83,8 +83,9 @@
     form.addEventListener("submit", function(event){
         const pass =  document.getElementById("password").value;
         const pass1 =  document.getElementById("password1").value;
-        const ref =  document.getElementById("referralCode").value;
-        console.log(pass,pass1,typeof ref)
+        let ref =  document.getElementById("referralCode").value;
+        console.log(pass,pass1,typeof ref,ref.trim())
+        ref =  ref.trim()
         if (pass.length < 6 ){
             event.preventDefault();
             alert("Password length too short minimum 6 chararcters!")

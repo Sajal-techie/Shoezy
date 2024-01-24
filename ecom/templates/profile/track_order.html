@@ -166,7 +166,7 @@ justify-content: center;
       {% endif %}
       <div class="card-body">
         <h6>Order ID: {{ order.id }} 
-          {% if order.status == 'delivered' %}
+          {% if order.status == 'delivered' or order.status == 'return denied' %}
           <div class="text-center">
             <a href="/order_invoice/{{order.id}}" class="btn btn-outline-danger">Download Invoice </a>
           </div>
@@ -179,10 +179,25 @@ justify-content: center;
           <div class="card-body row">
             <div class="col">
               <strong>Ordered date:</strong> <br>{{ order.order_id.order_date }}
+              <br> <br>
+              {% if returns %}
+                <strong>Return Request date:</strong> <br>{{ returns.request_date }}
+              {% endif %}
             </div>
             <div class="col">
-              <strong>Expected delivery date:</strong> <br>{{ order.delivery_date }}
-            </div>
+              <strong>Delivery date:</strong> <br>{{ order.delivery_date }}
+              <br><br>
+              {% if returns %}
+                <strong>Return date:</strong> <br>
+                 {% if returns.return_date %}
+                    {{ returns.return_date }}
+                  {% elif returns.order.status == 'return denied' %}
+                    Denied
+                  {% else %}
+                  Processing
+                  {% endif  %}
+              {% endif %}         
+               </div>
             <div class="col">
               <strong>Current Status:</strong> <br>{{ order.status }}
             </div>
@@ -214,7 +229,7 @@ justify-content: center;
               </figure>
 
               <!-- reviw if product is deliverd -->
-                {% if order.status == 'delivered'  %}
+                {% if order.status == 'delivered' or order.status == 'return denied'  %}
 
                 <!-- if review already added show it  -->
                 {% if review %}
@@ -281,8 +296,15 @@ justify-content: center;
             </li>
         </ul>
         <hr>
-        <a href="/order_history_items/{{order.order_id.id}}" class="btn btn-warning" data-abc="true"> <i class="fa fa-chevron-left"></i> Back to orders</a>
-        
+        <div>
+          {% if order.status == 'delivered' %}
+          <div class="text-center">
+            <a href="#"  data-toggle="modal" data-target="#returnOrderModal" class="btn btn-outline-dark">Return Request</a>
+          </div>
+          {% endif %}
+            <a href="/order_history_items/{{order.order_id.id}}" class="btn btn-warning" data-abc="true"> <i class="fa fa-chevron-left"></i> Back to orders</a>
+
+        </div>
       </div>
     </article>
     </div>
@@ -311,7 +333,35 @@ justify-content: center;
           </div>
       </div>
   </div>
-  
+  <!-- cancel modal end -->
+
+
+<!-- return  reason MOdal -->
+<div class="modal fade" id="returnOrderModal" tabindex="-1" role="dialog" aria-labelledby="returnOrderModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h5 class="modal-title" id="returnOrderModalLabel">Return Order</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+              </button>
+          </div>
+          <div class="modal-body text-center">
+
+              <form method="post" action="/return_request/{{order.id}} ">
+                  {% csrf_token %}
+                  <div class="form-group ">
+                      <label for="return_reason">Reason for Returning:</label> <br>
+                      <textarea name="reason"  cols="55" rows="4" required></textarea>
+                  </div>
+                  <button type="submit" class="btn btn-danger">Submit </button>
+              </form>
+          </div>
+      </div>
+  </div>
+</div>
+<!-- retrun modal end -->
+
 <script>
   const ratingStars = [...document.getElementsByClassName("rating__star")];
   const selectedRatingInput = document.getElementById("selectedRating");

@@ -288,15 +288,23 @@ def track_order(request,id):
                 order_items = OrderProducts.objects.get(id = id)
             except OrderProducts.DoesNotExist:
                 order_items = None
-                
-
-            tracking_steps = [
-                {'description': 'ordered'},
-                {'description': 'shipped'},
-                {'description': 'out for delivery'},
-                {'description': 'delivered'},
-            ]
-
+            if order_items.status == 'return request' or order_items.status == 'return accepted':
+                tracking_steps = [
+                    {'description': 'return request'},
+                    {'description': 'return accepted'},
+                ]
+            elif  order_items.status == 'return denied':
+                tracking_steps = [
+                    {'description': 'return request'},
+                    {'description': 'return denied'},
+                ]
+            else:
+                tracking_steps = [
+                    {'description': 'ordered'},
+                    {'description': 'shipped'},
+                    {'description': 'out for delivery'},
+                    {'description': 'delivered'},
+                ]
             current_status = order_items.status
             current_step_index = next((i for i, step in enumerate(tracking_steps) if step['description'] == current_status), None)
             previous_steps = tracking_steps[:current_step_index + 1 ] 
@@ -313,6 +321,12 @@ def track_order(request,id):
                 'username':username,
                 'review':review,
             }
+            try:
+                return_item = Returns.objects.get(user = username,order = order_items) 
+                context['returns'] =  return_item
+            except Exception as e:
+                print(e)
+                return_item = None 
             return render(request, 'profile/track_order.html',context)
         
     except Exception as e:
@@ -352,13 +366,11 @@ def cancel_order(request,id):
                         except Order.DoesNotExist:
                             order = None
                         if order is not None:
+                            rtn_amount = current_order.amount
                             if order.coupon_applied and order.coupon_id:
                                 count = OrderProducts.objects.filter(order_id = order).count()
-                                print(count)
                                 deduc = int(order.coupon_id.discount_amount) // count
-                                print(deduc)
                                 rtn_amount = current_order.amount - deduc
-                                print(rtn_amount) 
                         
                         if wallet is not None:
                             wallet.amount = wallet.amount + rtn_amount
@@ -486,4 +498,25 @@ def update_review(request,pid,oid):
         print(e)
     return redirect('home')
     
-    
+
+
+def return_request(request,id):
+    try:
+        if 'users' in request.session:
+            print('hi')
+            try:
+                order = OrderProducts.objects.get(id = id)
+            except Exception as e :
+                print(e)
+                order = None
+            if request.method == 'POST':
+                reason = request.POST['reason']
+                print(reason)
+                if order is not None:
+                    Returns.objects.create(order = order,user = order.user1,reason = reason )
+                    order.status = 'return request'
+                    order.save()
+            return redirect('track_order',id)
+    except Exception as e:
+        print(e)
+    return redirect('home')

@@ -1,11 +1,11 @@
 from django.shortcuts import render,redirect
 from .models import *
-from datetime import datetime
+from datetime import datetime,timedelta
 from django.core.paginator import Paginator,EmptyPage,PageNotAnInteger
 from django.db.models import Q
 from django.contrib import messages
 from user_profile.models import *
-
+from django.views import View
 
 def admorders(request):
     if 'users' in request.session:
@@ -49,7 +49,7 @@ def admorderitems(request, id):
         if order is not None:
             order_items = OrderProducts.objects.filter(order_id = order).order_by('-id')
             for order in order_items:
-                if order.delivery_date < datetime.now().date() and order.status != 'cancelled' :
+                if order.delivery_date < datetime.now().date() and order.status  in  ['ordered','shipped','out for delivery'] :
                     order.status = 'delivered'
                     order.save()
                 if order.delivery_date == datetime.now().date() and (order.status == 'ordered' or order.status == 'shipped') :
@@ -82,6 +82,7 @@ def update_status(request,id):
                     order = Order.objects.get(id = orders.order_id.id)
                 except Order.DoesNotExist:
                     order = None
+                rtn_amount = orders.amount
                 if order is not None:
                     if order.coupon_applied and order.coupon_id:
                         count = OrderProducts.objects.filter(order_id = order).count()
@@ -112,3 +113,71 @@ def update_date(request,id):
         orders.save()
         
     return redirect('admorderitems',orders.order_id.id)
+
+
+
+class Return_management(View):
+    success_url = 'admin/view_returns.html'
+    
+    def get(self,request, *args, **kwargs):
+        try:
+            if 'admin' in request.session:
+                returns = Returns.objects.all().order_by('-id')
+                context ={
+                    'returns':returns
+                }
+                return render(request , 'admin/view_returns.html',context)
+            return redirect('admlogin')
+        except Exception as e:
+                print(e)
+        return redirect('admlogin')
+
+    def post(self, request):
+        try:
+            ret_id = request.POST.get('id')
+            status = request.POST.get('status',None)
+            date = request.POST.get('date',None)
+            try:
+                ret = Returns.objects.get(id = ret_id)
+                if status:
+                    ret.order.status = status
+                    if status == 'return accepted':
+                        ret.return_date = datetime.now().date() + timedelta(7)
+                        ret.order.product.stock = ret.order.product.stock + ret.order.quantity
+                        ret.order.product.save()
+                        if ret.order.order_id.payment_mode != 'Cash on delivery':
+                            try:
+                                wallet = Wallet.objects.get(user_id = ret.user)
+                            except Wallet.DoesNotExist:
+                                 wallet = None
+                            try:
+                                order = Order.objects.get(id = ret.order.order_id.id)
+                            except Order.DoesNotExist:
+                                    order = None
+                            rtn_amount = ret.order.amount
+                            if order is not None:
+                                if order.coupon_applied and order.coupon_id:
+                                        count = OrderProducts.objects.filter(order_id = order).count()
+                                        deduc = int(order.coupon_id.discount_amount) // count
+                                        rtn_amount = ret.order.amount - deduc
+                                        
+                            if wallet is not None:
+                                wallet.amount = wallet.amount + rtn_amount
+                                wallet.save()
+                        
+                if date:
+                    date = datetime.strptime(date, '%Y-%m-%d').date()
+                    print(date)
+                    ret.return_date = date
+                ret.save()
+                ret.order.save()
+                return redirect('view_returns')
+            
+            except Exception as e:
+                print(e)
+                
+            return redirect('admlogin')
+        except Exception as e:
+            print(e)
+        return redirect('admlogin')
+        

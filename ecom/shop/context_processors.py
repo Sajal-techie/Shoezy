@@ -11,7 +11,8 @@ def cart_count(request):
         wish_count = Wishlist.objects.filter(user_id = username).count()
         cont = {
             'cart_count':cart_count,
-            'wish_count':wish_count
+            'wish_count':wish_count,
+            'username':username
         }
     return cont
  

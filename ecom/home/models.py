@@ -21,7 +21,7 @@ class Customuser(models.Model):
     referal_code = models.CharField(max_length = 10,null = True)
     
     
-    def save(self, *args, **kwargs):
+    def save(self, *args, **kwargs): 
         if not self.referal_code:
             self.referal_code = self.generate_referral_code()
 

@@ -16,5 +16,6 @@ urlpatterns = [
     path('add_review/<str:pid>/<str:oid>', views.add_review, name='add_review'),
     path('update_review/<str:pid>/<str:oid>', views.update_review, name='update_review'),
     path('cancel_order/<str:id>', views.cancel_order, name='cancel_order'),
+    path('return_request/<str:id>', views.return_request, name='return_requested'),
   
 ]

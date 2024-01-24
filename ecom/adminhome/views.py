@@ -50,7 +50,7 @@ def admhome(request):
                 if date1 > date2:
                     messages.error(request, 'Start date must be less than End date')
                     return redirect('admhome')   
-                orders = OrderProducts.objects.filter(order_id__order_date__range = (date1,date2),status = 'delivered')
+                orders = OrderProducts.objects.filter(Q( order_id__order_date__range = (date1,date2)) & Q(status = 'delivered')|Q(status = 'return denied') )
 
                 context = {
                     'orders':orders
@@ -68,29 +68,29 @@ def admhome(request):
             last_year_last_day = this_year - timedelta(1)
             last_year_first_day = last_year_last_day.replace(day=1, month=1)
             
-            daily = OrderProducts.objects.filter(order_id__order_date = today).exclude(status = 'cancelled').aggregate(daily = Sum('amount'))['daily'] or 0
-            yesterday = OrderProducts.objects.filter(order_id__order_date = yesterday).exclude(status = 'cancelled').aggregate(yesterday = Sum('amount'))['yesterday'] or 0   
+            daily = OrderProducts.objects.filter(order_id__order_date = today).exclude(Q(status = 'cancelled') | Q(status = 'return accepted')).aggregate(daily = Sum('amount'))['daily'] or 0
+            yesterday = OrderProducts.objects.filter(order_id__order_date = yesterday).exclude(Q(status = 'cancelled') | Q(status = 'return accepted')).aggregate(yesterday = Sum('amount'))['yesterday'] or 0   
             try:   
                 daily_perc = -round((((yesterday - daily)/yesterday) *100),2)
             except ZeroDivisionError:
                 daily_perc = 0
             
-            weekly_sales = OrderProducts.objects.filter(order_id__order_date__gte = this_week).exclude(status = 'cancelled').aggregate(weekly_sales = Sum('amount'))['weekly_sales'] or 0
-            last_week_sales = OrderProducts.objects.filter(order_id__order_date__gte = last_week).exclude(status = 'cancelled').aggregate(last_week_sales = Sum('amount'))['last_week_sales'] or 0
+            weekly_sales = OrderProducts.objects.filter(order_id__order_date__gte = this_week).exclude(Q(status = 'cancelled') | Q(status = 'return accepted')).aggregate(weekly_sales = Sum('amount'))['weekly_sales'] or 0
+            last_week_sales = OrderProducts.objects.filter(order_id__order_date__gte = last_week).exclude(Q(status = 'cancelled') | Q(status = 'return accepted')).aggregate(last_week_sales = Sum('amount'))['last_week_sales'] or 0
             try:
                 weekly_perc = -round((((last_week_sales - weekly_sales)/last_week_sales) * 100),2)
             except ZeroDivisionError:
                 weekly_perc = 0
             
-            monthly_sales = OrderProducts.objects.filter(order_id__order_date__gte = this_month).exclude(status = 'cancelled').aggregate(monthly_sales = Sum('amount'))['monthly_sales'] or 0
-            last_month_sales = OrderProducts.objects.filter(order_id__order_date__range = (last_month_first_day,last_month_last_day)).exclude(status = 'cancelled').aggregate(last_month_sales = Sum('amount'))['last_month_sales'] or 0
+            monthly_sales = OrderProducts.objects.filter(order_id__order_date__gte = this_month).exclude(Q(status = 'cancelled') | Q(status = 'return accepted')).aggregate(monthly_sales = Sum('amount'))['monthly_sales'] or 0
+            last_month_sales = OrderProducts.objects.filter(order_id__order_date__range = (last_month_first_day,last_month_last_day)).exclude(Q(status = 'cancelled') | Q(status = 'return accepted')).aggregate(last_month_sales = Sum('amount'))['last_month_sales'] or 0
             try:
                 monthly_perc = -round((((last_month_sales - monthly_sales)/last_month_sales)*100),2)
             except ZeroDivisionError:
                 monthly_perc = 0
             
-            yearly_sales = OrderProducts.objects.filter(order_id__order_date__gte = this_year).exclude(status = 'cancelled').aggregate(yearly_sales = Sum('amount'))['yearly_sales'] or 0
-            last_year_sales = OrderProducts.objects.filter(order_id__order_date__range = (last_year_first_day,last_year_last_day)).exclude(status = 'cancelled').aggregate(last_year_sales = Sum('amount'))['last_year_sales'] or 0
+            yearly_sales = OrderProducts.objects.filter(order_id__order_date__gte = this_year).exclude(Q(status = 'cancelled') | Q(status = 'return accepted')).aggregate(yearly_sales = Sum('amount'))['yearly_sales'] or 0
+            last_year_sales = OrderProducts.objects.filter(order_id__order_date__range = (last_year_first_day,last_year_last_day)).exclude(Q(status = 'cancelled') | Q(status = 'return accepted')).aggregate(last_year_sales = Sum('amount'))['last_year_sales'] or 0
             try:
                 yearly_perc = -round((((last_year_sales - yearly_sales)/last_year_sales)*100),2)
             except ZeroDivisionError:
@@ -99,7 +99,7 @@ def admhome(request):
             labels = ['January','February','March','April','May','June','July','August','September','October','November','December']
             monthly_sales_data = OrderProducts.objects.filter(order_id__order_date__gte=this_year,
                                                               order_id__order_date__lte=this_year_end
-                                                              ).exclude(status='cancelled').values(month=ExtractMonth('order_id__order_date')
+                                                              ).exclude(Q(status = 'cancelled') | Q(status = 'return accepted')).values(month=ExtractMonth('order_id__order_date')
                                                                                                    ).annotate(monthly_sales=Sum('amount')).order_by('month') 
             
             data = [0] * 12
@@ -118,7 +118,7 @@ def admhome(request):
 
             last_10_days = [today - timedelta(days=i) for i in range(9, -1, -1)]
             daily_sales_data = OrderProducts.objects.filter(
-                order_id__order_date__in=last_10_days).exclude(status = 'cancelled'
+                order_id__order_date__in=last_10_days).exclude(Q(status = 'cancelled') | Q(status = 'return accepted')
                                                                     ).values(orderdate = F('order_id__order_date')
                                                                              ).order_by('-orderdate').annotate(daily_sales=Sum('amount'))
             
@@ -208,7 +208,7 @@ def sales_report(request):
                 if date1 > date2:
                     messages.error(request, 'Start date must be less than End date')
                     return redirect('admhome')   
-                orders = OrderProducts.objects.filter(order_id__order_date__range = (date1,date2),status = 'delivered')
+                orders = OrderProducts.objects.filter(Q( order_id__order_date__range = (date1,date2)) & Q(status = 'delivered') | Q(status = 'return denied')  )
 
                 context = {
                     'orders':orders

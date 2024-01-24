@@ -130,7 +130,12 @@
             {% elif item.status == 'delivered' %}
             <a href="/track_order/{{item.id}}" class="text-white"><span class="status status-delivered text-center">Delivered</a></span>
             <a href="/track_order/{{item.id}}"  class="btn btn-outline-info ">Add Review</a>
-            <!-- <a href="#" data-toggle="modal" data-target="#viewReviewModal" class="btn btn-outline-info ">Edit Review</a> -->
+            {% elif item.status == 'return request' %}
+            <a href="/track_order/{{item.id}}" class="text-white"><span class="status status-processing text-center">Return Requested</a></span>
+            {% elif item.status == 'return accepted' %}
+            <a href="/track_order/{{item.id}}" class="text-white"><span class="status status-delivered text-center">Return Accepted</a></span>
+            {% elif item.status == 'return denied' %}
+            <a href="/track_order/{{item.id}}" class="text-white"><span class="status status-cancelled text-center">Return Denied</a></span>
             {% elif item.status == 'cancelled' %}
             <span class="status status-cancelled text-center ">Cancelled</span>
             {% endif %}
