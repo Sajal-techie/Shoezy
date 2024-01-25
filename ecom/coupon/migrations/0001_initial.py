@@ -4,24 +4,33 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='Coupen',
+            name="Coupen",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('title', models.CharField(blank=True, max_length=100, null=True)),
-                ('code', models.CharField(max_length=20, unique=True)),
-                ('valid_from', models.DateField(blank=True, null=True)),
-                ('valid_to', models.DateField(blank=True, null=True)),
-                ('discount_amount', models.DecimalField(decimal_places=2, max_digits=10, null=True)),
-                ('is_active', models.BooleanField(default=True, null=True)),
-                ('created_at', models.DateField(auto_now_add=True)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("title", models.CharField(blank=True, max_length=100, null=True)),
+                ("code", models.CharField(max_length=20, unique=True)),
+                ("valid_from", models.DateField(blank=True, null=True)),
+                ("valid_to", models.DateField(blank=True, null=True)),
+                (
+                    "discount_amount",
+                    models.DecimalField(decimal_places=2, max_digits=10, null=True),
+                ),
+                ("is_active", models.BooleanField(default=True, null=True)),
+                ("created_at", models.DateField(auto_now_add=True)),
             ],
         ),
     ]

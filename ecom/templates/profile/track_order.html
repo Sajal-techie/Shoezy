@@ -1,17 +1,18 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 {% load static %}
-{% block navbar %}{% include "navbar.html" %}{% endblock navbar %}
+{% block navbar %}
+  {% include 'navbar.html' %}
+{% endblock navbar %}
 {% block maincontent %}
-<style>
-  .containe {
+  <style>
+    .containe {
       margin-top: 50px;
       margin-bottom: 50px;
       display: flex;
-justify-content: center;
-
-  }
-
-  .card {
+      justify-content: center;
+    }
+    
+    .card {
       position: relative;
       display: flex;
       flex-direction: column;
@@ -20,56 +21,56 @@ justify-content: center;
       background-color: #fff;
       background-clip: border-box;
       border: 1px solid rgba(0, 0, 0, 0.1);
-      border-radius: 0.10rem;
-  }
-
-  .card-header:first-child {
+      border-radius: 0.1rem;
+    }
+    
+    .card-header:first-child {
       border-radius: calc(0.37rem - 1px) calc(0.37rem - 1px) 0 0;
-  }
-
-  .card-header {
+    }
+    
+    .card-header {
       padding: 0.75rem 1.25rem;
       margin-bottom: 0;
       background-color: #fff;
       border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-  }
-
-  .track {
+    }
+    
+    .track {
       position: relative;
       background-color: #ddd;
       height: 7px;
       display: flex;
       margin-bottom: 60px;
       margin-top: 50px;
-  }
-
-  .track .step {
+    }
+    
+    .track .step {
       flex-grow: 1;
       width: 25%;
       margin-top: -18px;
       text-align: center;
       position: relative;
-  }
-
-  .track .step.active:before {
+    }
+    
+    .track .step.active:before {
       background: rgb(187, 171, 108);
-  }
-
-  .track .step::before {
+    }
+    
+    .track .step::before {
       height: 7px;
       position: absolute;
-      content: "";
+      content: '';
       width: 100%;
       left: 0;
       top: 18px;
-  }
-
-  .track .step.active .icon {
+    }
+    
+    .track .step.active .icon {
       background: rgb(187, 171, 108);
       color: #fff;
-  }
-
-  .track .icon {
+    }
+    
+    .track .icon {
       display: inline-block;
       width: 40px;
       height: 40px;
@@ -77,320 +78,320 @@ justify-content: center;
       position: relative;
       border-radius: 100%;
       background: #ddd;
-  }
-
-  .track .step.active .text {
+    }
+    
+    .track .step.active .text {
       font-weight: 400;
       color: #000;
-  }
-
-  .track .text {
+    }
+    
+    .track .text {
       display: block;
       margin-top: 7px;
-  }
-
-  .itemside {
+    }
+    
+    .itemside {
       position: relative;
       display: flex;
       width: 100%;
-  }
-
-  .itemside .aside {
+    }
+    
+    .itemside .aside {
       position: relative;
       flex-shrink: 0;
-  }
-
-  .img-sm {
+    }
+    
+    .img-sm {
       width: 100px;
       height: 100px;
       padding: 3px;
-  }
-
-  ul.row, ul.row-sm {
+    }
+    
+    ul.row,
+    ul.row-sm {
       list-style: none;
       padding: 0;
-  }
-
-  .itemside .info {
+    }
+    
+    .itemside .info {
       padding-left: 15px;
       padding-right: 7px;
-  }
-
-  .itemside .title {
+    }
+    
+    .itemside .title {
       display: block;
       margin-bottom: 5px;
       color: #212529;
-  }
-
-  p {
+    }
+    
+    p {
       margin-top: 0;
       margin-bottom: 1rem;
-  }
-
-  .btn-warning {
+    }
+    
+    .btn-warning {
       color: #000000;
       background-color: #dbcc8f;
       border-color: #000000;
       border-radius: 1px;
-  }
-
-  .btn-warning:hover {
+    }
+    
+    .btn-warning:hover {
       color: #454545;
       background-color: #ffffff;
       border-color: #dbcc8f;
       border-radius: 1px;
-  }
-</style>
-<body>
-  {% if messages %}
-  <div aria-live="polite" aria-atomic="true" style="position: fixed; top: 50%; right: 12%; min-height: 200px; min-width: 300px;">
-    {% for message in messages %}
-    <div class="toast border {% if message.tags == 'success' %} border-success {% else %}border-danger{% endif %}" role="alert" aria-live="assertive" aria-atomic="true" data-delay="5000" style="margin-top: 10px;">
-      <div class="toast-header">
-      <strong class="mr-auto {% if message.tags == 'success' %}text-success{% else %}text-danger{% endif %}   text-capitalize">{{ message.tags }}</strong>
-      <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-      </button>
-      </div>
-      <div class="toast-body">
-      {{ message }}
-      </div>
-    </div>
-    {% endfor %}
-  </div>
-  {% endif %}
-  <div class="container containe ">
-    <article class="card ">
-      {% if order.status == 'ordered' or order.status == 'shipped' or order.status == 'out for delivery' %}
-      <header class="card-header text-center"> <h4>Track Order </h4></header>
-      {% endif %}
-      <div class="card-body">
-        <h6>Order ID: {{ order.id }} 
-          {% if order.status == 'delivered' or order.status == 'return denied' %}
-          <div class="text-center">
-            <a href="/order_invoice/{{order.id}}" class="btn btn-outline-danger">Download Invoice </a>
-          </div>
-         
-          {% endif %}
-        </h6> 
-        
-        <hr>
-        <article class="">
-          <div class="card-body row">
-            <div class="col">
-              <strong>Ordered date:</strong> <br>{{ order.order_id.order_date }}
-              <br> <br>
-              {% if returns %}
-                <strong>Return Request date:</strong> <br>{{ returns.request_date }}
-              {% endif %}
+    }
+  </style>
+  <body>
+    {% if messages %}
+      <div aria-live="polite" aria-atomic="true" style="position: fixed; top: 50%; right: 12%; min-height: 200px; min-width: 300px;">
+        {% for message in messages %}
+          <div class="toast border {% if message.tags == 'success' %}
+                    border-success {% else %}border-danger
+                      {% endif %}"
+            role="alert"
+            aria-live="assertive"
+            aria-atomic="true"
+            data-delay="5000"
+            style="margin-top: 10px;">
+            <div class="toast-header">
+              <strong class="mr-auto {% if message.tags == 'success' %}
+                          text-success{% else %}text-danger
+                {% endif %}   text-capitalize">
+                {{ message.tags }}
+              </strong>
+              <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             </div>
-            <div class="col">
-              <strong>Delivery date:</strong> <br>{{ order.delivery_date }}
-              <br><br>
-              {% if returns %}
-                <strong>Return date:</strong> <br>
-                 {% if returns.return_date %}
+            <div class="toast-body">{{ message }}</div>
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+    <div class="container containe">
+      <article class="card">
+        {% if order.status == 'ordered' or order.status == 'shipped' or order.status == 'out for delivery' %}
+          <header class="card-header text-center">
+            <h4>Track Order</h4>
+          </header>
+        {% endif %}
+        <div class="card-body">
+          <h6>
+            Order ID: {{ order.id }}
+            {% if order.status == 'delivered' or order.status == 'return denied' %}
+              <div class="text-center">
+                <a href="/order_invoice/{{ order.id }}" class="btn btn-outline-danger">Download Invoice</a>
+              </div>
+            {% endif %}
+          </h6>
+
+          <hr />
+          <article class="">
+            <div class="card-body row">
+              <div class="col">
+                <strong>Ordered date:</strong> <br />{{ order.order_id.order_date }}
+                <br /> <br />
+                {% if returns %}
+                  <strong>Return Request date:</strong> <br />{{ returns.request_date }}
+                {% endif %}
+              </div>
+              <div class="col">
+                <strong>Delivery date:</strong> <br />{{ order.delivery_date }}
+                <br /><br />
+                {% if returns %}
+                  <strong>Return date:</strong> <br />
+                  {% if returns.return_date %}
                     {{ returns.return_date }}
                   {% elif returns.order.status == 'return denied' %}
                     Denied
                   {% else %}
-                  Processing
-                  {% endif  %}
-              {% endif %}         
-               </div>
-            <div class="col">
-              <strong>Current Status:</strong> <br>{{ order.status }}
+                    Processing
+                  {% endif %}
+                {% endif %}
+              </div>
+              <div class="col">
+                <strong>Current Status:</strong> <br />{{ order.status }}
+              </div>
             </div>
-  
+            <hr />
+          </article>
+          <div class="track">
+            {% for step in tracking_steps %}
+              <div class="step{% if step in previous_steps %} active {% endif %}">
+                <span class="icon"><i class="fa fa-check"></i></span>
+                <span class="text">{{ step.description }}</span>
+              </div>
+            {% endfor %}
           </div>
-          <hr>
-        </article>
-        <div class="track ">
-          {% for step in tracking_steps %}
-            <div class="step{% if step in previous_steps %} active {% endif %}">
-              <span class="icon"> <i class="fa fa-check"></i> </span>
-              <span class="text">{{ step.description }}  </span>
-            </div>
-          {% endfor %}
-        </div>
-        <hr>
-        <ul class="row">
+          <hr />
+          <ul class="row">
             <li class="col-md-12">
               <figure class="itemside mb-6">
-                <a href="/singleproduct/{{order.product.product_id.id}}">
-                  <div class="aside"><img src="{{ order.product.product_id.image1.url }}" class="img-sm border"></div>
+                <a href="/singleproduct/{{ order.product.product_id.id }}">
+                  <div class="aside">
+                    <img src="{{ order.product.product_id.image1.url }}" class="img-sm border" />
+                  </div>
                 </a>
-                
+
                 <figcaption class="info align-self-center">
-                  <p class="title">{{ order.product.product_id.brand }} <br> {{ order.product.product_id.name }}</p>
-                  Size : {{order.size}}  &nbsp; &nbsp; Quantity : {{order.quantity}} &nbsp; &nbsp;
-                  <span class="text-muted">Price : ₹{{ order.amount }} </span>
+                  <p class="title">
+                    {{ order.product.product_id.brand }} <br /> {{ order.product.product_id.name }}
+                  </p>Size : {{ order.size }} &nbsp; &nbsp; Quantity : {{ order.quantity }} &nbsp; &nbsp;
+                  <span class="text-muted">Price : ₹{{ order.amount }}</span>
                 </figcaption>
               </figure>
 
               <!-- reviw if product is deliverd -->
-                {% if order.status == 'delivered' or order.status == 'return denied'  %}
-
-                <!-- if review already added show it  -->
+              {% if order.status == 'delivered' or order.status == 'return denied' %}
+                <!-- if review already added show it -->
                 {% if review %}
-                <div class="text-center border border-dark p-1">
-
-                  <form method="post" action="/update_review/{{order.product.product_id.id}}/{{order.id}} ">
-                    {% csrf_token %}
-                    <div class="modal-body">					                          
-                      <div class="form-group">
-                        <label for="review"> Review</label>
-                          <textarea class="form-control" id="review" name='review' rows="3"  required  >{{review.review}}
-                          </textarea>
+                  <div class="text-center border border-dark p-1">
+                    <form method="post" action="/update_review/{{ order.product.product_id.id }}/{{ order.id }} ">
+                      {% csrf_token %}
+                      <div class="modal-body">
+                        <div class="form-group">
+                          <label for="review">Review</label>
+                          <textarea class="form-control" id="review" name="review" rows="3" required>{{ review.review }}</textarea>
+                        </div>
+                        <label>Rate here</label>
+                        <div class="rating text-center" style="color: yellow;  font-size: 30px; ">
+                          {% for _ in "12345" %}
+                            {% if forloop.counter <= review.rating %}
+                              <i class="rating__star fas fa-star"></i>
+                            {% else %}
+                              <i class="rating__star far fa-star"></i>
+                            {% endif %}
+                          {% endfor %}
+                          <input type="hidden" name="rating" value="{{ review.rating }}" id="selectedRating" value="0" />
+                        </div>
+                        <button type="submit" class="btn btn-info">Update Review</button>
                       </div>
-                      <label>Rate here</label>
-                      <div class="rating text-center"  style="color: yellow;  font-size: 30px; ">
-                        {% for _ in "12345" %}
-                        {% if forloop.counter <= review.rating %}
-                          <i class="rating__star fas fa-star"></i>
-                        {% else %}
-                          <i class="rating__star far fa-star"></i>
-                        {% endif %}
-                      {% endfor %}
-                    <input  type="hidden" name="rating" value="{{review.rating}}" id="selectedRating" value="0">
+                    </form>
                   </div>
-                    <button type="submit" class="btn btn-info">Update Review</button>
-                  </form>
-                  </div>
-
 
                   <!-- if review not added add option -->
                 {% else %}
-
-                <div class="text-center border border-dark p-1">
-
-                <form method="post" action="/add_review/{{order.product.product_id.id}}/{{order.id}} ">
-                  {% csrf_token %}
-                  <div class="modal-body">					                          
-                    <div class="form-group">
-                        <textarea class="form-control" id="review" placeholder="write Your Review" name='review' rows="3"  required autofocus ></textarea>
-                    </div>
-                    <label>Rate here</label>
-                    <div class="rating text-center"  style="color: yellow;  font-size: 30px; ">
-                        <i class="rating__star far fa-star "></i>
-                        <i class="rating__star far fa-star"></i>
-                        <i class="rating__star far fa-star"></i>
-                        <i class="rating__star far fa-star"></i>
-                        <i class="rating__star far fa-star"></i>
+                  <div class="text-center border border-dark p-1">
+                    <form method="post" action="/add_review/{{ order.product.product_id.id }}/{{ order.id }} ">
+                      {% csrf_token %}
+                      <div class="modal-body">
+                        <div class="form-group">
+                          <textarea class="form-control" id="review" placeholder="write Your Review" name="review" rows="3" required autofocus></textarea>
+                        </div>
+                        <label>Rate here</label>
+                        <div class="rating text-center" style="color: yellow;  font-size: 30px; ">
+                          <i class="rating__star far fa-star"></i>
+                          <i class="rating__star far fa-star"></i>
+                          <i class="rating__star far fa-star"></i>
+                          <i class="rating__star far fa-star"></i>
+                          <i class="rating__star far fa-star"></i>
+                        </div>
+                        <input type="hidden" name="rating" id="selectedRating" value="0" />
+                      </div>
+                      <button type="submit" class="btn btn-success">Submit Review</button>
+                    </form>
                   </div>
-                  <input  type="hidden" name="rating" id="selectedRating" value="0">
-                </div>
-                  <button type="submit" class="btn btn-success">Submit Review</button>
-                </form>
-                </div>
                 {% endif %}
-                {% endif %}
-                <!-- reviw end -->
+              {% endif %}
+              <!-- reviw end -->
 
-
-                <!-- cancel if item is not delivered -->
-                {% if order.status == 'ordered' or order.status == 'shipped' or order.status == 'out for delivery' %}
-                <div class="text-center"><a href="#" class="btn btn-danger" data-toggle="modal" data-target="#cancelOrderModal" data-abc="true">Cancel order</a></div>
-                  {% endif %}
-                  <!-- end cancel -->
+              <!-- cancel if item is not delivered -->
+              {% if order.status == 'ordered' or order.status == 'shipped' or order.status == 'out for delivery' %}
+                <div class="text-center">
+                  <a href="#" class="btn btn-danger" data-toggle="modal" data-target="#cancelOrderModal" data-abc="true">Cancel order</a>
+                </div>
+              {% endif %}
+              <!-- end cancel -->
             </li>
-        </ul>
-        <hr>
-        <div>
-          {% if order.status == 'delivered' %}
-          <div class="text-center">
-            <a href="#"  data-toggle="modal" data-target="#returnOrderModal" class="btn btn-outline-dark">Return Request</a>
+          </ul>
+          <hr />
+          <div>
+            {% if order.status == 'delivered' %}
+              <div class="text-center">
+                <a href="#" data-toggle="modal" data-target="#returnOrderModal" class="btn btn-outline-dark">Return Request</a>
+              </div>
+            {% endif %}
+            <a href="/order_history_items/{{ order.order_id.id }}" class="btn btn-warning" data-abc="true"><i class="fa fa-chevron-left"></i> Back to orders</a>
           </div>
-          {% endif %}
-            <a href="/order_history_items/{{order.order_id.id}}" class="btn btn-warning" data-abc="true"> <i class="fa fa-chevron-left"></i> Back to orders</a>
-
         </div>
-      </div>
-    </article>
+      </article>
     </div>
 
-<!-- cancel reason MOdal -->
+    <!-- cancel reason MOdal -->
     <div class="modal fade" id="cancelOrderModal" tabindex="-1" role="dialog" aria-labelledby="cancelOrderModalLabel" aria-hidden="true">
       <div class="modal-dialog" role="document">
-          <div class="modal-content">
-              <div class="modal-header">
-                  <h5 class="modal-title" id="cancelOrderModalLabel">Cancel Order</h5>
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                      <span aria-hidden="true">&times;</span>
-                  </button>
-              </div>
-              <div class="modal-body text-center">
-                  <!-- Form for reason input -->
-                  <form method="post" action="{% url 'cancel_order' order.id %}">
-                      {% csrf_token %}
-                      <div class="form-group ">
-                          <label for="cancellation_reason">Reason for cancellation:</label> <br>
-                          <textarea name="reason"  cols="55" rows="4" required></textarea>
-                      </div>
-                      <button type="submit" class="btn btn-danger">Submit </button>
-                  </form>
-              </div>
-          </div>
-      </div>
-  </div>
-  <!-- cancel modal end -->
-
-
-<!-- return  reason MOdal -->
-<div class="modal fade" id="returnOrderModal" tabindex="-1" role="dialog" aria-labelledby="returnOrderModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-      <div class="modal-content">
+        <div class="modal-content">
           <div class="modal-header">
-              <h5 class="modal-title" id="returnOrderModalLabel">Return Order</h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
-              </button>
+            <h5 class="modal-title" id="cancelOrderModalLabel">Cancel Order</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
           </div>
           <div class="modal-body text-center">
-
-              <form method="post" action="/return_request/{{order.id}} ">
-                  {% csrf_token %}
-                  <div class="form-group ">
-                      <label for="return_reason">Reason for Returning:</label> <br>
-                      <textarea name="reason"  cols="55" rows="4" required></textarea>
-                  </div>
-                  <button type="submit" class="btn btn-danger">Submit </button>
-              </form>
+            <!-- Form for reason input -->
+            <form method="post" action="{% url 'cancel_order' order.id %}">
+              {% csrf_token %}
+              <div class="form-group">
+                <label for="cancellation_reason">Reason for cancellation:</label> <br />
+                <textarea name="reason" cols="55" rows="4" required></textarea>
+              </div>
+              <button type="submit" class="btn btn-danger">Submit</button>
+            </form>
           </div>
+        </div>
       </div>
-  </div>
-</div>
-<!-- retrun modal end -->
+    </div>
+    <!-- cancel modal end -->
 
-<script>
-  const ratingStars = [...document.getElementsByClassName("rating__star")];
-  const selectedRatingInput = document.getElementById("selectedRating");
-  function executeRating(stars) {
-      const starClassActive = "rating__star fas fa-star";
-      const starClassInactive = "rating__star far fa-star";
-      const starsLength = stars.length;
-      stars.map((star) => {
+    <!-- return reason MOdal -->
+    <div class="modal fade" id="returnOrderModal" tabindex="-1" role="dialog" aria-labelledby="returnOrderModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="returnOrderModalLabel">Return Order</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          </div>
+          <div class="modal-body text-center">
+            <form method="post" action="/return_request/{{ order.id }} ">
+              {% csrf_token %}
+              <div class="form-group">
+                <label for="return_reason">Reason for Returning:</label> <br />
+                <textarea name="reason" cols="55" rows="4" required></textarea>
+              </div>
+              <button type="submit" class="btn btn-danger">Submit</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- retrun modal end -->
+
+    <script>
+      const ratingStars = [...document.getElementsByClassName('rating__star')]
+      const selectedRatingInput = document.getElementById('selectedRating')
+      function executeRating(stars) {
+        const starClassActive = 'rating__star fas fa-star'
+        const starClassInactive = 'rating__star far fa-star'
+        const starsLength = stars.length
+        stars.map((star) => {
           star.onclick = () => {
-              const selectedIndex = stars.indexOf(star);
+            const selectedIndex = stars.indexOf(star)
+      
+            for (let i = 0; i < starsLength; ++i) {
+              stars[i].className = i <= selectedIndex ? starClassActive : starClassInactive
+            }
+      
+            // Set the value of the hidden input to the selected index + 1 (1-indexed)
+            selectedRatingInput.value = selectedIndex + 1
+          }
+        })
+      }
+      executeRating(ratingStars)
+    </script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 
-              for (let i = 0; i < starsLength; ++i) {
-                  stars[i].className = i <= selectedIndex ? starClassActive : starClassInactive;
-              }
-
-              // Set the value of the hidden input to the selected index + 1 (1-indexed)
-              selectedRatingInput.value = selectedIndex + 1;
-          };
-      });
-  }
-    executeRating(ratingStars);
-</script>
-<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-
-<script>
-$(document).ready(function () {
-  $('.toast').toast('show');
-});
-</script>
-</body>
-
-{% endblock maincontent %}
+    <script>
+      $(document).ready(function () {
+        $('.toast').toast('show')
+      })
+    </script>
+  </body>
+{% endblock %}

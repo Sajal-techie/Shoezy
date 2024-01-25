@@ -4,13 +4,12 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('productmanagement', '0010_product_variant'),
+        ("productmanagement", "0010_product_variant"),
     ]
 
     operations = [
         migrations.DeleteModel(
-            name='ProductVariant',
+            name="ProductVariant",
         ),
     ]

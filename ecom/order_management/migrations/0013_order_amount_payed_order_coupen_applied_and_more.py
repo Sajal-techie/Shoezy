@@ -5,26 +5,29 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('coupon', '0001_initial'),
-        ('order_management', '0012_alter_orderproducts_reason'),
+        ("coupon", "0001_initial"),
+        ("order_management", "0012_alter_orderproducts_reason"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='order',
-            name='amount_payed',
+            model_name="order",
+            name="amount_payed",
             field=models.FloatField(blank=True, null=True),
         ),
         migrations.AddField(
-            model_name='order',
-            name='coupen_applied',
+            model_name="order",
+            name="coupen_applied",
             field=models.BooleanField(default=False, null=True),
         ),
         migrations.AddField(
-            model_name='order',
-            name='coupen_id',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to='coupon.coupen'),
+            model_name="order",
+            name="coupen_id",
+            field=models.ForeignKey(
+                null=True,
+                on_delete=django.db.models.deletion.SET_NULL,
+                to="coupon.coupen",
+            ),
         ),
     ]

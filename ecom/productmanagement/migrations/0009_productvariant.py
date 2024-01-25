@@ -5,19 +5,44 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('productmanagement', '0008_alter_product_discount_percentage'),
+        ("productmanagement", "0008_alter_product_discount_percentage"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='ProductVariant',
+            name="ProductVariant",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('size', models.CharField(blank=True, choices=[(7, '7'), (8, '8'), (9, '9'), (10, '10')], default='7', max_length=5, null=True)),
-                ('stock', models.PositiveIntegerField(blank=True, default=0, null=True)),
-                ('product_id', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='productmanagement.product')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "size",
+                    models.CharField(
+                        blank=True,
+                        choices=[(7, "7"), (8, "8"), (9, "9"), (10, "10")],
+                        default="7",
+                        max_length=5,
+                        null=True,
+                    ),
+                ),
+                (
+                    "stock",
+                    models.PositiveIntegerField(blank=True, default=0, null=True),
+                ),
+                (
+                    "product_id",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="productmanagement.product",
+                    ),
+                ),
             ],
         ),
     ]

@@ -1,95 +1,102 @@
-{% include "admin/adminbase.html" %}
+{% include 'admin/adminbase.html' %}
 {% load static %}
 
 <head>
-<link rel="stylesheet" href="{% static 'css/styletable.css' %}">
-
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round">
-<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-
-
+  <link rel="stylesheet" href="{% static 'css/styletable.css' %}" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
-{% block content1 %} 
 
-<div class="container tbd1">
+{% block content1 %}
+  <div class="container tbd1">
     <div class="table-wrapper">
-        <div class="table-title">
-            <div class=" text-center">
-
-                    <h2> <b>User</b> Management</b></h2>
-
-            </div>
+      <div class="table-title">
+        <div class="text-center">
+          <h2><b>User</b> Management</h2>
         </div>
-        <div class="row input-group ">
-            <form action="/admusers/">
-            <input type="search"  name="searchuser" class="form-control rounded offset-1 col-lg-8" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
-            <button type="submit" class="btn btn-outline-primary btn-primary col-lg-2" data-mdb-ripple-init>search</button>
-            </form>
-          </div>
-        <table class="table table-striped table-hover">
-            <thead>
-                <tr>
-                    <th>first Name</th>
-                    <th>Last Name</th>
-                    <th>Email</th>
-                    <th>Datejoined</th>
-                    <th>Verified user</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            {% for users in user_details  %}
-            <tbody>
-                <tr>
-                    <td>{{users.first_name}} </td>
-                    <td>{{users.last_name}}</td>
-                    <td>{{users.email}}</td>
-                    <td>{{users.datejoined}}</td>
-                    <td>{% if users.is_verified %} Yes {% else %} No {% endif %}</td>
-                    <td>
-                        {% if not users.is_blocked  %}
-                        <a href="/block_user/{{ users.id }}" class="delete" data-toggle="modal">block</a>
-                        {% else %}
-                        <a href="/unblock_user/{{ users.id }}" class="edit" data-toggle="modal">unblock</a>
-                        {% endif %}
-                    </td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-        <div class="clearfix">
-            <div class="hint-text">{{user_details}}</b></div>
-            {% if user_details.has_other_pages  %}
-            <ul class="pagination">
-                {% if user_details.has_previous %}
-                    <li class="page-item"><a href="?page={{ user_details.previous_page_number }} ">&lt;</a></li>
+      </div>
+      <div class="row input-group">
+        <form action="/admusers/">
+          <input type="search" name="searchuser" class="form-control rounded offset-lg-1 col-lg-8 col-md-9" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
+          <button type="submit" class="btn btn-outline-primary btn-primary col-lg-2 col-md-3">search</button>
+        </form>
+      </div>
+      <table class="table table-striped table-hover">
+        <thead>
+          <tr>
+            <th>first Name</th>
+            <th>Last Name</th>
+            <th>Email</th>
+            <th>Datejoined</th>
+            <th>Verified user</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        {% for users in user_details %}
+          <tbody>
+            <tr>
+              <td>{{ users.first_name }}</td>
+              <td>{{ users.last_name }}</td>
+              <td>{{ users.email }}</td>
+              <td>{{ users.datejoined }}</td>
+              <td>
+                {% if users.is_verified %}
+                   Yes
                 {% else %}
-                    <li class="disabled"><span>&lt;</span></li>
+                  No
                 {% endif %}
-                {% for i in user_details.paginator.page_range %}
-                    {% if user_details.number == i  %}
-                        <li class="active"><span>{{ i }} <span class="sr-only"> (current) </span></span></li>
-                    {% else %}
-                        <li><a href="?page={{ i }}">{{ i }}</a></li>
-                    {% endif %}
-                {% endfor %}
-                {% if user_details.has_next %}
-                    <li ><a href="?page={{user_details.next_page_number}}">&gt; </a></li>
+              </td>
+              <td>
+                {% if not users.is_blocked %}
+                  <a href="/block_user/{{ users.id }}" class="delete" data-toggle="modal">block</a>
                 {% else %}
-                    <li class="disabled"><span>&gt;</span></li>
+                  <a href="/unblock_user/{{ users.id }}" class="edit" data-toggle="modal">unblock</a>
                 {% endif %}
-                
-                
-            </ul>
+              </td>
+            </tr>
+          </tbody>
+        {% endfor %}
+      </table>
+
+      <div class="clearfix">
+        <div class="hint-text">{{ user_details }}</div>
+        {% if user_details.has_other_pages %}
+          <ul class="pagination">
+            {% if user_details.has_previous %}
+              <li class="page-item">
+                <a href="?page={{ user_details.previous_page_number }} ">&lt;</a>
+              </li>
+            {% else %}
+              <li class="disabled">
+                <span>&lt;</span>
+              </li>
             {% endif %}
-        </div>
+            {% for i in user_details.paginator.page_range %}
+              {% if user_details.number == i %}
+                <li class="active">
+                  <span>{{ i }} <span class="sr-only">(current)</span></span>
+                </li>
+              {% else %}
+                <li>
+                  <a href="?page={{ i }}">{{ i }}</a>
+                </li>
+              {% endif %}
+            {% endfor %}
+            {% if user_details.has_next %}
+              <li>
+                <a href="?page={{ user_details.next_page_number }}">&gt;</a>
+              </li>
+            {% else %}
+              <li class="disabled">
+                <span>&gt;</span>
+              </li>
+            {% endif %}
+          </ul>
+        {% endif %}
+      </div>
     </div>
-</div>
-<script>
-    import { Ripple, initMDB } from "mdb-ui-kit";
-    initMDB({ Ripple });
-</script>
-{% endblock content1 %}
+  </div>
+{% endblock %}

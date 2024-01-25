@@ -1,130 +1,133 @@
-{% include "admin/adminbase.html" %}
+{% include 'admin/adminbase.html' %}
 {% load static %}
-<link rel="stylesheet" href="{% static 'css/admindash.css' %}">
-
+<link rel="stylesheet" href="{% static 'css/admindash.css' %}" />
 
 {% block content1 %}
   <!-- Your existing content goes here -->
-<div class="bg-muted pt-3">
-  <!-- New block for additional content -->
-  <h1 class="text-center">Dash Board</h1>
-  <div class="container mt-4 ">
-    <!-- <h2 class="mb-4">Additional Content</h2> -->
-
-    <div class="row">
-      <!-- Card 1 -->
-      <div class="col-xl-3 col-md-6 mb-4">
-        <div class="card h-100">
-          <div class="card-body">
-            <div class="d-flex align-items-center justify-content-between">
-              <h3 class="mb-0">₹{{daily}}</h3>
-              <p class=" {% if daily_perc > 0 %}  text-success {% else %} text-danger {% endif %} mb-0 font-weight-medium">{{daily_perc}}%</p>
+  <div class="bg-muted pt-3">
+    <!-- New block for additional content -->
+    <h1 class="text-center">Dash Board</h1>
+    <div class="container mt-4">
+      <div class="row">
+        <!-- Card 1 -->
+        <div class="col-xl-3 col-md-6 mb-4">
+          <div class="card h-100">
+            <div class="card-body">
+              <div class="d-flex align-items-center justify-content-between">
+                <h3 class="mb-0">₹{{ daily }}</h3>
+                <p class=" {% if daily_perc > 0 %}
+                      text-success {% else %} text-danger
+                  {% endif %} mb-0 font-weight-medium">{{ daily_perc }}%</p>
+              </div>
+              <div class="icon-box icon-box-success">
+                <span class="mdi mdi-arrow-top-right icon-item"></span>
+              </div>
+              <h6 class="mt-3 mb-0 text-muted font-weight-normal">Daily sales</h6>
             </div>
-            <div class="icon-box icon-box-success">
-              <span class="mdi mdi-arrow-top-right icon-item"></span>
-            </div>
-            <h6 class="mt-3 mb-0 text-muted font-weight-normal">Daily sales</h6>
           </div>
         </div>
-      </div>
 
-      <!-- Card 2 -->
-      <div class="col-xl-3 col-md-6 mb-4">
-        <div class="card h-100">
-          <div class="card-body">
-            <div class="d-flex align-items-center justify-content-between">
-              <h3 class="mb-0">₹{{weekly_sales}}</h3>
-              <p class=" {% if weekly_perc > 0 %}  text-success {% else %} text-danger {% endif %} mb-0 font-weight-medium">{{weekly_perc}}%</p>
+        <!-- Card 2 -->
+        <div class="col-xl-3 col-md-6 mb-4">
+          <div class="card h-100">
+            <div class="card-body">
+              <div class="d-flex align-items-center justify-content-between">
+                <h3 class="mb-0">₹{{ weekly_sales }}</h3>
+                <p class=" {% if weekly_perc > 0 %}
+                   text-success {% else %} text-danger
+                  {% endif %} mb-0 font-weight-medium">{{ weekly_perc }}%</p>
+              </div>
+              <div class="icon-box icon-box-success">
+                <span class="mdi mdi-arrow-top-right icon-item"></span>
+              </div>
+              <h6 class="mt-3 mb-0 text-muted font-weight-normal">Weekly sales</h6>
             </div>
-            <div class="icon-box icon-box-success">
-              <span class="mdi mdi-arrow-top-right icon-item"></span>
-            </div>
-            <h6 class="mt-3 mb-0 text-muted font-weight-normal">Weekly sales</h6>
           </div>
         </div>
-      </div>
 
-      <!-- Card 3 -->
-      <div class="col-xl-3 col-md-6 mb-4">
-        <div class="card h-100">
-          <div class="card-body">
-            <div class="d-flex align-items-center justify-content-between">
-              <h3 class="mb-0 pr-2">₹{{monthly_sales}} </h3>
-              <p class="{% if monthly_perc > 0 %} text-success {% else %}  text-danger {% endif %} mb-0 font-weight-medium">{{monthly_perc}}%</p>
+        <!-- Card 3 -->
+        <div class="col-xl-3 col-md-6 mb-4">
+          <div class="card h-100">
+            <div class="card-body">
+              <div class="d-flex align-items-center justify-content-between">
+                <h3 class="mb-0 pr-2">₹{{ monthly_sales }}</h3>
+                <p class="{% if monthly_perc > 0 %}
+                    text-success {% else %} text-danger
+                  {% endif %} mb-0 font-weight-medium">{{ monthly_perc }}%</p>
+              </div>
+              <div class="icon-box icon-box-danger">
+                <span class="mdi mdi-arrow-bottom-left icon-item"></span>
+              </div>
+              <h6 class="mt-3 mb-0 text-muted font-weight-normal">Monthly sales</h6>
             </div>
-            <div class="icon-box icon-box-danger">
-              <span class="mdi mdi-arrow-bottom-left icon-item"></span>
-            </div>
-            <h6 class="mt-3 mb-0 text-muted font-weight-normal">Monthly sales</h6>
           </div>
         </div>
-      </div>
 
-      <!-- Card 4 -->
-      <div class="col-xl-3 col-md-6 mb-4">
-        <div class="card h-100">
-          <div class="card-body">
-            <div class="d-flex align-items-center justify-content-between">
-              <h3 class="mb-0 pr-2">₹{{yearly_sales}} </h3>
-              <p class="{% if yearly_perc > 0 %} text-success {% else %} text-danger {% endif %} mb-0 font-weight-medium">{{yearly_perc}}%</p>
+        <!-- Card 4 -->
+        <div class="col-xl-3 col-md-6 mb-4">
+          <div class="card h-100">
+            <div class="card-body">
+              <div class="d-flex align-items-center justify-content-between">
+                <h3 class="mb-0 pr-2">₹{{ yearly_sales }}</h3>
+                <p class="{% if yearly_perc > 0 %}
+                     text-success {% else %} text-danger
+                  {% endif %} mb-0 font-weight-medium">{{ yearly_perc }}%</p>
+              </div>
+              <div class="icon-box icon-box-success">
+                <span class="mdi mdi-arrow-top-right icon-item"></span>
+              </div>
+              <h6 class="mt-3 mb-0 text-muted font-weight-normal">Yearly sales</h6>
             </div>
-            <div class="icon-box icon-box-success">
-              <span class="mdi mdi-arrow-top-right icon-item"></span>
-            </div>
-            <h6 class="mt-3 mb-0 text-muted font-weight-normal">Yearly  sales</h6>
           </div>
         </div>
       </div>
     </div>
-  </div>
-  <div class="container">
-    <div class=" bg-white"> 
-       <canvas id="monthlySalesChart" width="300" height="150" style="margin: 80px; background-color: white; "></canvas> </div>
+    <div class="container">
+      <div class="bg-white">
+        <canvas id="monthlySalesChart" width="300" height="150" style="margin: 80px; background-color: white; "></canvas>
+      </div>
     </div>
     <div class="container">
       <div class="row">
-      <div class="col-md-6 bg-white pb-1 ">
-        <canvas id="orderStatusChart" width="300" height="150"  style="margin: 80px; "></canvas>
-
-      </div>
-      <div class="col-md-6 bg-white pb-1 border-left border-dark">
-        <canvas id="dailySalesChart" width="300" height="200"   style="margin: 80px 0 80px 0; "></canvas>
-
-      </div>
+        <div class="col-md-6 bg-white pb-1">
+          <canvas id="orderStatusChart" width="300" height="150" style="margin: 80px; "></canvas>
+        </div>
+        <div class="col-md-6 bg-white pb-1 border-left border-dark">
+          <canvas id="dailySalesChart" width="300" height="200" style="margin: 80px 0 80px 0; "></canvas>
+        </div>
       </div>
     </div>
-  
 
     <div class="container mt-5">
       <div class="card p-4">
         <h4 class="mb-4">Sales Report</h4>
-  
+
         <form method="post" action="/sales_report/">
           {% if messages %}
-              {% for message in messages %}
-                <h5 class=" text-danger text-center"> {{ message }} </h5>
-              {% endfor %}
+            {% for message in messages %}
+              <h5 class="text-danger text-center">{{ message }}</h5>
+            {% endfor %}
           {% endif %}
           {% csrf_token %}
           <div class="form-group">
             <label for="date1">Start Date:</label>
-            <input type="date" class="form-control" id="date1" name="date1" required>
+            <input type="date" class="form-control" id="date1" name="date1" required />
           </div>
-  
+
           <div class="form-group">
             <label for="date2">End Date:</label>
-            <input type="date" class="form-control" id="date2" name="date2" required>
+            <input type="date" class="form-control" id="date2" name="date2" required />
           </div>
-  
+
           <button type="submit" class="btn btn-primary">Generate Report</button>
         </form>
       </div>
     </div>
-
-</div>
+  </div>
 
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
+  <!-- MOnthly sales bar graph -->
   <script> 
     const data = {{ data|safe }};
     const labels = {{ labels|safe }};
@@ -165,7 +168,9 @@
       },
     });
     </script>
-    <script>
+
+    <!-- Order status Doughnut graph -->
+  <script>
     const orderStatusLabels = {{pielabel|safe}};
     const orderStatusCount = {{piedata|safe}};
 
@@ -176,15 +181,15 @@
             labels: orderStatusLabels,
             datasets: [{
                 data: orderStatusCount,
-                backgroundColor: ['#F0FF33', '#FF0000', '#00FFBD','#006CFF','#00FF27'],  // Colors for each status
-            }]
+                backgroundColor: ['violet', 'red', 'cyan','indigo','brown', 'orange', 'green',],  
+            }] 
         },
         options: {
             responsive: true,
             plugins: {
               title: {
                 display: true,
-                text: 'Order Summary', // Add your desired heading here
+                text: 'Order Summary',
                 font: {
                   size: 30,
                   weight: 'bold'
@@ -195,7 +200,9 @@
 
     });
 </script>
-<script>
+
+<!-- Daily sales line graph -->
+  <script>
   const dailySalesLabels = {{newdata|safe}}
   const dailySalesAmounts = {{newlabel|safe}}
 

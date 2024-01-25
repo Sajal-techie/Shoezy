@@ -4,15 +4,14 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('cart', '0005_wishlist'),
+        ("cart", "0005_wishlist"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='wishlist',
-            name='stock',
+            model_name="wishlist",
+            name="stock",
             field=models.CharField(blank=True, max_length=20, null=True),
         ),
     ]

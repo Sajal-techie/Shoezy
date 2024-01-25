@@ -5,20 +5,25 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('order_management', '0007_alter_orderproducts_product_id'),
-        ('productmanagement', '0013_productvariant_color'),
+        ("order_management", "0007_alter_orderproducts_product_id"),
+        ("productmanagement", "0013_productvariant_color"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='orderproducts',
-            name='product_id',
+            model_name="orderproducts",
+            name="product_id",
         ),
         migrations.AddField(
-            model_name='orderproducts',
-            name='product',
-            field=models.ForeignKey(blank=True, default=3, null=True, on_delete=django.db.models.deletion.SET_NULL, to='productmanagement.productvariant'),
+            model_name="orderproducts",
+            name="product",
+            field=models.ForeignKey(
+                blank=True,
+                default=3,
+                null=True,
+                on_delete=django.db.models.deletion.SET_NULL,
+                to="productmanagement.productvariant",
+            ),
         ),
     ]

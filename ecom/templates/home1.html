@@ -1,281 +1,304 @@
 {% extends 'base.html' %}
 {% load static %}
 
-  <body class="goto-here">
-	<!-- navbar start -->
-	{% block navbar %}
+<body class="goto-here">
+  <!-- navbar start -->
+  {% block navbar %}
     {% include 'navbar.html' %}
-	{% endblock navbar %}
-    <!-- END nav -->
-{% block maincontent %} 	
+  {% endblock navbar %}
+  <!-- END nav -->
+  {% block maincontent %}
+    <link rel="stylesheet" href="{% static 'css/height.css' %}" />
 
-<link rel="stylesheet" href={% static 'css/height.css' %}>
-
-<!-- banner start -->
-	<div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel" style="height: 80vh;">
-		<ol class="carousel-indicators">
-		  <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
-		  <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
-		  <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
-		  <li data-target="#carouselExampleIndicators" data-slide-to="3"></li>
-		  <li data-target="#carouselExampleIndicators" data-slide-to="4"></li>
-		</ol>
-		<div class="carousel-inner">
-		  <div class="carousel-item active">
-			<img class="d-block w-100 img-fluid" style="height: 600px;"  src="{% static 'images/banner1.jpeg'  %}" alt="First slide">
-		  </div>
-		  <div class="carousel-item">
-			<img class="d-block w-100 img-fluid"style="height: 600px;"  src="{% static 'images/banner25.png'  %}" alt="Second slide">
-		  </div> 
-		  <div class="carousel-item">
-			<img class="d-block w-100 img-fluid" style="height: 600px;" src="{% static 'images/banner23.png'  %}" alt="Third slide">
-		  </div>
-			<div class="carousel-item">
-			<img class="d-block w-100 img-fluid" style="height: 600px;" src="{% static 'images/banner22.png'  %}" alt="Third slide">
-		  </div>
-		  <div class="carousel-item">
-			<img class="d-block w-100 img-fluid" style="height: 600px;" src="{% static 'images/banner30.png'  %}" alt="Third slide">
-		  </div>
-		</div>
-		<a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
-		  <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-		  <span class="sr-only">Previous</span>
-		</a>
-		<a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
-		  <span class="carousel-control-next-icon" aria-hidden="true"></span>
-		  <span class="sr-only">Next</span>
-		</a>
-	  </div>
-<!-- banner end -->
+    <!-- banner start -->
+    <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel" style="height: 80vh;">
+      <ol class="carousel-indicators">
+        <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+        <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+        <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+        <li data-target="#carouselExampleIndicators" data-slide-to="3"></li>
+        <li data-target="#carouselExampleIndicators" data-slide-to="4"></li>
+      </ol>
+      <div class="carousel-inner">
+        <div class="carousel-item active">
+          <img class="d-block w-100 img-fluid" style="height: 600px;" src="{% static 'images/banner1.jpeg' %}" alt="First slide" />
+        </div>
+        <div class="carousel-item">
+          <img class="d-block w-100 img-fluid" style="height: 600px;" src="{% static 'images/banner25.png' %}" alt="Second slide" />
+        </div>
+        <div class="carousel-item">
+          <img class="d-block w-100 img-fluid" style="height: 600px;" src="{% static 'images/banner23.png' %}" alt="Third slide" />
+        </div>
+        <div class="carousel-item">
+          <img class="d-block w-100 img-fluid" style="height: 600px;" src="{% static 'images/banner22.png' %}" alt="Third slide" />
+        </div>
+        <div class="carousel-item">
+          <img class="d-block w-100 img-fluid" style="height: 600px;" src="{% static 'images/banner30.png' %}" alt="Third slide" />
+        </div>
+      </div>
+      <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="sr-only">Previous</span>
+      </a>
+      <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="sr-only">Next</span>
+      </a>
+    </div>
+    <!-- banner end -->
 
     <section class="ftco-section ftco-no-pt ftco-no-pb">
-			<div class="container">
-				<div class="row no-gutters ftco-services">
+      <div class="container">
+        <div class="row no-gutters ftco-services">
           <div class="col-lg-4 text-center d-flex align-self-stretch ftco-animate">
             <div class="media block-6 services p-4 py-md-5">
               <div class="icon d-flex justify-content-center align-items-center mb-4">
-            		<span class="flaticon-bag"></span>
+                <span class="flaticon-bag"></span>
               </div>
               <div class="media-body">
                 <h3 class="heading">Free Shipping</h3>
-                <p>Free Shipping on Every Pair ! <br> – Walk in Style, No Extra Mile. <br>👟🌟</p>
+                <p>
+                  Free Shipping on Every Pair ! <br /> – Walk in Style, No Extra Mile. <br />👟🌟
+                </p>
               </div>
-            </div>      
+            </div>
           </div>
           <div class="col-lg-4 text-center d-flex align-self-stretch ftco-animate">
             <div class="media block-6 services p-4 py-md-5">
               <div class="icon d-flex justify-content-center align-items-center mb-4">
-            		<span class="flaticon-customer-service"></span>
+                <span class="flaticon-customer-service"></span>
               </div>
               <div class="media-body">
                 <h3 class="heading">Support Customer</h3>
-                <p>Your Comfort is Our Priority! <br> – Exceptional Customer Support anyime <br> 🤝🌟</p>
+                <p>
+                  Your Comfort is Our Priority! <br /> – Exceptional Customer Support anyime <br /> 🤝🌟
+                </p>
               </div>
-            </div>    
+            </div>
           </div>
           <div class="col-lg-4 text-center d-flex align-self-stretch ftco-animate">
             <div class="media block-6 services p-4 py-md-5">
               <div class="icon d-flex justify-content-center align-items-center mb-4">
-            		<span class="flaticon-payment-security"></span>
+                <span class="flaticon-payment-security"></span>
               </div>
               <div class="media-body">
                 <h3 class="heading">Secure Payments</h3>
-                <p>Shop with Confidence! <br> – Enjoy Secure Payments for Peace of Mind. 🔒💳</p>
+                <p>
+                  Shop with Confidence! <br /> – Enjoy Secure Payments for Peace of Mind. 🔒💳
+                </p>
               </div>
-            </div>      
+            </div>
           </div>
         </div>
-			</div>
-		</section>
+      </div>
+    </section>
 
-
-<!-- new arrival listing -->
+    <!-- new arrival listing -->
     <section class="ftco-section bg-light">
-    	<div class="container">
-				<div class="row justify-content-center mb-3 pb-3">
+      <div class="container">
+        <div class="row justify-content-center mb-3 pb-3">
           <div class="col-md-12 heading-section text-center ftco-animate">
             <h2 class="mb-4">New Arrivals</h2>
             <p>Fresh Styles, Fresh Vibes! Explore Our Latest Arrivals – Elevate Your Wardrobe with What's New.</p>
           </div>
-        </div>   		
-    	</div>
-    	<div class="container">
-    		<div class="row mainprod">
-				{% for prod in product %}
-    			<div class="col-sm-12 col-md-6 col-lg-3 ftco-animate d-flex " id="divhgt">
-    				<div class="product d-flex flex-column hgt align-items-center justify-content-center align-content-center " id="divhg">
-						<div class="">
-    					<a href="/singleproduct/{{prod.id}}" class="img-prod"><img class="img-fluid" src="{{ prod.image1.url }}" alt=" shoes pic">
-									{% with status=prod.offer_price.1 %}
-                                        {% if status > prod.discount_percentage  %}
-                                        <span class="status text-danger"> {{status}}% Off</span>
-                                        {% else %}
-                                        <span class="status">{{prod.discount_percentage}}% Off</span>
-                                        {% endif %}
-                                    {% endwith %}
-						</div>
-						
-						<div class="overlay"></div>
-    					</a>
-    					<div class="text py-3 pb-4 px-3  align-baseline">
-							
-    						<h3><a href="/singleproduct/{{prod.id}}">{% for brad in brand  %}{% if prod.brand_id == brad.id %}{{brad.brand_name}}{% endif %}{% endfor %} &nbsp; {{prod.name}}</a></h3>
-							
-    						<div class="pricing">
-								{% with offer_price=prod.offer_price.0 %}
-                                            {% if offer_price < prod.selling_price %}
-											<p class="price"><span class="mr-2 price-dc">₹{{prod.original_price}}</span><span class="price-sale"><del>₹{{prod.selling_price}}</del> </span></p>
-											<h6 class="text-danger" > Special Price: ₹{{ offer_price }}</h6>
-                                            {% else %}
-												<p class="price"><span class="mr-2 price-dc">₹{{prod.original_price}}</span><span class="price-sale">₹{{prod.selling_price}}</span></p>
-                                            {% endif %}
-                                {% endwith %}
-	    					</div>
-	    					<p class="bottom-area d-flex px-3">
-    							<a href="{% url 'singleproduct' prod.id %}" class="add-to-cart text-center py-2 mr-1"><span>View details </span></a>
-								{% if prod.id in wishlist1 %}
-								<a href="/wishlist/" class="buy-now text-center py-2">View wishlist<span><i class="ion-ios-heart ml-1"></i></span></a>
-								{% else %}
-								<a href="{% url 'add_to_wish' prod.id %}?next={{ request.path }}" class="buy-now text-center py-2">Add to wish<span><i class="ion-ios-heart ml-1"></i></span></a>
-								{% endif %}
-    							
-    						</p>
-    					</div>
-    				</div>
-    			</div>
-				{% endfor %}
-    		</div>
-    	</div>
+        </div>
+      </div>
+      <div class="container">
+        <div class="row mainprod">
+          {% for prod in product %}
+            <div class="col-sm-12 col-md-6 col-lg-3 ftco-animate d-flex" id="divhgt">
+              <div class="product d-flex flex-column hgt align-items-center justify-content-center align-content-center" id="divhg">
+                <div>
+                  <a href="/singleproduct/{{ prod.id }}" class="img-prod">
+                    <img class="img-fluid" src="{{ prod.image1.url }}" alt=" shoes pic" />
+                    {% with status=prod.offer_price.1 %}
+                      {% if status > prod.discount_percentage %}
+                        <span class="status text-danger">{{ status }}% Off</span>
+                      {% else %}
+                        <span class="status">{{ prod.discount_percentage }}% Off</span>
+                      {% endif %}
+                    {% endwith %}
+                  </a>
+                </div>
+
+                <div class="overlay"></div>
+
+                <div class="text py-3 pb-4 px-3 align-baseline">
+                  <h3>
+                    <a href="/singleproduct/{{ prod.id }}">
+                      {% for brad in brand %}
+                        {% if prod.brand_id == brad.id %}{{ brad.brand_name }}{% endif %}
+                      {% endfor %}&nbsp; {{ prod.name }}
+                    </a>
+                  </h3>
+
+                  <div class="pricing">
+                    {% with offer_price=prod.offer_price.0 %}
+                      {% if offer_price < prod.selling_price %}
+                        <p class="price">
+                          <span class="mr-2 price-dc">₹{{ prod.original_price }}</span><span class="price-sale"><del>₹{{ prod.selling_price }}</del></span>
+                        </p>
+                        <h6 class="text-danger">Special Price: ₹{{ offer_price }}</h6>
+                      {% else %}
+                        <p class="price">
+                          <span class="mr-2 price-dc">₹{{ prod.original_price }}</span><span class="price-sale">₹{{ prod.selling_price }}</span>
+                        </p>
+                      {% endif %}
+                    {% endwith %}
+                  </div>
+                  <p class="bottom-area d-flex px-3">
+                    <a href="{% url 'singleproduct' prod.id %}" class="add-to-cart text-center py-2 mr-1"><span>View details</span></a>
+                    {% if prod.id in wishlist1 %}
+                      <a href="/wishlist/" class="buy-now text-center py-2">View wishlist<span><i class="ion-ios-heart ml-1"></i></span></a>
+                    {% else %}
+                      <a href="{% url 'add_to_wish' prod.id %}?next={{ request.path }}" class="buy-now text-center py-2">Add to wish<span><i class="ion-ios-heart ml-1"></i></span></a>
+                    {% endif %}
+                  </p>
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
     </section>
 
-<!-- new arrivals end  -->
+    <!-- new arrivals end -->
 
-<!-- category section -->
+    <!-- category section -->
     <section class="ftco-section ftco-choose ftco-no-pb ftco-no-pt">
-    	<div class="container">
-				<div class="row no-gutters">
-					<div class="col-lg-4">
-							<div class="choose-wrap divider-one img p-5 d-flex align-items-end" style="background-image: url({% static 'images/choose-1.jpg' %});">
-
-    					<div class="text text-center text-white px-2">
-								<span class="subheading">Men's Shoes</span>
-    						<h2>Men's Collection</h2>
-    						<p>Elevate Your Look, Empower Your Presence. Unleash the Latest Trends in Men's Fashion – Your Signature Style, Defined.</p>
-    						<p><a href="/shop/?men=men" class="btn btn-black px-3 py-2">Shop now</a></p>
-    					</div>
-    				</div>
-					</div>
-					<div class="col-lg-8">
-    				<div class="row no-gutters choose-wrap divider-two align-items-stretch">
-    					<div class="col-md-12">
-	    					<div class="choose-wrap full-wrap img align-self-stretch d-flex align-item-center justify-content-end" style="background-image: url('{% static 'images/choose-2.jpg' %}');">
-	    						<div class="col-md-7 d-flex align-items-center">
-	    							<div class="text text-white px-5">
-	    								<span class="subheading">Women's Shoes</span>
-			    						<h2>Women's Collection</h2>
-			    						<p>Fierce, Fabulous, Fearless. Unleash Your Style with Our Latest Women's Collection – Embrace the Extraordinary.</p>
-			    						<p><a href="/shop/?women=women" class="btn btn-black px-3 py-2">Shop now</a></p>
-			    					</div>
-	    						</div>
-	    					</div>
-	    				</div>
-    					<div class="col-md-12">
-    						<div class="row no-gutters">
-    							<div class="col-md-6">
-		    						<div class="choose-wrap wrap img align-self-stretch bg-light d-flex align-items-center">
-		    							<div class="text text-center px-5">
-		    								<span class="subheading">Popular</span>
-				    						<h2>Top rated</h2>
-				    						<p>"Explore What's in Vogue! Our Popular Picks Showcase the Latest Trends and Timeless Classics. Elevate Your Style with the Favorites of Many.</p>
-				    						<p><a href="/shop/" class="btn btn-black px-3 py-2">Shop now</a></p>
-				    					</div>
-		    						</div>
-	    						</div>
-	    						<div class="col-md-6">
-		    						<div class="choose-wrap wrap img align-self-stretch d-flex align-items-center" style="background-image: url({% static 'images/choose-3.jpg' %});">
-		    							<div class="text text-center text-white px-5">
-		    								<span class="subheading">Shoes</span>
-				    						<h2>Best Brands</h2>
-				    						<p >Iconic Choices, Unmatched Quality. Dive into the World of Top Brands – Elevate Your Wardrobe with the Best in Fashion</p>
-				    						<p><a href="/shop/" class="btn btn-black px-3 py-2">Shop now</a></p>
-				    					</div>
-		    						</div>
-	    						</div>
-	    					</div>
-    					</div>
-    				</div>
-    			</div>
-  			</div>
-    	</div>
+      <div class="container">
+        <div class="row no-gutters">
+          <div class="col-lg-4">
+            <div class="choose-wrap divider-one img p-5 d-flex align-items-end" style="background-image: url({% static 'images/choose-1.jpg' %});">
+              <div class="text text-center text-white px-2">
+                <span class="subheading">Men's Shoes</span>
+                <h2>Men's Collection</h2>
+                <p>Elevate Your Look, Empower Your Presence. Unleash the Latest Trends in Men's Fashion – Your Signature Style, Defined.</p>
+                <p>
+                  <a href="/shop/?men=men" class="btn btn-black px-3 py-2">Shop now</a>
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-8">
+            <div class="row no-gutters choose-wrap divider-two align-items-stretch">
+              <div class="col-md-12">
+                <div class="choose-wrap full-wrap img align-self-stretch d-flex align-item-center justify-content-end" style="background-image: url('{% static 'images/choose-2.jpg' %}');">
+                  <div class="col-md-7 d-flex align-items-center">
+                    <div class="text text-white px-5">
+                      <span class="subheading">Women's Shoes</span>
+                      <h2>Women's Collection</h2>
+                      <p>Fierce, Fabulous, Fearless. Unleash Your Style with Our Latest Women's Collection – Embrace the Extraordinary.</p>
+                      <p>
+                        <a href="/shop/?women=women" class="btn btn-black px-3 py-2">Shop now</a>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-12">
+                <div class="row no-gutters">
+                  <div class="col-md-6">
+                    <div class="choose-wrap wrap img align-self-stretch bg-light d-flex align-items-center">
+                      <div class="text text-center px-5">
+                        <span class="subheading">Popular</span>
+                        <h2>Top rated</h2>
+                        <p>"Explore What's in Vogue! Our Popular Picks Showcase the Latest Trends and Timeless Classics. Elevate Your Style with the Favorites of Many.</p>
+                        <p>
+                          <a href="/shop/" class="btn btn-black px-3 py-2">Shop now</a>
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="choose-wrap wrap img align-self-stretch d-flex align-items-center" style="background-image: url({% static 'images/choose-3.jpg' %});">
+                      <div class="text text-center text-white px-5">
+                        <span class="subheading">Shoes</span>
+                        <h2>Best Brands</h2>
+                        <p>Iconic Choices, Unmatched Quality. Dive into the World of Top Brands – Elevate Your Wardrobe with the Best in Fashion</p>
+                        <p>
+                          <a href="/shop/" class="btn btn-black px-3 py-2">Shop now</a>
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </section>
-<!-- category end  -->
+    <!-- category end -->
 
-<!-- follow start  -->
+    <!-- follow start -->
     <section class="ftco-gallery">
-    	<div class="container">
-    		<div class="row justify-content-center">
-    			<div class="col-md-8 heading-section text-center mb-4 ftco-animate">
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-md-8 heading-section text-center mb-4 ftco-animate">
             <h2 class="mb-4">Follow Us On Instagram</h2>
             <p>Stay Connected, Stay Stylish! Join us on Instagram for Exclusive Updates, Behind-the-Scenes, and a Daily Dose of Fashion Inspiration ✨</p>
           </div>
-    		</div>
-    	</div>
-    	<div class="container-fluid px-0">
-    		<div class="row no-gutters">
-					<div class="col-md-4 col-lg-2 ftco-animate">
-						<a href={% static 'images/gallery-1.jpg' %} class="gallery image-popup img d-flex align-items-center" style="background-image: url({% static 'images/gallery-1.jpg' %});">
-							<div class="icon mb-4 d-flex align-items-center justify-content-center">
-    						<span class="icon-instagram"></span>
-    					</div>
-						</a>
-					</div>
-					<div class="col-md-4 col-lg-2 ftco-animate">
-						<a href={% static 'images/gallery-2.jpg' %} class="gallery image-popup img d-flex align-items-center" style="background-image: url({% static 'images/gallery-2.jpg' %});">
-							<div class="icon mb-4 d-flex align-items-center justify-content-center">
-    						<span class="icon-instagram"></span>
-    					</div>
-						</a>
-					</div>
-					<div class="col-md-4 col-lg-2 ftco-animate">
-						<a href={% static 'images/gallery-3.jpg' %} class="gallery image-popup img d-flex align-items-center" style="background-image: url({% static 'images/gallery-3.jpg' %});">
-							<div class="icon mb-4 d-flex align-items-center justify-content-center">
-    						<span class="icon-instagram"></span>
-    					</div>
-						</a>
-					</div>
-					<div class="col-md-4 col-lg-2 ftco-animate">
-						<a href={% static 'images/gallery-4.jpg' %} class="gallery image-popup img d-flex align-items-center" style="background-image: url({% static "images/gallery-4.jpg" %} );">
-							<div class="icon mb-4 d-flex align-items-center justify-content-center">
-    						<span class="icon-instagram"></span>
-    					</div>
-						</a>
-					</div>
-					<div class="col-md-4 col-lg-2 ftco-animate">
-						<a href={% static 'images/gallery-5.jpg' %} class="gallery image-popup img d-flex align-items-center" style="background-image: url({% static 'images/gallery-5.jpg' %});">
-							<div class="icon mb-4 d-flex align-items-center justify-content-center">
-    						<span class="icon-instagram"></span>
-    					</div>
-						</a>
-					</div>
-					<div class="col-md-4 col-lg-2 ftco-animate">
-						<a href={% static 'images/gallery-6.jpg' %} class="gallery image-popup img d-flex align-items-center" style="background-image: url({% static 'images/gallery-6.jpg' %});">
-							<div class="icon mb-4 d-flex align-items-center justify-content-center">
-    						<span class="icon-instagram"></span>
-    					</div>
-						</a>
-					</div>
-        	</div>
-    	</div>
+        </div>
+      </div>
+      <div class="container-fluid px-0">
+        <div class="row no-gutters">
+          <div class="col-md-4 col-lg-2 ftco-animate">
+            <a href="{% static 'images/gallery-1.jpg' %}" class="gallery image-popup img d-flex align-items-center" style="background-image: url({% static 'images/gallery-1.jpg' %});">
+              <div class="icon mb-4 d-flex align-items-center justify-content-center">
+                <span class="icon-instagram"></span>
+              </div>
+            </a>
+          </div>
+          <div class="col-md-4 col-lg-2 ftco-animate">
+            <a href="{% static 'images/gallery-2.jpg' %}" class="gallery image-popup img d-flex align-items-center" style="background-image: url({% static 'images/gallery-2.jpg' %});">
+              <div class="icon mb-4 d-flex align-items-center justify-content-center">
+                <span class="icon-instagram"></span>
+              </div>
+            </a>
+          </div>
+          <div class="col-md-4 col-lg-2 ftco-animate">
+            <a href="{% static 'images/gallery-3.jpg' %}" class="gallery image-popup img d-flex align-items-center" style="background-image: url({% static 'images/gallery-3.jpg' %});">
+              <div class="icon mb-4 d-flex align-items-center justify-content-center">
+                <span class="icon-instagram"></span>
+              </div>
+            </a>
+          </div>
+          <div class="col-md-4 col-lg-2 ftco-animate">
+            <a href="{% static 'images/gallery-4.jpg' %}" class="gallery image-popup img d-flex align-items-center" style="background-image: url({% static 'images/gallery-4.jpg' %} );">
+              <div class="icon mb-4 d-flex align-items-center justify-content-center">
+                <span class="icon-instagram"></span>
+              </div>
+            </a>
+          </div>
+          <div class="col-md-4 col-lg-2 ftco-animate">
+            <a href="{% static 'images/gallery-5.jpg' %}" class="gallery image-popup img d-flex align-items-center" style="background-image: url({% static 'images/gallery-5.jpg' %});">
+              <div class="icon mb-4 d-flex align-items-center justify-content-center">
+                <span class="icon-instagram"></span>
+              </div>
+            </a>
+          </div>
+          <div class="col-md-4 col-lg-2 ftco-animate">
+            <a href="{% static 'images/gallery-6.jpg' %}" class="gallery image-popup img d-flex align-items-center" style="background-image: url({% static 'images/gallery-6.jpg' %});">
+              <div class="icon mb-4 d-flex align-items-center justify-content-center">
+                <span class="icon-instagram"></span>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
     </section>
 
-<!-- foooter start -->
-{% include 'footer.html' %}
-<!-- footer end -->
-  
+    <!-- foooter start -->
+    {% include 'footer.html' %}
+    <!-- footer end -->
 
-  <!-- loader -->
-  <div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px"><circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/><circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00"/></svg></div> 
-
+    <!-- loader -->
+    <div id="ftco-loader" class="show fullscreen">
+      <svg class="circular" width="48px" height="48px">
+        <circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee" />
+        <circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00" />
+      </svg>
+    </div>
   {% endblock maincontent %}
-  </body>
-</html>
+</body>

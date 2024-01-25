@@ -39,15 +39,6 @@
   });
 
 
-	// var fullHeight = function() {
-
-	// 	$('.js-fullheight').css('height', $(window).height());
-	// 	$(window).resize(function(){
-	// 		$('.js-fullheight').css('height', $(window).height());
-	// 	});
-
-	// };
-	// fullHeight();
 
 	// loader
 	var loader = function() {
@@ -59,56 +50,7 @@
 	};
 	loader();
 
-	// Scrollax
-//    $.Scrollax();
 
-// 	var carousel = function() {
-// 		$('.home-slider').owlCarousel({
-// 	    loop:true,
-// 	    autoplay: true,
-// 	    margin:0,
-// 	    animateOut: 'fadeOut',
-// 	    animateIn: 'fadeIn',
-// 	    nav:false,
-// 	    autoplayHoverPause: false,
-// 	    items: 1,
-// 	    navText : ["<span class='ion-md-arrow-back'></span>","<span class='ion-chevron-right'></span>"],
-// 	    responsive:{
-// 	      0:{
-// 	        items:1
-// 	      },
-// 	      600:{
-// 	        items:1
-// 	      },
-// 	      1000:{
-// 	        items:1
-// 	      }
-// 	    }
-// 		});
-	
-	// 	$('.carousel-testimony').owlCarousel({
-	// 		center: true,
-	// 		loop: true,
-	// 		items:1,
-	// 		margin: 30,
-	// 		stagePadding: 0,
-	// 		nav: false,
-	// 		navText: ['<span class="ion-ios-arrow-back">', '<span class="ion-ios-arrow-forward">'],
-	// 		responsive:{
-	// 			0:{
-	// 				items: 1
-	// 			},
-	// 			600:{
-	// 				items: 1
-	// 			},
-	// 			1000:{
-	// 				items: 1
-	// 			}
-	// 		}
-	// 	});
-
-	// };
-	// carousel();
 
 	$('nav .dropdown').hover(function(){
 		var $this = $(this);
@@ -273,64 +215,6 @@ container.addEventListener('mouseleave', function () {
 	};
 	goHere();
 
-	// function makeTimer() {
-
-	// 	var endTime = new Date("21 December 2019 9:56:00 GMT+01:00");			
-	// 	endTime = (Date.parse(endTime) / 1000);
-
-	// 	var now = new Date();
-	// 	now = (Date.parse(now) / 1000);
-
-	// 	var timeLeft = endTime - now;
-
-	// 	var days = Math.floor(timeLeft / 86400); 
-	// 	var hours = Math.floor((timeLeft - (days * 86400)) / 3600);
-	// 	var minutes = Math.floor((timeLeft - (days * 86400) - (hours * 3600 )) / 60);
-	// 	var seconds = Math.floor((timeLeft - (days * 86400) - (hours * 3600) - (minutes * 60)));
-
-	// 	if (hours < "10") { hours = "0" + hours; }
-	// 	if (minutes < "10") { minutes = "0" + minutes; }
-	// 	if (seconds < "10") { seconds = "0" + seconds; }
-
-	// 	$("#days").html(days + "<span>Days</span>");
-	// 	$("#hours").html(hours + "<span>Hours</span>");
-	// 	$("#minutes").html(minutes + "<span>Minutes</span>");
-	// 	$("#seconds").html(seconds + "<span>Seconds</span>");		
-
-// }
-// setInterval(function() { makeTimer(); }, 1000);
-
-
-
-
-
-
-
-
-let timerOn = true;
-function timer(remaining) {
-  var m = Math.floor(remaining / 60);
-  var s = remaining % 60;
-  m = m < 10 ? "0" + m : m;
-  s = s < 10 ? "0" + s : s;
-  document.getElementById("countdown").innerHTML = `Time left: ${m} : ${s}`;
-  remaining -= 1;
-  if (remaining >= 0 && timerOn) {
-    setTimeout(function () {
-      timer(remaining);
-    }, 1000);
-    document.getElementById("resend").innerHTML = `
-    `;
-    return;
-  }
-  if (!timerOn) {
-    return;
-  }
-  document.getElementById("resend").innerHTML = `Don't receive the code? 
-  <span class="font-weight-bold text-color cursor" onclick="timer(60)">Resend
-  </span>`;
-}
-timer(60);
 
 
 

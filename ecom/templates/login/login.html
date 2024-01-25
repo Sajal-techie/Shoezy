@@ -1,95 +1,96 @@
-{% extends "base.html" %}
-{% block navbar %}{% include 'navbar.html' %}{% endblock navbar %}]
+{% extends 'base.html' %}
+{% block navbar %}
+  {% include 'navbar.html' %}
+{% endblock navbar %}
+
 {% block maincontent %}
-
-<section class="login_part padding_top">
+  <section class="login_part padding_top">
     <div class="container">
-        <!-- register side left -->
-        <div class="row align-items-center">
-            <div class="col-lg-6 col-md-6">
-                <div class="login_part_text text-center">
-                    <div class="login_part_text_iner">
-                        <h2 class="text-dark">New to our Shop?</h2>
-                        <p class="text-dark">Step into a World of Soleful Style! Sign Up and  Explore our  Exclusive Shoe Collections and Limited Edition Releases.</p>
-                        <a href="/register/" class="text-dark btn btn_3 ">Create an Account</a>
-                    </div>
-                </div>
+      <!-- register side left -->
+      <div class="row align-items-center">
+        <div class="col-lg-6 col-md-6">
+          <div class="login_part_text text-center">
+            <div class="login_part_text_iner">
+              <h2 class="text-dark">New to our Shop?</h2>
+              <p class="text-dark">Step into a World of Soleful Style! Sign Up and Explore our Exclusive Shoe Collections and Limited Edition Releases.</p>
+              <a href="/register/" class="text-dark btn btn_3">Create an Account</a>
             </div>
-            <div class="col-lg-6 col-md-6">
-                <div class="login_part_form">
-                    <div class="login_part_form_iner">
-                        <h3>Welcome Back ! <br>
-                            Please Sign in now</h3>
-                            <!-- show error message  -->
-                            {% if messages %}
-                                    {% for message in messages %}
-                                        <h6 class=" text-danger"> {{ message }} </h6>
-                                    {% endfor %}
-                            {% endif %}
-                        <form class="row contact_form" action="/login/" method="post" >
-                        {% csrf_token %}
-                            <div class="col-md-12 form-group p_star">
-                                <input type="email" class="form-control" id="email" name="email" value="" placeholder="email" required >
-                            </div>
-                            <div class="col-md-12 form-group p_star">
-                                <input type="password" class="form-control" id="password" name="password" value="" placeholder="password" required >
-                            </div>
-                            <div class="col-md-12 form-group">
-                                <div class="creat_account d-flex align-items-center">
-                                    <input type="checkbox" id="showpass" name="selector">
-                                    <label for="showpass">Show password</label>
-                                </div> 
-                                <button type="submit" value="submit" class="btn_3 border-dark lgn">
-                                    Login
-                                </button>
-                                </form>
-                                <a class="lost_pass"   href="#forgetpass" data-toggle="modal" >forget password?</a>
-                    </div>
-                        
-                </div>
-            </div>
+          </div>
         </div>
-    </div>
-<!-- modal for forget password  -->
-    <div id="forgetpass" class="modal fade">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <form method="post" action="/forget_pass/">
+        <div class="col-lg-6 col-md-6">
+          <div class="login_part_form">
+            <div class="login_part_form_iner">
+              <h3>
+                Welcome Back ! <br />
+                Please Sign in now
+              </h3>
+              <!-- show error message -->
+              {% if messages %}
+                {% for message in messages %}
+                  <h6 class="text-danger">{{ message }}</h6>
+                {% endfor %}
+              {% endif %}
+              <form class="row contact_form" action="/login/" method="post">
                 {% csrf_token %}
-                    <div class="modal-header">						
-                        <h4 class="modal-title">Reset your password ?</h4>
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    </div>
-                    <div class="modal-body">					
-                        <div class="form-group">
-                            <label> enter your email</label>
-                            <input type="text"  name="email" class="form-control" required>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
-                        <input type="submit" class="btn btn-primary" value="submit">
-                    </div>
-                </form>
+                <div class="col-md-12 form-group p_star">
+                  <input type="email" class="form-control" id="email" name="email" value="" placeholder="email" required />
+                </div>
+                <div class="col-md-12 form-group p_star">
+                  <input type="password" class="form-control" id="password" name="password" value="" placeholder="password" required />
+                </div>
+                <div class="col-md-12 form-group">
+                  <div class="creat_account d-flex align-items-center">
+                    <input type="checkbox" id="showpass" name="selector" />
+                    <label for="showpass">Show password</label>
+                  </div>
+                  <button type="submit" value="submit" class="btn_3 border-dark lgn">Login</button>
+                </div>
+              </form>
+
+              <a class="lost_pass" href="#forgetpass" data-toggle="modal">forget password?</a>
             </div>
+          </div>
         </div>
+      </div>
     </div>
-    <!-- modal end -->
-<script>
-const pass = document.getElementById('password')
-const show = document.getElementById('showpass')
+  </section>
 
-show.addEventListener("change",() =>{
-    if (show.checked){
-        pass.type = 'text';
-    }
-    else{
-        pass.type = 'password';
-    }
-
-});
-
-
-</script>
-{% include 'footer.html' %}
+  <!-- modal for forget password -->
+  <div id="forgetpass" class="modal fade">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <form method="post" action="/forget_pass/">
+          {% csrf_token %}
+          <div class="modal-header">
+            <h4 class="modal-title">Reset your password ?</h4>
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          </div>
+          <div class="modal-body">
+            <div class="form-group">
+              <label>enter your email</label>
+              <input type="text" name="email" class="form-control" required />
+            </div>
+          </div>
+          <div class="modal-footer">
+            <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel" />
+            <input type="submit" class="btn btn-primary" value="submit" />
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <!-- modal end -->
+  <script>
+    const pass = document.getElementById('password')
+    const show = document.getElementById('showpass')
+    
+    show.addEventListener('change', () => {
+      if (show.checked) {
+        pass.type = 'text'
+      } else {
+        pass.type = 'password'
+      }
+    })
+  </script>
+  {% include 'footer.html' %}
 {% endblock maincontent %}

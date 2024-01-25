@@ -5,29 +5,45 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [
-        ('home', '0003_customuser_is_blocked'),
+        ("home", "0003_customuser_is_blocked"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Address',
+            name="Address",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(blank=True, max_length=100)),
-                ('country', models.CharField(max_length=100)),
-                ('state', models.CharField(max_length=100)),
-                ('district', models.CharField(max_length=100)),
-                ('town', models.CharField(max_length=100)),
-                ('house', models.CharField(max_length=100)),
-                ('land_mark', models.CharField(blank=True, max_length=100, null=True)),
-                ('pincode', models.IntegerField()),
-                ('number', models.CharField(max_length=15)),
-                ('alternate_number', models.CharField(blank=True, max_length=15, null=True)),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='home.customuser')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(blank=True, max_length=100)),
+                ("country", models.CharField(max_length=100)),
+                ("state", models.CharField(max_length=100)),
+                ("district", models.CharField(max_length=100)),
+                ("town", models.CharField(max_length=100)),
+                ("house", models.CharField(max_length=100)),
+                ("land_mark", models.CharField(blank=True, max_length=100, null=True)),
+                ("pincode", models.IntegerField()),
+                ("number", models.CharField(max_length=15)),
+                (
+                    "alternate_number",
+                    models.CharField(blank=True, max_length=15, null=True),
+                ),
+                (
+                    "user",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="home.customuser",
+                    ),
+                ),
             ],
         ),
     ]

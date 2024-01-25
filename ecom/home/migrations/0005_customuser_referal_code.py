@@ -4,15 +4,14 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('home', '0004_customuser_dob_customuser_gender_customuser_number'),
+        ("home", "0004_customuser_dob_customuser_gender_customuser_number"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='customuser',
-            name='referal_code',
+            model_name="customuser",
+            name="referal_code",
             field=models.CharField(max_length=10, null=True),
         ),
     ]

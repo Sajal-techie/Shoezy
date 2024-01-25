@@ -4,15 +4,14 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('cart', '0007_remove_cart_product_id_remove_wishlist_product_id_and_more'),
+        ("cart", "0007_remove_cart_product_id_remove_wishlist_product_id_and_more"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='cart',
-            name='size',
+            model_name="cart",
+            name="size",
             field=models.CharField(default=7, max_length=20),
         ),
     ]

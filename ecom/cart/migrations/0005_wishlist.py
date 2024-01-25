@@ -5,21 +5,42 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('cart', '0004_remove_cart_is_active'),
-        ('home', '0004_customuser_dob_customuser_gender_customuser_number'),
-        ('productmanagement', '0008_alter_product_discount_percentage'),
+        ("cart", "0004_remove_cart_is_active"),
+        ("home", "0004_customuser_dob_customuser_gender_customuser_number"),
+        ("productmanagement", "0008_alter_product_discount_percentage"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Wishlist',
+            name="Wishlist",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('added_at', models.DateField(auto_now_add=True)),
-                ('product_id', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to='productmanagement.product')),
-                ('user_id', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='home.customuser')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("added_at", models.DateField(auto_now_add=True)),
+                (
+                    "product_id",
+                    models.ForeignKey(
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        to="productmanagement.product",
+                    ),
+                ),
+                (
+                    "user_id",
+                    models.ForeignKey(
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="home.customuser",
+                    ),
+                ),
             ],
         ),
     ]

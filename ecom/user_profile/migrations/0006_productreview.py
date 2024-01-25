@@ -5,23 +5,44 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('home', '0004_customuser_dob_customuser_gender_customuser_number'),
-        ('productmanagement', '0013_productvariant_color'),
-        ('user_profile', '0005_wallet'),
+        ("home", "0004_customuser_dob_customuser_gender_customuser_number"),
+        ("productmanagement", "0013_productvariant_color"),
+        ("user_profile", "0005_wallet"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='ProductReview',
+            name="ProductReview",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('rating', models.IntegerField(blank=True, null=True)),
-                ('review', models.TextField(blank=True, null=True)),
-                ('created_at', models.DateTimeField(auto_now_add=True, null=True)),
-                ('product', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='productmanagement.product')),
-                ('user', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to='home.customuser')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("rating", models.IntegerField(blank=True, null=True)),
+                ("review", models.TextField(blank=True, null=True)),
+                ("created_at", models.DateTimeField(auto_now_add=True, null=True)),
+                (
+                    "product",
+                    models.ForeignKey(
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="productmanagement.product",
+                    ),
+                ),
+                (
+                    "user",
+                    models.ForeignKey(
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        to="home.customuser",
+                    ),
+                ),
             ],
         ),
     ]

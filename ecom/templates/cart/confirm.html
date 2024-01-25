@@ -1,105 +1,97 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 {% load static %}
-{% block navbar %}{% include "navbar.html" %}{% endblock navbar %}
+{% block navbar %}
+  {% include 'navbar.html' %}
+{% endblock %}
 <body>
   {% block maincontent %}
-  <div class="site-wrap mb-4">
-    <div class="site-section">
+    <div class="site-wrap mb-4">
+      <div class="site-section">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-12 text-center">
+              <span class="icon-check_circle display-3 text-success"></span>
+              <h2 class="display-3 text-black">Thank you!</h2>
+              <p class="lead mb-2 mt-2">Your order was successfully completed.</p>
+              <p>
+                <a href="/shop/" class="btn btn-sm height-auto px-4 py-3 btn-primary">Back to shop</a>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Confirmation Part -->
+    <section class="confirmation_part padding_top" style="background-color: #f4f4f4;">
       <div class="container">
         <div class="row">
-          <div class="col-md-12 text-center">
-            <span class="icon-check_circle display-3 text-success"></span>
-            <h2 class="display-3 text-black">Thank you!</h2>
-            <p class="lead mb-2 mt-2">Your order was successfully completed.</p>
-            <p><a href="/shop/" class="btn btn-sm height-auto px-4 py-3 btn-primary ">Back to shop</a></p>
+          <div class="col-lg-6 col-lx-4">
+            <div class="single_confirmation_details" style="background-color: #fff; border: 1px solid #ddd; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); border-radius: 8px; padding: 20px; margin-bottom: 20px;">
+              <h4>Order Info</h4>
+              <ul>
+                <li>
+                  Order ID<span>: {{ orders.id }}</span>
+                </li>
+                <li>
+                  Order Date<span>: {{ orders.order_date }}</span>
+                </li>
+                <li>
+                  Total<span>: ₹{{ orders.total }}</span>
+                </li>
+                <li>
+                  Payment Method<span>: {{ orders.payment_mode }}</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="col-lg-6 col-lx-4">
+            <div class="single_confirmation_details" style="background-color: #fff; border: 1px solid #ddd; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); border-radius: 8px; padding: 20px; margin-bottom: 20px;">
+              <h4>Shipping Address</h4>
+              <ul>
+                <li>Name: {{ orders.address.name|upper }} , Number : {{ orders.address.number }}</li>
+                <li>Country : {{ orders.address.country }} , State: {{ orders.address.state }} , District : {{ orders.address.district }}</li>
+                <li>House : {{ orders.address.house }} , Town : {{ orders.address.town }}</li>
+                <li>Postcode: {{ orders.address.pincode }}</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="order_details_iner" style="background-color: #fff; border: 1px solid #ddd; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); border-radius: 8px; padding: 20px; margin-bottom: 20px;">
+              <h3>Order Details</h3>
+              <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
+                <thead>
+                  <tr>
+                    <th scope="col" colspan="2">Product</th>
+                    <th scope="col">Size</th>
+                    <th scope="col">Quantity</th>
+                    <th scope="col">Total</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for item in order_items %}
+                    <tr>
+                      <td colspan="2">{{ item.product.product_id.brand.brand_name }} {{ item.product.product_id.name }}</td>
+                      <td>{{ item.size }}</td>
+                      <td>{{ item.quantity }}</td>
+                      <td>
+                        <span>{{ item.amount }}</span>
+                      </td>
+                    </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+            <div class="text-center pb-4 mb-4">
+              <a href="/order_history_items/{{ orders.id }}" style=" width: 120px;  background-color: #dbcc8f; border:1px solid rgb(0, 0, 0)  " class="py-3 text-dark px-4">Track Order</a>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  </div>
+    </section>
 
-  <!-- Confirmation Part -->
-  <section class="confirmation_part padding_top" style="background-color: #f4f4f4;">
-    <div class="container">
-      <div class="row">
-        <div class="col-lg-6 col-lx-4">
-          <div class="single_confirmation_details" style="background-color: #fff; border: 1px solid #ddd; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); border-radius: 8px; padding: 20px; margin-bottom: 20px;">
-            <h4>Order Info</h4>
-            <ul>
-              <li>
-                Order ID<span>: {{orders.id}}</span>
-              </li>
-              <li>
-                Date<span>: {{orders.order_date}}</span>
-              </li>
-              <li>
-                Total<span>: ₹{{orders.total}}</span>
-              </li>
-              <li>
-                Payment Method<span>: {{orders.payment_mode}}</span>
-              </li>
-            </ul>
-          </div>
-        </div>
-        <div class="col-lg-6 col-lx-4">
-          <div class="single_confirmation_details" style="background-color: #fff; border: 1px solid #ddd; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); border-radius: 8px; padding: 20px; margin-bottom: 20px;">
-            <h4>Shipping Address</h4>
-            <ul>
-              <li>
-                Name: {{ orders.address.name | upper}} , Number : {{orders.address.number}}
-              </li>
-              <li>
-                Country : {{orders.address.country}} ,  State: {{orders.address.state}} , District : {{orders.address.district}} 
-              </li>
-              <li>
-                House : {{orders.address.house}}  , Town : {{orders.address.town}} 
-              </li>
-              <li>
-                Postcode: {{orders.address.pincode}}
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-lg-12">
-          <div class="order_details_iner" style="background-color: #fff; border: 1px solid #ddd; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); border-radius: 8px; padding: 20px; margin-bottom: 20px;">
-            <h3>Order Details</h3>
-            <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
-              <thead>
-                <tr>
-                  <th scope="col" colspan="2">Product</th>
-                  <th scope="col">Size</th>
-                  <th scope="col">Quantity</th>
-                  <th scope="col">Total</th>
-                </tr>
-              </thead>  
-              <tbody>
-                {% for item in order_items %}
-                <tr>
-                  <td colspan="2">{{item.product.product_id.brand.brand_name}} {{ item.product.product_id.name }}</td>
-                  <td>{{item.size}}</td>
-                  <td>{{item.quantity}}</td>
-                  <td><span>{{item.amount}}</span></td>
-                </tr>
-                {% endfor %}
-              </tfoot>
-            </table>
-          </div>
-          <div class="text-center pb-4 mb-4">
-      <a href="/order_history_items/{{orders.id}}" style=" width: 120px;  background-color: #dbcc8f; border:1px solid rgb(0, 0, 0)  "
-      class="py-3 text-dark px-4  ">
-      Track Order</a>
-
-      </div>
-        </div>
-      </div>
-     
-      
-    </div>
-  </section>
-
-
-  {% include "footer.html" %}
+    {% include 'footer.html' %}
   {% endblock maincontent %}
 </body>

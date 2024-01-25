@@ -4,30 +4,29 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('home', '0005_customuser_referal_code'),
+        ("home", "0005_customuser_referal_code"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='customuser',
-            name='datejoined',
+            model_name="customuser",
+            name="datejoined",
             field=models.DateField(auto_now_add=True, null=True),
         ),
         migrations.AlterField(
-            model_name='customuser',
-            name='email',
+            model_name="customuser",
+            name="email",
             field=models.EmailField(max_length=254, unique=True),
         ),
         migrations.AlterField(
-            model_name='customuser',
-            name='first_name',
+            model_name="customuser",
+            name="first_name",
             field=models.CharField(max_length=255, null=True),
         ),
         migrations.AlterField(
-            model_name='customuser',
-            name='last_name',
+            model_name="customuser",
+            name="last_name",
             field=models.CharField(max_length=255, null=True),
         ),
     ]

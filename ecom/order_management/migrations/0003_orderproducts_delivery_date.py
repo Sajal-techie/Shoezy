@@ -4,15 +4,14 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('order_management', '0002_order_payment_mode'),
+        ("order_management", "0002_order_payment_mode"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='orderproducts',
-            name='delivery_date',
+            model_name="orderproducts",
+            name="delivery_date",
             field=models.DateField(blank=True, null=True),
         ),
     ]

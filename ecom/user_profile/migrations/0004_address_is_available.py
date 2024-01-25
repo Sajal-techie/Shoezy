@@ -4,15 +4,14 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('user_profile', '0003_alter_address_alternate_number_alter_address_number'),
+        ("user_profile", "0003_alter_address_alternate_number_alter_address_number"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='address',
-            name='is_available',
+            model_name="address",
+            name="is_available",
             field=models.BooleanField(blank=True, default=True, null=True),
         ),
     ]

@@ -15,26 +15,24 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path,include,re_path
+from django.urls import path, include, re_path
 from django.conf import settings
 from django.conf.urls.static import static
 from home.views import page_not_found
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('',include('home.urls')),
-    path('',include('shop.urls')),
-    path('',include('adminhome.urls')),
-    path('',include('categorymanagement.urls')),
-    path('',include('productmanagement.urls')),
-    path('',include('info.urls')),
-    path('',include('cart.urls')),
-    path('',include('user_profile.urls')),
-    path('',include('order_management.urls')),
-    path('',include('coupon.urls')),
-
-
-] 
+    path("admin/", admin.site.urls),
+    path("", include("home.urls")),
+    path("", include("shop.urls")),
+    path("", include("adminhome.urls")),
+    path("", include("categorymanagement.urls")),
+    path("", include("productmanagement.urls")),
+    path("", include("info.urls")),
+    path("", include("cart.urls")),
+    path("", include("user_profile.urls")),
+    path("", include("order_management.urls")),
+    path("", include("coupon.urls")),
+]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
@@ -42,5 +40,5 @@ if settings.DEBUG:
 
 # if the url is not in above list it will redirect to this page
 urlpatterns += [
-    re_path(r'^.*/$', page_not_found),
+    re_path(r"^.*/$", page_not_found),
 ]

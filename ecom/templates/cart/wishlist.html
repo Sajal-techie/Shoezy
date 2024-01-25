@@ -1,111 +1,119 @@
-{% extends "base.html" %} 
+{% extends 'base.html' %}
 {% load static %}
-  <body class="goto-here">
-{% block navbar %}
-{% include 'navbar.html' %}
-{% endblock navbar %}
-{% block maincontent %}
-
+<body class="goto-here">
+  {% block navbar %}
+    {% include 'navbar.html' %}
+  {% endblock %}
+  {% block maincontent %}
     <section class="ftco-section ftco-cart">
-        <h1 class=" text-center scs">Wishlist</h1>
-        {% if wishlist_items %}
-		{% if messages %}
-		<div aria-live="polite" aria-atomic="true" style="position: fixed; top: 15%; right: 3%; min-height: 200px; min-width:300px;  z-index: 1000">
+      <h1 class="text-center scs">Wishlist</h1>
+	  {% if messages %}
+	  <div aria-live="polite" aria-atomic="true" style="position: fixed; top: 15%; right: 3%; min-height: 200px; min-width:300px;  z-index: 1000">
 		  {% for message in messages %}
-			<div class="toast   border  {% if message.tags == 'success' %} border-success {% else %}border-danger{% endif %}" role="alert" aria-live="assertive" aria-atomic="true" data-delay="5000" style="margin-top: 10px;;">
-			  <div class="toast-header">
-				<strong class="mr-auto {% if message.tags == 'success' %}text-success{% else %}text-danger{% endif %}  text-capitalize">{{ message.tags }}</strong>
-				<button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
-				  <span aria-hidden="true">&times;</span>
-				</button>
-			  </div>
-			  <div class="toast-body">
-				{{ message }}
-			  </div>
-			</div>
-		  {% endfor %}
+		  <div class="toast  border  {% if message.tags == 'success' %}
+		  border-success {% else %}border-danger
+		  {% endif %}"
+		  role="alert"
+		  aria-live="assertive"
+		  aria-atomic="true"
+		  data-delay="5000"
+		  style="margin-top: 10px;;">
+		  <div class="toast-header">
+			  <strong class="mr-auto {% if message.tags == 'success' %}
+			  text-success{% else %}text-danger
+			  {% endif %}  text-capitalize">
+			  {{ message.tags }}
+			</strong>
+			<button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 		</div>
-	  {% endif %}
-			<div class="container">
-				<div class="row">
-    			<div class="col-md-12 ">
-    				<div class="cart-list">
-	    				<table class="table">
-						    <thead class="thead-primary">
-						      <tr class="text-center">
-								
-						        <th>&nbsp;</th>
-						        <th>&nbsp;</th>
-						        <th>Product</th>
-						        <th>Price</th>
-						        <th>Size</th>
-						        <th>Stock</th>
-						        <th></th>
-						      </tr>
-						    </thead>
-						    <tbody>
-								
-                            {% for wishlist_item in wishlist_items %}
-						      <tr class="text-center">
-                                
-						        <td class="product-remove"><a href="/remove_wish/{{wishlist_item.product_id.id}}?next={{request.path}}"  title="remove"><span class="ion-ios-close"></span></a></td>
-						        
-						        <td class="image-prod"><a href="/singleproduct/{{wishlist_item.product_id.id}}"><div class="img" style="width: 200px;  background-image:url({{ wishlist_item.product_id.image1.url }}); " ></div></a> </td>
-						        
-						        <td class="product-name">
-						        	<h3>{{ wishlist_item.product_id.brand  }} </h3>
-						        	<p>{{ wishlist_item.product_id.name }}</p>
-						        </td>
-						        
-						        <td class="price">₹{{ wishlist_item.product_id.selling_price }}</td>
-								<form action="{% url 'addto_cart' wishlist_item.product_id.id  %}" method="get">
-									<input type="hidden" name="next" value="{{ request.path }}">
-								<td class="size-selector">
-									<select name="size" class="form-control" required>
-									<option value="" selected disabled>Select Size</option>
-									  <option value="7">7</option>
-									  <option value="8">8</option>
-									  <option value="9">9</option>
-									  <option value="10">10</option>
-									</select>
-								</td>
+		<div class="toast-body">{{ message }}</div>
+	</div>
+		{% endfor %}
+	</div>
+	{% endif %}
+	{% if wishlist_items %}
+        <div class="container">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="cart-list">
+                <table class="table">
+                  <thead class="thead-primary">
+                    <tr class="text-center">
+                      <th>&nbsp;</th>
+                      <th>&nbsp;</th>
+                      <th>Product</th>
+                      <th>Price</th>
+                      <th>Size</th>
+                      <th>Stock</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for wishlist_item in wishlist_items %}
+                      <tr class="text-center">
+                        <td class="product-remove">
+                          <a href="/remove_wish/{{ wishlist_item.product_id.id }}?next={{ request.path }}" title="remove"><span class="ion-ios-close"></span></a>
+                        </td>
 
-                                <td class="total">
-									<button type="submit"  class="btn btn-primary  py-0 px-4"  style="border-radius: 0px ;"> Add to Cart </button>
-								</td>
-								</form>	
-                        
-						      </tr>
-                            {% endfor %}
-            
-						    
-                            </tbody>
-						  </table>
-					  </div>
-    			</div>
-    		</div>
-    	
-			</div>
-		</section>
-		{% else %}
-        <div class="bg-light m-4 p-4">
-            <div class="h4  text-center mb-4"> Wishlist is empty </div>
-            <div class="text-center mb-4"> <a href="/shop/" class="btn btn-primary py-3 px-4">Continue Shopping</a>   </div>
+                        <td class="image-prod">
+                          <a href="/singleproduct/{{ wishlist_item.product_id.id }}"><div class="img" style="width: 200px;  background-image:url({{ wishlist_item.product_id.image1.url }}); "></div></a>
+                        </td>
+
+                        <td class="product-name">
+                          <h3>{{ wishlist_item.product_id.brand }}</h3>
+                          <p>{{ wishlist_item.product_id.name }}</p>
+                        </td>
+
+                        <td class="price">₹{{ wishlist_item.product_id.selling_price }}</td>
+                        <form action="{% url 'addto_cart' wishlist_item.product_id.id %}" method="get">
+                          <input type="hidden" name="next" value="{{ request.path }}" />
+                          <td class="size-selector">
+                            <select name="size" class="form-control" required>
+								 <option value="" selected disabled>Select Size</option>
+								{% for size in prodsize %}
+								{% if wishlist_item.product_id.id == size.0 %}
+								<option value="{{size.1}}">{{size.1}}</option>
+								{% endif %}
+								{% endfor %}
+                            </select>
+                          </td>
+
+                          <td class="total">
+                            <button type="submit" class="btn btn-primary py-0 px-4" style="border-radius: 0px ;">Add to Cart</button>
+                          </td>
+                        </form>
+                      </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
         </div>
-        {% endif %}
+      {% else %}
+        <div class="bg-light m-4 p-4">
+          <div class="h4 text-center mb-4">Wishlist is empty</div>
+          <div class="text-center mb-4">
+            <a href="/shop/" class="btn btn-primary py-3 px-4">Continue Shopping</a>
+          </div>
+        </div>
+      {% endif %}
+    </section>
+    {% include 'footer.html' %}
 
-{% include 'footer.html' %}
-    
-  
+    <!-- loader -->
+    <div id="ftco-loader" class="show fullscreen">
+      <svg class="circular" width="48px" height="48px">
+        <circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee" />
+        <circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00" />
+      </svg>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 
-  <!-- loader -->
-  <div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px"><circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/><circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00"/></svg></div> 
-  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-
-  <script>
-	$(document).ready(function () {
-	  $('.toast').toast('show');
-	});
-  </script>
-      {% endblock maincontent %}
-  </body>
+    <script>
+      $(document).ready(function () {
+        $('.toast').toast('show')
+      })
+    </script>
+  {% endblock %}
+</body>

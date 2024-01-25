@@ -4,16 +4,15 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('order_management', '0001_initial'),
+        ("order_management", "0001_initial"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='order',
-            name='payment_mode',
-            field=models.CharField(default='hi', max_length=20),
+            model_name="order",
+            name="payment_mode",
+            field=models.CharField(default="hi", max_length=20),
             preserve_default=False,
         ),
     ]

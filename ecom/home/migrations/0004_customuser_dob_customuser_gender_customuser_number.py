@@ -4,25 +4,28 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('home', '0003_customuser_is_blocked'),
+        ("home", "0003_customuser_is_blocked"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='customuser',
-            name='dob',
+            model_name="customuser",
+            name="dob",
             field=models.DateField(blank=True, null=True),
         ),
         migrations.AddField(
-            model_name='customuser',
-            name='gender',
-            field=models.CharField(blank=True, choices=[('men', 'Men'), ('women', 'Women'), ('others', 'Others')], null=True),
+            model_name="customuser",
+            name="gender",
+            field=models.CharField(
+                blank=True,
+                choices=[("men", "Men"), ("women", "Women"), ("others", "Others")],
+                null=True,
+            ),
         ),
         migrations.AddField(
-            model_name='customuser',
-            name='number',
+            model_name="customuser",
+            name="number",
             field=models.CharField(blank=True, max_length=20, null=True),
         ),
     ]

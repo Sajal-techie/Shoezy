@@ -1,456 +1,388 @@
 {% extends 'base.html' %}
 {% load static %}
 
-
-    {% block navbar %} {% include 'navbar.html' %} {% endblock navbar %} 
-    {% block maincontent %} 
-	
-	<style>.custom-button {
-		width: 150px !important;
-		height: 80px !important;
-		display: inline-block !important;
-		padding-bottom: 20px  !important;
-		font-size: 16px;
-		font-weight: bold;
-		text-align: center !important;
-		text-decoration: none;
-		border-radius: 25px !important;
-		cursor: pointer ;
-		background-color: #000000 !important;
-		color: #000000 !important;
-		border: 3px solid #000000 !important;
-		transition: background-color 0.3s, color 0.3s !important;
-	}
-	
-	.custom-button:hover {
-		background-color: #000000 !important;
-		color: #fff !important;
-	}</style>
-    <body class="goto-here">
+{% block navbar %}
+  {% include 'navbar.html' %}
+{% endblock navbar %}
+{% block maincontent %}
+  <style>
+    .custom-button {
+      width: 150px !important;
+      height: 80px !important;
+      display: inline-block !important;
+      padding-bottom: 20px !important;
+      font-size: 16px;
+      font-weight: bold;
+      text-align: center !important;
+      text-decoration: none;
+      border-radius: 25px !important;
+      cursor: pointer;
+      background-color: #000000 !important;
+      color: #000000 !important;
+      border: 3px solid #000000 !important;
+      transition: background-color 0.3s, color 0.3s !important;
+    }
+    
+    .custom-button:hover {
+      background-color: #000000 !important;
+      color: #fff !important;
+    }
+    
+    .btn-check {
+      display: none;
+    }
+    .lbl:hover {
+      color: #dbcc8f;
+      background-color: black;
+      border-color: #dbcc8f;
+    }
+    
+    .lbl {
+      cursor: pointer;
+      border-color: black;
+      color: #000;
+    }
+    
+    .btn-check:checked + .lbl {
+      background-color: #dbcc8f;
+      color: black;
+      border-color: black;
+    }
+  </style>
+  <body class="goto-here">
     <section class="ftco-section">
-		{% if productvariant %}
-		{% if messages %}
-		<div aria-live="polite" aria-atomic="true" style="position: fixed; top: 50%; right: 5%; min-height: 200px; min-width: 200px;">
-		  {% for message in messages %}
-			<div class="toast border {% if message.tags == 'success' %} border-success {% else %}border-danger{% endif %}" role="alert" aria-live="assertive" aria-atomic="true" data-delay="5000" style="margin-top: 10px;">
-			  <div class="toast-header">
-				<strong class="mr-auto {% if message.tags == 'success' %}text-success{% else %}text-danger{% endif %}   text-capitalize">{{ message.tags }}</strong>
-				<button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
-				  <span aria-hidden="true">&times;</span>
-				</button>
-			  </div>
-			  <div class="toast-body">
-				{{ message }}
-			  </div>
-			</div>
-		  {% endfor %}
-		</div>
-	  {% endif %}
-		{% for prod in productvariant %}
-    	<div class="container">
-    		<div class="row">
-    			<div class="col-lg-6 mb-5 ftco-animate prd1">
-                    <div>
-                        <div class="image-zoom-container imgsiz" id="product-container">
-                        <img src="{{prod.product_id.image1.url}}" class="img-fluid" alt="Product Image" id="zoom-image">
-                        </div>
-                        <div class="thumbnail-container">
-                            <img src="{{ prod.product_id.image1.url }}" class="thumbnail" alt="Thumbnail 1" onclick="changeImage(this)">
-							{% for img in multi_image %}
-                            <img src="{{ img.images.url }}" class="thumbnail" alt="Thumbnail 2" onclick="changeImage(this)">
-							{% endfor %}
-                        </div>
-                    </div>
+      {% if productvariant %}
+        {% if messages %}
+          <div aria-live="polite" aria-atomic="true" style="position: fixed; top: 50%; right: 5%; min-height: 200px; min-width: 200px;">
+            {% for message in messages %}
+              <div class="toast border {% if message.tags == 'success' %}
+			  			border-success {% else %}border-danger
+                {% endif %}"
+                role="alert"
+                aria-live="assertive"
+                aria-atomic="true"
+                data-delay="5000"
+                style="margin-top: 10px;">
+                <div class="toast-header">
+                  <strong class="mr-auto {% if message.tags == 'success' %}
+				  			text-success{% else %}text-danger
+                    {% endif %}   text-capitalize">
+                    {{ message.tags }}
+                  </strong>
+                  <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 </div>
-            
-    			<div class="col-lg-6 product-details pl-md-5 ftco-animate">
-    				<h3>{{prod.product_id.brand.brand_name}} &nbsp; {{prod.product_id.name}}</h3>
-    				
-                     <div class="rating d-flex">
-							<p class="text-left mr-4" style="font-size: 20px ; color: #dbcc8f;">
-								<span  class="mr-2">{{avg_rating}}</span>
-								{% if avg_rating == 5  %}
-								<span class="ion-ios-star"></span>
-								<span class="ion-ios-star"></span>
-								<span class="ion-ios-star"></span>
-								<span class="ion-ios-star"></span>
-								<span class="ion-ios-star"></span>
-								{% elif avg_rating > 4.4 %}
-								<span class="ion-ios-star"></span>
-								<span class="ion-ios-star"></span>
-								<span class="ion-ios-star"></span>
-								<span class="ion-ios-star"></span>
-								<span class="ion-ios-star-half"></span>
-								{% elif avg_rating > 3.9 %}
-								<span class="ion-ios-star"></span>
-								<span class="ion-ios-star"></span>
-								<span class="ion-ios-star"></span>
-								<span class="ion-ios-star"></span>
-								<span class="ion-ios-star-outline"></span>
-								{% elif avg_rating > 3.4 %}
-								<span class="ion-ios-star"></span>
-								<span class="ion-ios-star"></span>
-								<span class="ion-ios-star"></span>
-								<span class="ion-ios-star-half"></span>
-								<span class="ion-ios-star-outline"></span>
-								{% elif avg_rating > 2.9 %}
-								<span class="ion-ios-star"></span>
-								<span class="ion-ios-star"></span>
-								<span class="ion-ios-star"></span>
-								<span class="ion-ios-star-outline"></span>
-								<span class="ion-ios-star-outline"></span>
-								{% elif avg_rating > 2.4 %}
-								<span class="ion-ios-star"></span>
-								<span class="ion-ios-star"></span>
-								<span class="ion-ios-star-half"></span>
-								<span class="ion-ios-star-outline"></span>
-								<span class="ion-ios-star-outline"></span>
-								{% elif avg_rating > 1.9 %}
-								<span class="ion-ios-star"></span>
-								<span class="ion-ios-star"></span>
-								<span class="ion-ios-star-outline"></span>
-								<span class="ion-ios-star-outline"></span>
-								<span class="ion-ios-star-outline"></span>
-								{% elif avg_rating > 1.4 %}
-								<span class="ion-ios-star"></span>
-								<span class="ion-ios-star-half"></span>
-								<span class="ion-ios-star-outline"></span>
-								<span class="ion-ios-star-outline"></span>
-								<span class="ion-ios-star-outline"></span>
-								{% elif avg_rating > .9 %}
-								<span class="ion-ios-star"></span>
-								<span class="ion-ios-star-outline"></span>
-								<span class="ion-ios-star-outline"></span>
-								<span class="ion-ios-star-outline"></span>
-								<span class="ion-ios-star-outline"></span>
-								{% elif avg_rating > .4 %}
-								<span class="ion-ios-star-half"></span>
-								<span class="ion-ios-star-outline"></span>
-								<span class="ion-ios-star-outline"></span>
-								<span class="ion-ios-star-outline"></span>
-								<span class="ion-ios-star-outline"></span>
-								{% else %}
-								<span class="ion-ios-star-outline"></span>
-								<span class="ion-ios-star-outline"></span>
-								<span class="ion-ios-star-outline"></span>
-								<span class="ion-ios-star-outline"></span>
-								<span class="ion-ios-star-outline"></span>
+                <div class="toast-body">{{ message }}</div>
+              </div>
+            {% endfor %}
+          </div>
+        {% endif %}
+        {% for prod in productvariant %}
+          <div class="container">
+            <div class="row">
+              <div class="col-lg-6 mb-5 ftco-animate prd1">
+                <div>
+                  <div class="image-zoom-container imgsiz" id="product-container">
+                    <img src="{{ prod.product_id.image1.url }}" class="img-fluid" alt="Product Image" id="zoom-image" />
+                  </div>
+                  <div class="thumbnail-container">
+                    <img src="{{ prod.product_id.image1.url }}" class="thumbnail" alt="Thumbnail 1" onclick="changeImage(this)" />
+                    {% for img in multi_image %}
+                      <img src="{{ img.images.url }}" class="thumbnail" alt="Thumbnail 2" onclick="changeImage(this)" />
+                    {% endfor %}
+                  </div>
+                </div>
+              </div>
 
-								{% endif %}
-							
-							</p>
-							<p class="text-left mr-4">
-								<span class="mr-2" style="color: #000;">{{review_count}} <span style="color: #bbb;">Rating</span></span>
-							</p>
-							<p class="text-left">
-								<span class="mr-2" style="color: #000;">{{order_count}} <span style="color: #bbb;">Sold</span></span>
-							</p>
-						</div>
+              <div class="col-lg-6 product-details pl-md-5 ftco-animate">
+                <h3>{{ prod.product_id.brand.brand_name }} &nbsp; {{ prod.product_id.name }}</h3>
 
-						<!-- checking if offer available -->
-						{% with offer_price=prod.product_id.offer_price.0 %}
-						{% if offer_price < prod.product_id.selling_price %}
-                        <div class="ppp"><p class="price"><span class="mr-2 price-dc">₹{{prod.product_id.original_price}}</span><span class="price-sale"><del>₹{{prod.product_id.selling_price}}</del> </span></p></div>
-							<h4 class="text-danger" >Special Price: ₹{{ offer_price }}</h4>
-						{% else %}
-                        <div class="ppp"><p class="price"><span class="mr-2 price-dc">₹{{prod.product_id.original_price}}</span><span class="price-sale">₹{{prod.product_id.selling_price}}</span></p></div>
-						{% endif %}
-						{% endwith %}
-						<p>
-                            Brand : {{prod.product_id.brand.brand_name}}  <br> 
-                            Name : {{prod.product_id.name}} <br>
-                            Catergory : {{prod.product_id.category}} <br>
-                            Color : {{prod.color}} <br>
+                <div class="rating d-flex">
+                  <p class="text-left mr-4" style="font-size: 20px ; color: #dbcc8f;">
+                    <span class="mr-2">{{ avg_rating }}</span>
+                    {% if avg_rating == 5 %}
+                      <span class="ion-ios-star"></span>
+                      <span class="ion-ios-star"></span>
+                      <span class="ion-ios-star"></span>
+                      <span class="ion-ios-star"></span>
+                      <span class="ion-ios-star"></span>
+                    {% elif avg_rating > 4.4 %}
+                      <span class="ion-ios-star"></span>
+                      <span class="ion-ios-star"></span>
+                      <span class="ion-ios-star"></span>
+                      <span class="ion-ios-star"></span>
+                      <span class="ion-ios-star-half"></span>
+                    {% elif avg_rating > 3.9 %}
+                      <span class="ion-ios-star"></span>
+                      <span class="ion-ios-star"></span>
+                      <span class="ion-ios-star"></span>
+                      <span class="ion-ios-star"></span>
+                      <span class="ion-ios-star-outline"></span>
+                    {% elif avg_rating > 3.4 %}
+                      <span class="ion-ios-star"></span>
+                      <span class="ion-ios-star"></span>
+                      <span class="ion-ios-star"></span>
+                      <span class="ion-ios-star-half"></span>
+                      <span class="ion-ios-star-outline"></span>
+                    {% elif avg_rating > 2.9 %}
+                      <span class="ion-ios-star"></span>
+                      <span class="ion-ios-star"></span>
+                      <span class="ion-ios-star"></span>
+                      <span class="ion-ios-star-outline"></span>
+                      <span class="ion-ios-star-outline"></span>
+                    {% elif avg_rating > 2.4 %}
+                      <span class="ion-ios-star"></span>
+                      <span class="ion-ios-star"></span>
+                      <span class="ion-ios-star-half"></span>
+                      <span class="ion-ios-star-outline"></span>
+                      <span class="ion-ios-star-outline"></span>
+                    {% elif avg_rating > 1.9 %}
+                      <span class="ion-ios-star"></span>
+                      <span class="ion-ios-star"></span>
+                      <span class="ion-ios-star-outline"></span>
+                      <span class="ion-ios-star-outline"></span>
+                      <span class="ion-ios-star-outline"></span>
+                    {% elif avg_rating > 1.4 %}
+                      <span class="ion-ios-star"></span>
+                      <span class="ion-ios-star-half"></span>
+                      <span class="ion-ios-star-outline"></span>
+                      <span class="ion-ios-star-outline"></span>
+                      <span class="ion-ios-star-outline"></span>
+                    {% elif avg_rating > 0.9 %}
+                      <span class="ion-ios-star"></span>
+                      <span class="ion-ios-star-outline"></span>
+                      <span class="ion-ios-star-outline"></span>
+                      <span class="ion-ios-star-outline"></span>
+                      <span class="ion-ios-star-outline"></span>
+                    {% elif avg_rating > 0.4 %}
+                      <span class="ion-ios-star-half"></span>
+                      <span class="ion-ios-star-outline"></span>
+                      <span class="ion-ios-star-outline"></span>
+                      <span class="ion-ios-star-outline"></span>
+                      <span class="ion-ios-star-outline"></span>
+                    {% else %}
+                      <span class="ion-ios-star-outline"></span>
+                      <span class="ion-ios-star-outline"></span>
+                      <span class="ion-ios-star-outline"></span>
+                      <span class="ion-ios-star-outline"></span>
+                      <span class="ion-ios-star-outline"></span>
+                    {% endif %}
+                  </p>
+                  <p class="text-left mr-4">
+                    <span class="mr-2" style="color: #000;">{{ review_count }} <span style="color: #bbb;">Rating</span></span>
+                  </p>
+                  <p class="text-left">
+                    <span class="mr-2" style="color: #000;">{{ order_count }} <span style="color: #bbb;">Sold</span></span>
+                  </p>
+                </div>
 
-                        </p>
+                <!-- checking if offer available -->
+                {% with offer_price=prod.product_id.offer_price.0 %}
+                  {% if offer_price < prod.product_id.selling_price %}
+                    <div class="ppp">
+                      <p class="price">
+                        <span class="mr-2 price-dc">₹{{ prod.product_id.original_price }}</span><span class="price-sale"><del>₹{{ prod.product_id.selling_price }}</del></span>
+                      </p>
+                    </div>
+                    <h4 class="text-danger">Special Price: ₹{{ offer_price }}</h4>
+                  {% else %}
+                    <div class="ppp">
+                      <p class="price">
+                        <span class="mr-2 price-dc">₹{{ prod.product_id.original_price }}</span><span class="price-sale">₹{{ prod.product_id.selling_price }}</span>
+                      </p>
+                    </div>
+                  {% endif %}
+                {% endwith %}
+                <p>
+                  Brand : {{ prod.product_id.brand.brand_name }} <br />
+                  Name : {{ prod.product_id.name }} <br />
+                  Catergory : {{ prod.product_id.category }} <br />
+                  Color : {{ prod.color }} <br />
+                </p>
 
-						<form action="{% url 'addto_cart' prod.id  %}" method="get">
+                <form action="{% url 'addto_cart' prod.id %}" method="get" id="cartform">
+                  <div class="row mt-4">
+                    <div class="col-md-6" id="reloadArea">
+                      <p id="checkboxMessage" class="text-danger ml-3 pl-3"></p>
+                      <div class="form-group d-flex">
+                        size:{% for sizes in prodsize %}
+                          <div class="btn-group p-2 w-50" role="group" aria-label="Basic radio toggle button group">
+                            <input type="radio" class="btn-check size" name="size" id="size{{ forloop.counter }}" autocomplete="off" value="{{ sizes.size }}" required />
+                            <label class="btn btn-outline-primary lbl" for="size{{ forloop.counter }}" style="border-radius: 0px !important ;">{{ sizes.size }}</label>
+                          </div>
+                        {% endfor %}
+                      </div>
 
-						<div class="row mt-4">
-							<div class="col-md-6" id="reloadArea">
-								<div class="form-group d-flex">size:
-									<div class="select-wrap">
-										
-										<div class="icon"><span class="ion-ios-arrow-down"></span></div>
-										<select name="size" id="size" class="form-control" onchange="updateQuantity()">
-											<option value="7">7</option>
-											<option value="8">8</option>
-											<option value="9">9</option>
-											<option value="10">10</option>
-										</select>
-									</div>
-								</div>
-								<div class="w-100"></div>
-								<div class="col-md-12">
-									<p  id="quantityMessage" style="color: #2d2d2d;">  Only 0 left</p>
-								</div>
-							</div>
-						<div class="w-100 "></div>
-							<!-- quantity increment and decrement -->
-					<div class="input-group col-md-6 d-flex mb-3 ">
-                                <span class="input-group-btn mr-2    border border-muted">
-									<button type="button" class="quantity-left-minus btn mt-2 "  data-type="minus" data-field="">
-                                        <i class="ion-ios-remove"></i>
-                                    </button>
-                                    
+                      <div class="w-100"></div>
+                      <div class="col-md-12">
+                        <p id="quantityMessage" style="color: red;"></p>
+                      </div>
+                    </div>
+                    <div class="w-100"></div>
+                    <!-- quantity increment and decrement -->
+                    <div class="input-group col-md-6 d-flex mb-3">
+                      <span class="input-group-btn mr-2 border border-muted"><button type="button" class="quantity-left-minus btn mt-2" data-type="minus" data-field=""><i class="ion-ios-remove"></i></button></span>
+                      <input type="text" id="quantity" name="quantity" class="quantity form-control input-number" value="1" readonly />
+                      <span class="input-group-btn ml-2 border border-muted"><button type="button" class="quantity-right-plus btn mt-2" data-type="plus" data-field=""><i class="ion-ios-add"></i></button></span>
+                    </div>
+                    <!-- quantity end -->
+                  </div>
+                  <p class="p-3">
+                    <button type="submit" class="btn btn-black px-5 py-3" style="border-radius: 0cm;"><span>Add to Cart</span></button>&nbsp;
+                    &nbsp; &nbsp;{% if not is_in_wish %}
+                      <a href="{% url 'add_to_wish' prod.product_id.id %}?next={{ request.path }}" title="add to wishlist"><i class="fa-regular fa-heart fa-beat fa-2xl" style="color: #ff3246;"></i></a>
+                    {% else %}
+                      <a href="{% url 'remove_wish' prod.product_id.id %}?next={{ request.path }}" title="remove from wishlist"><i class="fa-solid fa-heart fa-2xl" style="color: #ff3246;"></i></a>
+                    {% endif %}
+                  </p>
+                </form>
+              </div>
+            </div>
+            <div class="row mt-5">
+              <div class="col-md-12 nav-link-wrap">
+                <div class="nav nav-pills d-flex text-center" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                  <a class="nav-link ftco-animate active mr-lg-1" id="v-pills-1-tab" data-toggle="pill" href="#v-pills-1" role="tab" aria-controls="v-pills-1" aria-selected="true">Description</a>
+
+                  <a class="nav-link ftco-animate mr-lg-1" id="v-pills-2-tab" data-toggle="pill" href="#v-pills-2" role="tab" aria-controls="v-pills-2" aria-selected="false">Manufacturer</a>
+
+                  <a class="nav-link ftco-animate" id="v-pills-3-tab" data-toggle="pill" href="#v-pills-3" role="tab" aria-controls="v-pills-3" aria-selected="false">Reviews</a>
+                </div>
+              </div>
+              <div class="col-md-12 tab-wrap">
+                <div class="tab-content bg-light" id="v-pills-tabContent">
+                  <div class="tab-pane fade show active" id="v-pills-1" role="tabpanel" aria-labelledby="day-1-tab">
+                    <div class="p-4">
+                      <h3 class="mb-4">{{ prod.product_id.brand.brand_name }} {{ prod.product_id.name }}</h3>
+                      <p>
+                        {{ prod.product_id.description }} <br /> {{ prod.product_id.name }}is a fusion of sporty style and street-ready flair. With a sleek and modern design, these high-top sneakers offer a fashion-forward look that effortlessly transitions from the court to the urban landscape. Crafted with {{ prod.product_id.brand.brand_name }}'s renowned attention to comfort and performance, these high tops feature a supportive ankle design, cushioned insoles, and the iconic {{ prod.product_id.brand.brand_name }} logo. Whether you're hitting the streets or making a statement on the court, the {{ prod.product_id.brand.brand_name }} {{ prod.product_id.name }}
+                        combines athletic functionality with trendsetting aesthetics
+                      </p>
+                    </div>
+                  </div>
+
+                  <div class="tab-pane fade" id="v-pills-2" role="tabpanel" aria-labelledby="v-pills-day-2-tab">
+                    <div class="p-4">
+                      <h3 class="mb-4">Manufactured By {{ prod.product_id.brand.brand_name }}</h3>
+                      <p>{{ prod.product_id.brand.brand_name }}, a prominent shoe manufacturer, is recognized for its commitment to quality craftsmanship and innovative shoe designs. Leveraging cutting-edge technology, Puma's shoe manufacturing process integrates performance-driven features with contemporary aesthetics. The brand's expertise spans various athletic disciplines, with a focus on creating footwear that not only meets the demands of sports enthusiasts but also reflects current fashion trends.
+                        {{ prod.product_id.brand.brand_name }}'s dedication to sustainability is evident in its responsible sourcing of materials and eco-friendly manufacturing practices. Through a combination of heritage and forward-thinking, Puma continues to shape the landscape of shoe manufacturing, producing a diverse range of athletic and lifestyle footwear that resonates with a global audience.</p>
+                    </div>
+                  </div>
+                  <div class="tab-pane fade" id="v-pills-3" role="tabpanel" aria-labelledby="v-pills-day-3-tab">
+                    <div class="row p-4">
+                      <div class="col-md-10">
+                        <h3 class="mb-4">{{ review_count }} Reviews</h3>
+                        {% for review in reviews %}
+                          <div class="review border border-muted">
+                            <div class="desc">
+                              <h4>
+                                <span class="{% if review.user == username %} text-right text-success {% else %} text-left {% endif %}  ">
+                                  {{ review.user.first_name }} {{ review.user.last_name }}  {% if review.user == username %} (me) {% endif %}
                                 </span>
-                                <input type="text" id="quantity" name="quantity" class="quantity form-control input-number" value="1" readonly >
-                                <span class="input-group-btn ml-2  border border-muted">
-								<button type="button" class="quantity-right-plus btn mt-2" data-type="plus" data-field="">
-                                        <i class="ion-ios-add"></i>
-                                	</button>
-                                    
+                                <span class="text-right">{{ review.created_at|date:'F j, Y ' }}</span>
+                              </h4>
+                              <p class="star">
+                                <span style="font-size: 25px; ">
+                                  {% if review.rating == 1 %}
+                                    <i class="ion-ios-star"></i>
+                                  {% elif review.rating == 2 %}
+                                    <i class="ion-ios-star"></i>
+                                    <i class="ion-ios-star"></i>
+                                  {% elif review.rating == 3 %}
+                                    <i class="ion-ios-star"></i>
+                                    <i class="ion-ios-star"></i>
+                                    <i class="ion-ios-star"></i>
+                                  {% elif review.rating == 4 %}
+                                    <i class="ion-ios-star"></i>
+                                    <i class="ion-ios-star"></i>
+                                    <i class="ion-ios-star"></i>
+                                    <i class="ion-ios-star"></i>
+                                  {% elif review.rating == 5 %}
+                                    <i class="ion-ios-star"></i>
+                                    <i class="ion-ios-star"></i>
+                                    <i class="ion-ios-star"></i>
+                                    <i class="ion-ios-star"></i>
+                                    <i class="ion-ios-star"></i>
+                                  {% else %}
+                                    No ratings
+                                  {% endif %}
                                 </span>
-	          	    </div>
-					<!-- quantity end  -->
-	          	
-          	</div>
-          	<p class="p-3">
-			 <!-- {% if is_in_cart %}
-				<a href="/cart/" class="btn btn-black py-3 px-5 mr-2">View  Cart</a>
-				{% else %}  -->
-				{% comment %} {% if messages %}
-				{% for message in messages %}
-				<div class=" "><h6 class=" {% if message.tags == 'success' %} text-success alert-success {% else %}  text-danger alert-danger {% endif %} py-2"> {{ message }} </h6></div>    
-				{% endfor %}
-				{% endif %} {% endcomment %}
-				<button type="submit" class="btn btn-black px-5 py-3" style="border-radius: 0cm;">
-					<span>Add to Cart</span>
-				</button>&nbsp;
-				{% comment %} <a href="" class="btn btn-primary py-3 px-5" style="color: black; border-radius: 0cm;"  data-toggle="modal" data-target="#sizeModal">Buy Now</a> {% endcomment %}
-				&nbsp; &nbsp;
-				{% if not is_in_wish %}
-				<a href="{% url 'add_to_wish' prod.product_id.id %}?next={{request.path}}"   title="add to wishlist"> <i class="fa-regular fa-heart fa-beat fa-2xl" style="color: #ff3246;"></i></a>
-				{% else %}
-				<a href="{% url 'remove_wish' prod.product_id.id %}?next={{request.path}}" title="remove from wishlist"><i class="fa-solid fa-heart fa-2xl" style="color: #ff3246;"></i></a>
-				{% endif %}
-			</p>
-			</form>
-			<!-- modal for buy now -->
-			<div class="modal fade" id="sizeModal" tabindex="-1" role="dialog" aria-labelledby="sizeModalLabel" aria-hidden="true" data-backdrop="false">
-				<div class="modal-dialog modal-dialog-centered" role="document">
-					<div class="modal-content border border-info">
-						<div class="modal-header">
-							<h5 class="modal-title" id="sizeModalLabel">Select Size</h5>
-							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-								<span aria-hidden="true">&times;</span>
-							</button>
-						</div>
-						<div class="modal-body">
-							<form  method="get" action="{% url 'buy_now' prod.product_id.id %}">
-								{% csrf_token %}
-								<div class="form-group">
-									<label for="size">Size:</label>
-									<select name="size" id="size" class="form-control">
-										<option value="7">7</option>
-										<option value="8">8</option>
-										<option value="9">9</option>
-										<option value="10">10</option>
-									</select>
-								</div>
-
-									<input type="text" class="form-control " id="name" name="quantity" placeholder="Enter the Quantity" required >
-								
-								<div class="text-center pt-2">
-									<button type="submit" class="btn btn-primary py-3 px-4" >Buy Now</button>
-								</div>
-							</form>
-						</div>
-					</div>
-				</div>
-			</div>
-			
-		 <!-- {% endif %}  -->
-				
-				
-    			</div>
-    		</div>
-    		<div class="row mt-5">
-          <div class="col-md-12 nav-link-wrap">
-            <div class="nav nav-pills d-flex text-center" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-              <a class="nav-link ftco-animate active mr-lg-1" id="v-pills-1-tab" data-toggle="pill" href="#v-pills-1" role="tab" aria-controls="v-pills-1" aria-selected="true">Description</a>
-
-              <a class="nav-link ftco-animate mr-lg-1" id="v-pills-2-tab" data-toggle="pill" href="#v-pills-2" role="tab" aria-controls="v-pills-2" aria-selected="false">Manufacturer</a>
-
-              <a class="nav-link ftco-animate" id="v-pills-3-tab" data-toggle="pill" href="#v-pills-3" role="tab" aria-controls="v-pills-3" aria-selected="false">Reviews</a>
-
+                              </p>
+                              <p>{{ review.review }}</p>
+                            </div>
+                          </div>
+                        {% endfor %}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
-          <div class="col-md-12 tab-wrap">
-            
-            <div class="tab-content bg-light" id="v-pills-tabContent">
-
-              <div class="tab-pane fade show active" id="v-pills-1" role="tabpanel" aria-labelledby="day-1-tab">
-              	<div class="p-4">
-	              	<h3 class="mb-4">{{prod.product_id.brand.brand_name}} {{prod.product_id.name}}</h3>
-	              	<p>{{prod.product_id.description}} <br> {{prod.product_id.name}}is a fusion of sporty style and street-ready flair. 
-						With a sleek and modern design, these high-top sneakers offer a fashion-forward look that effortlessly transitions from the court to the urban landscape. 
-						Crafted with {{prod.product_id.brand.brand_name}}'s renowned attention to comfort and performance,
-						 these high tops feature a supportive ankle design, cushioned insoles, and the iconic {{prod.product_id.brand.brand_name}} logo.
-						 Whether you're hitting the streets or making a statement on the court, the {{prod.product_id.brand.brand_name}} {{prod.product_id.name}}
-						  combines athletic functionality with trendsetting aesthetics</p>
-              	</div>
-              </div>
-
-              <div class="tab-pane fade" id="v-pills-2" role="tabpanel" aria-labelledby="v-pills-day-2-tab">
-              	<div class="p-4">
-	              	<h3 class="mb-4">Manufactured By {{prod.product_id.brand.brand_name}}</h3>
-	              	<p>
-                        {{prod.product_id.brand.brand_name}}, a prominent shoe manufacturer, is recognized for its commitment to quality craftsmanship and innovative shoe designs.
-						 Leveraging cutting-edge technology, Puma's shoe manufacturing process integrates performance-driven features with contemporary aesthetics.
-						  The brand's expertise spans various athletic disciplines, with a focus on creating footwear that not only meets the demands of sports 
-						  enthusiasts but also reflects current fashion trends.
-						  {{prod.product_id.brand.brand_name}}'s dedication to sustainability is evident in its responsible sourcing of materials and eco-friendly manufacturing practices.
-						   Through a combination of heritage and forward-thinking, Puma continues to shape the landscape of shoe manufacturing,
-						    producing a diverse range of athletic and lifestyle footwear that resonates with a global audience.</p>
-              	</div>
-              </div>
-              <div class="tab-pane fade" id="v-pills-3" role="tabpanel" aria-labelledby="v-pills-day-3-tab">
-              	<div class="row p-4">
-						   		<div class="col-md-10 ">
-						   			<h3 class="mb-4">{{review_count}} Reviews</h3>
-									{% for review in reviews %}
-
-						   			<div class="review border border-muted">
-								   		<div class="desc">
-								   			<h4>
-								   				<span class="text-left">{{review.user.first_name}} {{review.user.last_name}}   </span>
-								   				<span class="text-right">{{review.created_at|date:"F j, Y " }} </span>
-								   			</h4>
-								   			<p class="star">
-								   				<span  style="font-size: 25px; ">
-													{% if review.rating == 1 %}
-								   					<i class="ion-ios-star"></i>
-													{% elif review.rating == 2 %}
-								   					<i class="ion-ios-star"></i>
-								   					<i class="ion-ios-star"></i>
-													{% elif review.rating == 3 %}
-								   					<i class="ion-ios-star"></i>
-								   					<i class="ion-ios-star"></i>
-								   					<i class="ion-ios-star"></i>
-													{% elif review.rating == 4 %}
-								   					<i class="ion-ios-star"></i>
-								   					<i class="ion-ios-star"></i>
-								   					<i class="ion-ios-star"></i>
-								   					<i class="ion-ios-star"></i>
-													{% elif review.rating == 5 %}
-								   					<i class="ion-ios-star"></i>
-								   					<i class="ion-ios-star"></i>
-								   					<i class="ion-ios-star"></i>
-								   					<i class="ion-ios-star"></i>
-								   					<i class="ion-ios-star"></i>
-													{% else %}
-													No ratings
-													{% endif %}
-							   					</span>
-							   					{% comment %} <span class="text-right"><a href="#" class="reply"><i class="icon-reply"></i></a></span> {% endcomment %}
-								   			</p>
-								   			<p>{{review.review}}</p>
-								   		</div>
-								   	</div>
-
-									{% endfor %}
-						   		</div>
-						   		<!-- <div class="col-md-4">
-						   			<div class="rating-wrap">
-							   			<h3 class="mb-4">Give a Review</h3>
-							   			<p class="star">
-							   				<span>
-							   					<i class="ion-ios-star-outline"></i>
-							   					<i class="ion-ios-star-outline"></i>
-							   					<i class="ion-ios-star-outline"></i>
-							   					<i class="ion-ios-star-outline"></i>
-							   					<i class="ion-ios-star-outline"></i>
-							   					(98%)
-						   					</span>
-						   					<span>20 Reviews</span>
-							   			</p>
-							   			<p class="star">
-							   				<span>
-							   					<i class="ion-ios-star-outline"></i>
-							   					<i class="ion-ios-star-outline"></i>
-							   					<i class="ion-ios-star-outline"></i>
-							   					<i class="ion-ios-star-outline"></i>
-							   					<i class="ion-ios-star-outline"></i>
-							   					(85%)
-						   					</span>
-						   					<span>10 Reviews</span>
-							   			</p>
-							   			<p class="star">
-							   				<span>
-							   					<i class="ion-ios-star-outline"></i>
-							   					<i class="ion-ios-star-outline"></i>
-							   					<i class="ion-ios-star-outline"></i>
-							   					<i class="ion-ios-star-outline"></i>
-							   					<i class="ion-ios-star-outline"></i>
-							   					(98%)
-						   					</span>
-						   					<span>5 Reviews</span>
-							   			</p>
-							   			<p class="star">
-							   				<span>
-							   					<i class="ion-ios-star-outline"></i>
-							   					<i class="ion-ios-star-outline"></i>
-							   					<i class="ion-ios-star-outline"></i>
-							   					<i class="ion-ios-star-outline"></i>
-							   					<i class="ion-ios-star-outline"></i>
-							   					(98%)
-						   					</span>
-						   					<span>0 Reviews</span>
-							   			</p>
-							   			<p class="star">
-							   				<span>
-							   					<i class="ion-ios-star-outline"></i>
-							   					<i class="ion-ios-star-outline"></i>
-							   					<i class="ion-ios-star-outline"></i>
-							   					<i class="ion-ios-star-outline"></i>
-							   					<i class="ion-ios-star-outline"></i>
-							   					(98%)
-						   					</span>
-						   					<span>0 Reviews</span>
-							   			</p>
-							   		</div>
-						   		</div> -->
-						   	</div>
-              </div>
-            </div>
+        {% endfor %}
+      {% else %}
+        <div class="bg-light m-4 p-4">
+          <div class="h4 text-center mb-4">Product Unavailable</div>
+          <div class="text-center mb-4">
+            <a href="/shop/" class="btn btn-primary py-3 px-4">Continue Shopping</a>
           </div>
         </div>
-    	</div>
-		{% endfor %}
-	{% else %}
-	<div class="bg-light m-4 p-4">
-		<div class="h4  text-center mb-4"> Product Unavailable </div>
-		<div class="text-center mb-4"> <a href="/shop/" class="btn btn-primary py-3 px-4">Continue Shopping</a>   </div>
-	</div>
-	{% endif %}
+      {% endif %}
     </section>
-{% include 'footer.html' %}
+    {% include 'footer.html' %}
 
-  <!-- loader -->
-  <div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px"><circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/><circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00"/></svg></div>
+    <!-- loader -->
+    <div id="ftco-loader" class="show fullscreen">
+      <svg class="circular" width="48px" height="48px">
+        <circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee" />
+        <circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00" />
+      </svg>
+    </div>
 
-  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 
-  <!-- update the stock according to size -->
-  <script>
-    document.addEventListener("DOMContentLoaded", function() {
-        updateQuantity();
+    <script>
+      const submitButton = document.querySelector('#cartform button[type="submit"]')
+      
+      submitButton.addEventListener('click', (event) => {
+        const selectedSize = document.querySelector('.size:checked');
+        const term1 = selectedSize ? selectedSize.value : '';
+        const checkmsg = document.getElementById('checkboxMessage');
+      
+        if (term1) {
+          checkmsg.textContent = '';
+        } else 
+		{
+          checkmsg.textContent = 'Select a size';
+        }
+      });
+    </script>
+
+    <!-- update the stock according to size -->
+    <script>
+	document.querySelectorAll('input[name="size"]').forEach(function(radioButton) {
+        radioButton.addEventListener('change', function() {
+            // Get the selected size value
+            var selectedSize = this.value;
+            
+            // Call function to update quantity message
+            updateQuantity(selectedSize);
+        });
     });
-
-    function updateQuantity() {
-        var selectedSize = document.getElementById("size").value;
-        var quantityMessage = "Out of stock";
+    function updateQuantity(selectedSize) {
+        var quantityMessage = " ";
+		const checkmsg = document.getElementById('checkboxMessage');
         {% for vari in productvariants %}
             if ({{ vari.size }} == selectedSize && {{ vari.stock }} > 0) {
-                quantityMessage = "Only " + {{ vari.stock }} + " left";
+				checkmsg.textContent = ''
+				  if ({{vari.stock }} < 10 ){
+                quantityMessage = "Only " + {{ vari.stock }} + " left" ;
+			      }
             }
         {% endfor %}
         document.getElementById("quantityMessage").innerText = quantityMessage;
     }
 </script>
 
-  <script>
+    <script>
 		$(document).ready(function(){
 
 		var quantity=0;
@@ -483,20 +415,10 @@ thumbnailContainer.addEventListener('mouseover', function () {
 });
 	</script>
 
-	<!-- submit with size -->
-	<script>
-		$(document).ready(function() {
-			$("#sizeForm").submit(function(e) {
-				e.preventDefault();
-				console.log("Form submitted with size: " + $("#size").val());
-				$('#sizeModal').modal('hide');
-			});
-		});
-	</script>
-	<script>
+    <script>
 		$(document).ready(function () {
 		  $('.toast').toast('show');
 		});
 	  </script>
   </body>
-  {% endblock maincontent %} 
+{% endblock maincontent %}

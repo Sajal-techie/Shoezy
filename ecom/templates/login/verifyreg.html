@@ -1,73 +1,75 @@
-{% extends "base.html" %}
-{% block navbar %}{% include 'navbar.html' %}{% endblock navbar %}
+{% extends 'base.html' %}
+{% block navbar %}
+  {% include 'navbar.html' %}
+{% endblock %}
 {% block maincontent %}
-
-<form method="post" id="otpform" >
-{% csrf_token %}
-<div class="d-flex justify-content-center align-items-center container kk">
-    <div class="card py-5 px-3">
-      <h5 class="m-0 text-center h4"><b>OTP Verification</b></h5> 
-      <span class="mobile-text text-center h5">
-        <b>6 </b> digit Verification code send into your email<br>
-        <b class="bbb">Check mail !!</b>
-      </span>
-<!-- shwowing error message -->
+  <form method="post" id="otpform">
+    {% csrf_token %}
+    <div class="d-flex justify-content-center align-items-center container kk">
+      <div class="card py-5 px-3">
+        <h5 class="m-0 text-center h4"><b>OTP Verification</b></h5>
+        <span class="mobile-text text-center h5">
+          <b>6</b> digit Verification code send into your email<br />
+          <b class="bbb">Check mail !!</b>
+        </span>
+        <!-- shwowing error message -->
         {% if messages %}
-       {% for message in messages %}
-              <h4 class="text-center text-danger"> {{ message }} </h4>
-            {% endfor %}
+          {% for message in messages %}
+            <h4 class="text-center text-danger">{{ message }}</h4>
+          {% endfor %}
         {% endif %}
-      <div class="d-flex flex-row mt-5 p-5 mx-5 text-center">
-        <input id="otp" type="number" name="otp" class="form-control" autofocus="" required/>
+        <div class="d-flex flex-row mt-5 p-5 mx-5 text-center">
+          <input id="otp" type="number" name="otp" class="form-control" autofocus="" required />
+        </div>
+        <div class="text-center">
+          <button class="px-5 py-3 validate1" type="submit">Verify</button>
+        </div>
+        <div class="text-center mt-5 bbb">
+          <span class="d-block mobile-text" id="countdown"></span>
+          <a href="/resendotp/{{ userid }}" class="text-danger"><span class="d-block mobile-text" id="resend"></span></a>
+        </div>
       </div>
-      <div class=" text-center">
-        <button class="px-5 py-3  validate1" type="submit">Verify</button>
-      </div>
-       <div class="text-center mt-5 bbb ">
-        <span class="d-block mobile-text" id="countdown"></span>
-        <a href="/resendotp/{{ userid }}" class="text-danger"><span class="d-block mobile-text" id="resend"></span></a>
-       </div>
     </div>
-</div>
-</form>
+  </form>
 
-<script>let timerOn = true;
-  function timer(remaining) {
-    var m = Math.floor(remaining / 60);
-    var s = remaining % 60;
-    m = m < 10 ? "0" + m : m;
-    s = s < 10 ? "0" + s : s;
-    document.getElementById("countdown").innerHTML = `Time left: ${m} : ${s}`;
-    remaining -= 1;
-    if (remaining >= 0 && timerOn) {
-      setTimeout(function () {
-        timer(remaining);
-      }, 1000);
-      document.getElementById("resend").innerHTML = `
-      `;
-      return;
+  <script>
+    let timerOn = true
+    function timer(remaining) {
+      var m = Math.floor(remaining / 60)
+      var s = remaining % 60
+      m = m < 10 ? '0' + m : m
+      s = s < 10 ? '0' + s : s
+      document.getElementById('countdown').innerHTML = `Time left: ${m} : ${s}`
+      remaining -= 1
+      if (remaining >= 0 && timerOn) {
+        setTimeout(function () {
+          timer(remaining)
+        }, 1000)
+        document.getElementById('resend').innerHTML = `
+          `
+        return
+      }
+      if (!timerOn) {
+        return
+      }
+      document.getElementById('resend').innerHTML = `Don't receive the code? 
+        <span class="font-weight-bold text-color cursor" onclick="timer(60)">Resend
+        </span>`
     }
-    if (!timerOn) {
-      return;
-    }
-    document.getElementById("resend").innerHTML = `Don't receive the code? 
-    <span class="font-weight-bold text-color cursor" onclick="timer(60)">Resend
-    </span>`;
-  }
-  timer(60);
+    timer(60)
   </script>
 
-<!-- validation for otp -->
+  <!-- validation for otp -->
   <script>
-    const form = document.getElementById("otpform")
-    form.addEventListener("submit", function(event){
-        const otp =  document.getElementById("otp").value;
-
-        if(otp.length !=6 ){
-            event.preventDefault();
-            alert("enter valid otp (6-digits)!")
-        }
-    });
-</script>
-{% include 'footer.html' %}
-{% endblock maincontent %}
+    const form = document.getElementById('otpform')
+    form.addEventListener('submit', function (event) {
+      const otp = document.getElementById('otp').value
+    
+      if (otp.length != 6) {
+        event.preventDefault()
+        alert('enter valid otp (6-digits)!')
+      }
+    })
+  </script>
+  {% include 'footer.html' %}
+{% endblock %}

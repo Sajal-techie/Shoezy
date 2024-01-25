@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" />
     <title>Invoice</title>
     <style>
         body {
@@ -46,54 +46,60 @@
             }
         }
     </style>
-</head>
-<body>
-
+  </head>
+  <body>
     <div class="invoice">
-        <div class="header">
-            <h1>Invoice</h1>
-            <p>Date:{{date}}</p>
-        </div>
+      <div class="header">
+        <h1>Invoice</h1>
+        <p>Date:{{ date }}</p>
+      </div>
 
-        <div class="customer-info text-capitalize">
-            <p><strong>Customer Name:</strong>{{item.user1.first_name}}  {{item.user1.last_name}}</p>
-            <p><strong>Address:</strong> 
-                                  <ul class="li ">
-                                    <li>{{ item.address1.name }}</li>
-                                    <li>{{item.address1.district}},{{item.address1.state}},{{item.address1.country}}</li>
-                                    <li>{{item.address1.house}}, {{item.address1.town}}</li>
-                                    <li>PIN: {{item.address1.pincode}}</li>
-                                    <li>Number: {{item.address1.number}}</li>
-                                    </ul></p>
-        </div>
+      <div class="customer-info text-capitalize">
+        <p>
+          <strong>Customer Name:</strong>{{ item.user1.first_name }} {{ item.user1.last_name }}
+        </p>
 
-        <table class="bordered-table">
-            <thead>
-                <tr>
-                    <th>Product</th>
-                    <th>Size</th>
-                    <th>Price</th>
-                    <th>Quantity</th>
-                    <th>Total</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>{{item.product.product_id.brand.brand_name}} {{item.product.product_id.name}}</td>
-                    <td>{{item.product.size}}</td>
-                    <td>{{item.product.product_id.selling_price}}</td>
-                    <td>{{item.quantity}}</td>
-                    <td>₹{{item.amount}}</td>
-                </tr>
-                <!-- Add more rows as needed -->
-            </tbody>
-        </table>
+        <p>
+          <strong>Address:</strong>
+          <ul class="li">
+            <li>{{ item.address1.name }}</li>
+            <li>{{ item.address1.district }},{{ item.address1.state }},{{ item.address1.country }}</li>
+            <li>{{ item.address1.house }}, {{ item.address1.town }}</li>
+            <li>PIN: {{ item.address1.pincode }}</li>
+            <li>Number: {{ item.address1.number }}</li>
+          </ul>
+        </p>
+      </div>
 
-        <div class="total">
-            <p><strong>Total Amount:</strong>₹{{item.amount}}</p>
-        </div>
-        <a href="/track_order/{{item.id}}" class="btn btn-danger text-decoration-none" >back</a>
-        <a href=""class="btn btn-danger text-decoration-none" onclick="downloadInvoice()">download invoice</a>
+      <table class="bordered-table">
+        <thead>
+          <tr>
+            <th>Product</th>
+            <th>Size</th>
+            <th>Price</th>
+            <th>Quantity</th>
+            <th>Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>{{ item.product.product_id.brand.brand_name }} {{ item.product.product_id.name }}</td>
+            <td>{{ item.product.size }}</td>
+            <td>{{ item.product.product_id.selling_price }}</td>
+            <td>{{ item.quantity }}</td>
+            <td>₹{{ item.amount }}</td>
+          </tr>
+          <!-- Add more rows as needed -->
+        </tbody>
+      </table>
+
+      <div class="total">
+        <p>
+          <strong>Total Amount:</strong>₹{{ item.amount }}
+        </p>
+      </div>
+      <a href="/track_order/{{ item.id }}" class="btn btn-danger text-decoration-none">back</a>
+      <a href="" class="btn btn-danger text-decoration-none" onclick="downloadInvoice()">download invoice</a>
     </div>
     <script>
     function downloadInvoice() 
@@ -101,6 +107,5 @@
         window.print();
     }
 </script>
-
-</body>
+  </body>
 </html>

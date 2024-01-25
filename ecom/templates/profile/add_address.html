@@ -42,7 +42,7 @@
           <div class="col-md-6">
             <div class="form-group">
               <label id="number_label" for="id_number">{{ form.number.label }}(+91)</label>
-              <input type="number" id="id_number" name="number" maxlength="10" required/>
+              <input type="number" id="id_number" name="number" maxlength="10" required />
             </div>
             <div class="form-group">
               <label for="state">State</label>
@@ -54,7 +54,7 @@
             </div>
             <div class="form-group">
               <label id="pinlabel" for="id_pin">{{ form.pincode.label }}</label>
-              <input type="number" id="id_pin" name="pincode" required/>
+              <input type="number" id="id_pin" name="pincode" required />
             </div>
 
             <div class="form-group">
@@ -70,22 +70,21 @@
     </div>
   </div>
   <script>
-    const form = document.getElementById("myForm")
-    form.addEventListener("submit", function(event){
-        const inputnumber =  document.getElementById("id_number")
-        const pincode =  document.getElementById("id_pin")
-        const number = inputnumber.value;
-        const pin = pincode.value;
-
-        if (number.length != 10){
-            event.preventDefault();
-            alert("enter a valid number !")
-        }
-        else if(pin.length !=6 ){
-            event.preventDefault();
-            alert("enter valid pincode (6-digits)!")
-        }
-    });
-</script>
+    const form = document.getElementById('myForm')
+    form.addEventListener('submit', function (event) {
+      const inputnumber = document.getElementById('id_number')
+      const pincode = document.getElementById('id_pin')
+      const number = inputnumber.value
+      const pin = pincode.value
+    
+      if (number.length != 10) {
+        event.preventDefault()
+        alert('enter a valid number !')
+      } else if (pin.length != 6) {
+        event.preventDefault()
+        alert('enter valid pincode (6-digits)!')
+      }
+    })
+  </script>
   {% include 'footer.html' %}
 {% endblock %}

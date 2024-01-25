@@ -5,36 +5,41 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('cart', '0013_checkout'),
-        ('coupon', '0001_initial'),
+        ("cart", "0013_checkout"),
+        ("coupon", "0001_initial"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='checkout',
-            name='coupon',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to='coupon.coupen'),
+            model_name="checkout",
+            name="coupon",
+            field=models.ForeignKey(
+                null=True,
+                on_delete=django.db.models.deletion.SET_NULL,
+                to="coupon.coupen",
+            ),
         ),
         migrations.AddField(
-            model_name='checkout',
-            name='coupon_active',
+            model_name="checkout",
+            name="coupon_active",
             field=models.BooleanField(default=False, null=True),
         ),
         migrations.AddField(
-            model_name='checkout',
-            name='payable_amount',
+            model_name="checkout",
+            name="payable_amount",
             field=models.DecimalField(decimal_places=2, default=0, max_digits=10),
         ),
         migrations.AlterField(
-            model_name='checkout',
-            name='size',
+            model_name="checkout",
+            name="size",
             field=models.CharField(blank=True, max_length=20, null=True),
         ),
         migrations.AlterField(
-            model_name='checkout',
-            name='sub_total',
-            field=models.DecimalField(decimal_places=2, default=0.0, max_digits=10, null=True),
+            model_name="checkout",
+            name="sub_total",
+            field=models.DecimalField(
+                decimal_places=2, default=0.0, max_digits=10, null=True
+            ),
         ),
     ]

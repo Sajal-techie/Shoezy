@@ -5,19 +5,32 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('home', '0004_customuser_dob_customuser_gender_customuser_number'),
-        ('user_profile', '0004_address_is_available'),
+        ("home", "0004_customuser_dob_customuser_gender_customuser_number"),
+        ("user_profile", "0004_address_is_available"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Wallet',
+            name="Wallet",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('amount', models.IntegerField(blank=True, null=True)),
-                ('user_id', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='home.customuser')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("amount", models.IntegerField(blank=True, null=True)),
+                (
+                    "user_id",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="home.customuser",
+                    ),
+                ),
             ],
         ),
     ]

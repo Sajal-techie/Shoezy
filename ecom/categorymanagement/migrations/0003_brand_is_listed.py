@@ -4,15 +4,14 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('categorymanagement', '0002_rename_brand_name_brand_brand_name'),
+        ("categorymanagement", "0002_rename_brand_name_brand_brand_name"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='brand',
-            name='is_listed',
+            model_name="brand",
+            name="is_listed",
             field=models.BooleanField(default=True),
         ),
     ]

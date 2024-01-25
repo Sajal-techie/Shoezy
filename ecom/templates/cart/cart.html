@@ -1,183 +1,185 @@
- {% extends "base.html" %} 
+{% extends 'base.html' %}
 {% load static %}
-  <body class="goto-here">
-{% block navbar %}
-{% include 'navbar.html' %}
-{% endblock navbar %}
-{% block maincontent %}
-
+<body class="goto-here">
+  {% block navbar %}
+    {% include 'navbar.html' %}
+  {% endblock navbar %}
+  {% block maincontent %}
     <section class="ftco-section ftco-cart">
-        <h1 class=" text-center scs">Cart</h1>
-        {% if messages %}
-		<div aria-live="polite" aria-atomic="true" style="position: fixed; top: 15%; right: 3%; min-height: 200px; min-width:300px;  z-index: 1000">
-		  {% for message in messages %}
-			<div class="toast   border  {% if message.tags == 'success' %} border-success {% else %}border-danger{% endif %}" role="alert" aria-live="assertive" aria-atomic="true" data-delay="5000" style="margin-top: 10px;;">
-			  <div class="toast-header">
-				<strong class="mr-auto {% if message.tags == 'success' %}text-success{% else %}text-danger{% endif %}  text-capitalize">{{ message.tags }}</strong>
-				<button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
-				  <span aria-hidden="true">&times;</span>
-				</button>
-			  </div>
-			  <div class="toast-body">
-				{{ message }}
-			  </div>
-			</div>
-		  {% endfor %}
-		</div>
-	  {% endif %}
-        {% if cart_item %}
-			<div class="container">
-				<div class="row">
-    			<div class="col-md-12 ">
-    				<div class="cart-list" id="reload">
-	    				<table class="table">
-						    <thead class="thead-primary">
-						      <tr class="text-center">
-						        <th>&nbsp;</th>
-						        <th>&nbsp;</th>
-						        <th>Product</th>
-						        <th>Size</th>
-						        <th>Price</th>
-						        <th>Quantity</th>
-						        <th>Total</th>
-						      </tr>
-						    </thead>
-						    <tbody>
-                            
-                            {% for cart_item in cart_item %}
-						      <tr class="text-center">
-                                
-						        <td class="product-remove"><a href="/remove_cart/{{cart_item.id}}"><span class="ion-ios-close"></span></a></td>
-						        
-						        <td class="image-prod"><a href="/singleproduct/{{cart_item.product.product_id.id}}"><div class="img" style="width: 200px;  background-image:url({{ cart_item.product.product_id.image1.url }}); " ></div></a></td>
-						        
-						        <td class="product-name">
-						        	<h3>{{ cart_item.product.product_id.brand  }} </h3>
-						        	<p>{{ cart_item.product.product_id.name }}</p>
-						        </td>
-						        
-						        <td class="price">{{ cart_item.size }}</td>
-                                {% with offer_price=cart_item.product.product_id.offer_price.0 %}
-                                    {% if offer_price < cart_item.product.product_id.selling_price %}
-                                    <td class="price">{{ offer_price }}</td>
-                                    {% else %}
-                                    <td class="price">{{ cart_item.product.product_id.selling_price }}</td>
-                                    {% endif %}
-                                {% endwith %}						        
-						        <td class="quantity">
-                                    <input type="hidden" class="pro_id" value="{{cart_item.id}}">
-                                   {% csrf_token %} 
-						        	<div class="input-group mb-3">
-                                        <div class="input-group-prepend">
-                                            <button class="change_quantity quantity-left-minus btn btn-outline-secondary" data-action="minus" data-product-id="{{ cart_item.id }}">–</button>
-                                        </div>
-                                        
-                                        <input type="text" name="quantity" class="quantity1 form-control input-number" value="{{ cart_item.quantity }}" min="1" max="100" disabled>
-                                        <div class="input-group-append">
-                                            <button class="change_quantity quantity-right-plus btn btn-outline-secondary" data-action="plus" data-product-id="{{ cart_item.id }}">+</button>
-                                        </div>
-                                    </div>
-					          </td>
-						        <td class="total">{{cart_item.sub_total}}</td>
-						      </tr>
-                            
-                            {% endfor %}
-            
-						    
-                            </tbody>
-						  </table>
-                        </div>
-					  </div>
-    			</div>
-    		</div>
-    		<div class="row justify-content-end mt-4">
-                <div class="col col-lg-6 col-md-6 mt-5 cart-wrap ftco-animate">
-                    <div class="cart-total mb-3" id="2load">
-                        <h3>Cart Totals</h3>
-                        <p class="d-flex">
-                            <span>Subtotal</span>
-                            <span>₹{{total}}</span>
-                        </p>
-                        <p class="d-flex">
-                            <span>Delivery</span>
-                            <span>₹0.00</span>
-                        </p>
-                        <p class="d-flex">
-                            <span>Discount</span>
-                            <span>₹0.00</span>
-                        </p>
-                        <hr>
-                        <p class="d-flex total-price">
-                            <span>Total</span>
-                            <span>₹{{total}}</span>
-                        </p>
-                    </div>
-                    <p class="text-center"><a href="/checkout/" class="btn btn-primary py-3 px-3">Proceed to Checkout</a></p>
-                </div>
-                
+      <h1 class="text-center scs">Cart</h1>
+      {% if messages %}
+        <div aria-live="polite" aria-atomic="true" style="position: fixed; top: 15%; right: 3%; min-height: 200px; min-width:300px;  z-index: 1000">
+          {% for message in messages %}
+            <div class="toast   border  {% if message.tags == 'success' %}
+                  border-success {% else %}border-danger
+              {% endif %}"
+              role="alert"
+              aria-live="assertive"
+              aria-atomic="true"
+              data-delay="5000"
+              style="margin-top: 10px;;">
+              <div class="toast-header">
+                <strong class="mr-auto {% if message.tags == 'success' %}
+                      text-success{% else %}text-danger
+                  {% endif %}  text-capitalize">
+                  {{ message.tags }}
+                </strong>
+                <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              </div>
+              <div class="toast-body">{{ message }}</div>
             </div>
-			</div>
-		</section>
-		{% else %}
-        <div class="bg-light m-4 p-4">
-            <div class="h4  text-center mb-4"> Cart is empty </div>
-            <div class="text-center mb-4"> <a href="/shop/" class="btn btn-primary py-3 px-4">Continue Shopping</a>   </div>
+          {% endfor %}
         </div>
-        {% endif %}
+      {% endif %}
+      {% if cart_item %}
+        <div class="container">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="cart-list" id="reload">
+                <table class="table">
+                  <thead class="thead-primary">
+                    <tr class="text-center">
+                      <th>&nbsp;</th>
+                      <th>&nbsp;</th>
+                      <th>Product</th>
+                      <th>Size</th>
+                      <th>Price</th>
+                      <th>Quantity</th>
+                      <th>Total</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for cart_item in cart_item %}
+                      <tr class="text-center">
+                        <td class="product-remove">
+                          <a href="/remove_cart/{{ cart_item.id }}"><span class="ion-ios-close"></span></a>
+                        </td>
 
-{% include 'footer.html' %}
-    
-  
+                        <td class="image-prod">
+                          <a href="/singleproduct/{{ cart_item.product.product_id.id }}"><div class="img" style="width: 200px;  background-image:url({{ cart_item.product.product_id.image1.url }}); "></div></a>
+                        </td>
 
-  <!-- loader -->
-  {% comment %} <div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px"><circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/><circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00"/></svg></div> {% endcomment %}
-  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-<script>
+                        <td class="product-name">
+                          <h3>{{ cart_item.product.product_id.brand }}</h3>
+                          <p>{{ cart_item.product.product_id.name }}</p>
+                        </td>
 
+                        <td class="price">{{ cart_item.size }}</td>
+                        {% with offer_price=cart_item.product.product_id.offer_price.0 %}
+                          {% if offer_price < cart_item.product.product_id.selling_price %}
+                            <td class="price">{{ offer_price }}</td>
+                          {% else %}
+                            <td class="price">{{ cart_item.product.product_id.selling_price }}</td>
+                          {% endif %}
+                        {% endwith %}
+                        <td class="quantity">
+                          <input type="hidden" class="pro_id" value="{{ cart_item.id }}" />
+                          {% csrf_token %}
+                          <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                              <button class="change_quantity quantity-left-minus btn btn-outline-secondary" data-action="minus" data-product-id="{{ cart_item.id }}">–</button>
+                            </div>
 
-     
-    $(document).ready(function() {
-    $('#reload').on('click', '.change_quantity', function(e) {
-        e.preventDefault();
-        
-        var products_id = $(this).data('product-id');
+                            <input type="text" name="quantity" class="quantity1 form-control input-number" value="{{ cart_item.quantity }}" min="1" max="100" disabled />
+                            <div class="input-group-append">
+                              <button class="change_quantity quantity-right-plus btn btn-outline-secondary" data-action="plus" data-product-id="{{ cart_item.id }}">+</button>
+                            </div>
+                          </div>
+                        </td>
+                        <td class="total">{{ cart_item.sub_total }}</td>
+                      </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row justify-content-end mt-4">
+          <div class="col col-lg-6 col-md-6 mt-5 cart-wrap ftco-animate">
+            <div class="cart-total mb-3" id="2load">
+              <h3>Cart Totals</h3>
+              <p class="d-flex">
+                <span>Subtotal</span>
+                <span>₹{{ total }}</span>
+              </p>
+              <p class="d-flex">
+                <span>Delivery</span>
+                <span>₹0.00</span>
+              </p>
+              <p class="d-flex">
+                <span>Discount</span>
+                <span>₹0.00</span>
+              </p>
+              <hr />
+              <p class="d-flex total-price">
+                <span>Total</span>
+                <span>₹{{ total }}</span>
+              </p>
+            </div>
+            <p class="text-center">
+              <a href="/checkout/" class="btn btn-primary py-3 px-3">Proceed to Checkout</a>
+            </p>
+          </div>
+        </div>
+      {% else %}
+        <div class="bg-light m-4 p-4">
+          <div class="h4 text-center mb-4">Cart is empty</div>
+          <div class="text-center mb-4">
+            <a href="/shop/" class="btn btn-primary py-3 px-4">Continue Shopping</a>
+          </div>
+        </div>
+      {% endif %}
+    </section>
+    {% include 'footer.html' %}
 
-        var token = $('input[name=csrfmiddlewaretoken]').val();
-         
-        var action = $(this).data('action');
-        $.ajax({
-            method: "POST",
+    <!-- loader -->
+ <div id="ftco-loader" class="show fullscreen">
+      <svg class="circular" width="48px" height="48px">
+        <circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee" />
+        <circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00" />
+      </svg>
+    </div> 
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script>
+      $(document).ready(function () {
+        $('#reload').on('click', '.change_quantity', function (e) {
+          e.preventDefault()
+      
+          var products_id = $(this).data('product-id')
+      
+          var token = $('input[name=csrfmiddlewaretoken]').val()
+      
+          var action = $(this).data('action')
+          $.ajax({
+            method: 'POST',
             url: '/change_quantity/',
-            data:  {
-                'products_id':products_id,
-
-                'action': action,
-                csrfmiddlewaretoken:token
+            data: {
+              products_id: products_id,
+      
+              action: action,
+              csrfmiddlewaretoken: token
             },
-            
-            success: function(response) {
-              if(response.status) {
-                   $('#reload').load('/cart/ #reload');
-                   $('#2load').load('/cart/ #2load');
-               }
+      
+            success: function (response) {
+              if (response.status) {
+                $('#reload').load('/cart/ #reload')
+                $('#2load').load('/cart/ #2load')
+              }
             },
             error: (error) => {
-              console.log(error);
+              console.log(error)
             }
-          });
-    
-    });
+          })
+        })
+      })
+    </script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 
-});
-    
-</script>
-<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-
-<script>
-  $(document).ready(function () {
-    $('.toast').toast('show');
-  });
-</script>
-
-      {% endblock maincontent %}
-  </body>
+    <script>
+      $(document).ready(function () {
+        $('.toast').toast('show')
+      })
+    </script>
+  {% endblock maincontent %}
+</body>

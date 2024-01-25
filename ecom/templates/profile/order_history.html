@@ -1,56 +1,82 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 {% load humanize %}
-{% block navbar %}{% include "navbar.html" %}{% endblock navbar %}
+{% block navbar %}
+  {% include 'navbar.html' %}
+{% endblock navbar %}
 
 {% block maincontent %}
-{% if order_items %}
-<div class="container mb-3">
-    <h2 class="mb-4">Order History</h2>
+  {% if order_items %}
+    <div class="container mb-3">
+      <h2 class="mb-4">Order History</h2>
 
-    <div class="table-responsive">
+      <div class="table-responsive">
         <table class="table table-bordered table-striped">
-            <thead class="thead-dark">
+          <thead class="thead-dark">
             <tr>
-                <th scope="col">No.</th>
-                <th scope="col">Name <i class="fas fa-user"></i></th>
-                <th scope="col">Address <i class="fas fa-list"></i></th>
-                <th scope="col">Order Date <i class="fas fa-calendar"></i></th>
-                <th scope="col">Subtotal <i class="fas fa-inr"></i></th>
-                <th scope="col">Coupon Discount <i class="fas fa-tags"></i></th>
-                <th scope="col">Total Amount <i class="fas fa-inr"></i></th>
-                <th scope="col">Payment Method <i class="fas fa-shield"></i></th>
-                <th scope="col">View Details <i class="fas fa-eye"></i></th>
+              <th scope="col">No.</th>
+              <th scope="col">
+                Name <i class="fas fa-user"></i>
+              </th>
+              <th scope="col">
+                Address <i class="fas fa-list"></i>
+              </th>
+              <th scope="col">
+                Order Date <i class="fas fa-calendar"></i>
+              </th>
+              <th scope="col">
+                Subtotal <i class="fas fa-inr"></i>
+              </th>
+              <th scope="col">
+                Coupon Discount <i class="fas fa-tags"></i>
+              </th>
+              <th scope="col">
+                Total Amount <i class="fas fa-inr"></i>
+              </th>
+              <th scope="col">
+                Payment Method <i class="fas fa-shield"></i>
+              </th>
+              <th scope="col">
+                View Details <i class="fas fa-eye"></i>
+              </th>
             </tr>
-            </thead>
-            <tbody>
+          </thead>
+          <tbody>
             {% for item in order_items %}
-            <tr>
-                <td>{{forloop.counter}}</td>
+              <tr>
+                <td>{{ forloop.counter }}</td>
                 <td>{{ item.address.name }}</td>
                 <td>
-                {{ item.address.country }},{{ item.address.state }},{{ item.address.district }} <br>
-                    House:{{ item.address.house }},{{ item.address.town }}, <br>
-                    Pin: {{ item.address.pincode }},   
-                    no: {{ item.address.number }} 
+                  {{ item.address.country }},{{ item.address.state }},{{ item.address.district }} <br />
+                  House:{{ item.address.house }},{{ item.address.town }}, <br />
+                  Pin: {{ item.address.pincode }}, no: {{ item.address.number }}
                 </td>
                 <td>{{ item.order_date }}</td>
                 <td>₹{{ item.og_amount }}</td>
-                <td>{% if item.coupon_id.discount_amount %} ₹{{ item.coupon_id.discount_amount }} {% else %} 0 {% endif %}</td>
+                <td>
+                  {% if item.coupon_id.discount_amount %}
+                    ₹{{ item.coupon_id.discount_amount }}
+                  {% else %}
+                    0
+                  {% endif %}
+                </td>
                 <td class="font-weight-bold text-success">₹{{ item.total }}</td>
                 <td>{{ item.payment_mode }}</td>
-                <td><a class="btn btn-dark text-white" href="/order_history_items/{{item.id}}">View Details</a></td>
-            </tr>
-            {% endfor %} 
-            </tbody>
+                <td>
+                  <a class="btn btn-dark text-white" href="/order_history_items/{{ item.id }}">View Details</a>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
         </table>
+      </div>
     </div>
-</div>
-
   {% else %}
-  <div class="bg-light m-4 p-4">
-    <div class="h4  text-center mb-4"> You haven't ordered yet </div>
-    <div class="text-center mb-4"> <a href="/shop/" class="btn btn-primary py-3 px-4">Continue Shopping</a>   </div>
-  </div>
+    <div class="bg-light m-4 p-4">
+      <div class="h4 text-center mb-4">You haven't ordered yet</div>
+      <div class="text-center mb-4">
+        <a href="/shop/" class="btn btn-primary py-3 px-4">Continue Shopping</a>
+      </div>
+    </div>
   {% endif %}
-  {% include "footer.html" %}
-  {% endblock maincontent %}
+  {% include 'footer.html' %}
+{% endblock maincontent %}

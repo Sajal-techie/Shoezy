@@ -5,20 +5,24 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('cart', '0009_alter_cart_size'),
-        ('productmanagement', '0013_productvariant_color'),
+        ("cart", "0009_alter_cart_size"),
+        ("productmanagement", "0013_productvariant_color"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='wishlist',
-            name='product',
+            model_name="wishlist",
+            name="product",
         ),
         migrations.AddField(
-            model_name='wishlist',
-            name='product_id',
-            field=models.ForeignKey(default=23, null=True, on_delete=django.db.models.deletion.SET_NULL, to='productmanagement.product'),
+            model_name="wishlist",
+            name="product_id",
+            field=models.ForeignKey(
+                default=23,
+                null=True,
+                on_delete=django.db.models.deletion.SET_NULL,
+                to="productmanagement.product",
+            ),
         ),
     ]

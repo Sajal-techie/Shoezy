@@ -4,18 +4,17 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('cart', '0017_remove_checkout_product_remove_checkout_size'),
+        ("cart", "0017_remove_checkout_product_remove_checkout_size"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='checkout',
-            name='quantity',
+            model_name="checkout",
+            name="quantity",
         ),
         migrations.RemoveField(
-            model_name='wishlist',
-            name='stock',
+            model_name="wishlist",
+            name="stock",
         ),
     ]

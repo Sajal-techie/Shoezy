@@ -4,15 +4,14 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('order_management', '0011_orderproducts_reason'),
+        ("order_management", "0011_orderproducts_reason"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='orderproducts',
-            name='reason',
+            model_name="orderproducts",
+            name="reason",
             field=models.TextField(blank=True, null=True),
         ),
     ]

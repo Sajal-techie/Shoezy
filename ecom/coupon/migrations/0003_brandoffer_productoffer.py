@@ -5,32 +5,67 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('categorymanagement', '0003_brand_is_listed'),
-        ('coupon', '0002_alter_coupen_discount_amount'),
-        ('productmanagement', '0013_productvariant_color'),
+        ("categorymanagement", "0003_brand_is_listed"),
+        ("coupon", "0002_alter_coupen_discount_amount"),
+        ("productmanagement", "0013_productvariant_color"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='BrandOffer',
+            name="BrandOffer",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('offer_percentage', models.FloatField(blank=True, default=0, null=True)),
-                ('is_active', models.BooleanField(default=True)),
-                ('created_at', models.DateField(auto_now_add=True)),
-                ('brand', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='categorymanagement.brand')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "offer_percentage",
+                    models.FloatField(blank=True, default=0, null=True),
+                ),
+                ("is_active", models.BooleanField(default=True)),
+                ("created_at", models.DateField(auto_now_add=True)),
+                (
+                    "brand",
+                    models.ForeignKey(
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="categorymanagement.brand",
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='ProductOffer',
+            name="ProductOffer",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('offer_percentage', models.FloatField(blank=True, default=0, null=True)),
-                ('is_active', models.BooleanField(default=True)),
-                ('created_at', models.DateField(auto_now_add=True)),
-                ('product', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='productmanagement.product')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "offer_percentage",
+                    models.FloatField(blank=True, default=0, null=True),
+                ),
+                ("is_active", models.BooleanField(default=True)),
+                ("created_at", models.DateField(auto_now_add=True)),
+                (
+                    "product",
+                    models.ForeignKey(
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="productmanagement.product",
+                    ),
+                ),
             ],
         ),
     ]

@@ -4,18 +4,17 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('cart', '0016_alter_checkout_discount_amount'),
+        ("cart", "0016_alter_checkout_discount_amount"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='checkout',
-            name='product',
+            model_name="checkout",
+            name="product",
         ),
         migrations.RemoveField(
-            model_name='checkout',
-            name='size',
+            model_name="checkout",
+            name="size",
         ),
     ]
