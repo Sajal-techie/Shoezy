@@ -4,7 +4,6 @@
     <link rel="stylesheet" href="{% static 'css/styletable.css' %}">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
@@ -22,16 +21,18 @@
         </div>
         <div class="row input-group mb-4 mt-4">
             <form action="/view_returns/">
-            <input type="search" name="search" class="form-control rounded offset-1 col-lg-8 col-sm-4 " placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
+            <input type="search" name="search" class="form-control rounded offset-1 col-lg-8 col-sm-4 " placeholder="username or product name or status" aria-label="Search" aria-describedby="search-addon" />
             <button type="submit" class="btn btn-outline-primary btn-primary col-lg-2 col-sm-3 " >search</button>
             </form>
           </div>
                 {% if messages %}
                     {% for message in messages %}
                         <div class="text-center">
-                            <h3 class=" text-danger"> {{ message }} </h3>
+                            <h3 class="{% if message.tags == 'success' %} 
+                                text-success {% else %} text-danger
+                                {% endif %}"> {{ message }}
+                            </h3>
                         </div>
-                        
                     {% endfor %}
                 {% endif %}
         <table class="table table-striped table-hover ms-3">
@@ -44,7 +45,6 @@
                     <th>Size</th>
                     <th>Payment</th>
                     <th>Ordered ,<br> Delivered date</th>
-                    <th>Reason</th>
                     <th>Requested Date</th>
                     <th>Return Date</th>
                     <th>Status</th>
@@ -61,20 +61,15 @@
                     <td> {{item.order.amount}} x {{item.order.quantity}}  </td>
                     <td> {{item.order.size}} </td>
                     <td> {{item.order.order_id.payment_mode}} </td>
-                    <td >
-                            {{item.order.order_id.order_date}}, <br> {{item.order.delivery_date}} 
-                        <!-- <a href="#editEmployeeModal" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
-                        <a href="#listEmployeeModal" class="delete" data-toggle="modal"><i class="fa-solid fa-eye  fa-lg" style="color: #ffd500;"></i></a>
-                        <a href="#deleteEmployeeModal" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a> -->
+                    <td>
+                        {{item.order.order_id.order_date}}, <br> {{item.order.delivery_date}} 
                     </td>
-                    <!-- <td> {% if item.status == 'ordered' or item.status == 'shipped' or item.status == 'out for delivery' %}
-                        <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href="#editdate{{item.id}}" class="edit " data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
-                        {% endif %}    
-                    </td> -->
-                    <!-- </td> -->
-                    <td> {{item.reason}} </td>
-                    <td> {{item.request_date}}  </td>
-                    <td> {{item.return_date}} </td>
+                    <td> {{item.request_date}} </td>
+                    <td> {{item.return_date}} 
+                        {% if item.order.status == 'return accepted' %}
+                            <br>&nbsp; <a href="#editdate{{item.id}}" class="edit " data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
+                        {% endif %}
+                    </td>
                     <td> 
                         {{item.order.status}} 
                         {% if item.order.status == 'return request' %}
@@ -87,23 +82,23 @@
             </tbody>
         </table>
        <div class="clearfix">
-            {% comment %} <div class="hint-text"><b>{{order_items}} </b> </div> {% endcomment %}
-            {% if order_items.has_other_pages %}
+           {% if returns.has_other_pages %}
+           <div class="hint-text"><b>{{returns}} </b> </div> 
             <ul class="pagination">
-                {% if order_items.has_previous %}
-                    <li class="page-item"><a href="?page={{order_items.previous_page_number}}{% if search %}&search={{search}}{% endif %}" class="page-link">&lt;</a></li>
+                {% if returns.has_previous %}
+                    <li class="page-item"><a href="?page={{returns.previous_page_number}}" class="page-link">&lt;</a></li>
                 {% else %}
                     <li class="page-item disabled"><a href="#">&lt;</a></li>
                 {% endif %}
-                {% for i in order_items.paginator.page_range %}
-                    {% if order_items.number == i %}
+                {% for i in returns.paginator.page_range %}
+                    {% if returns.number == i %}
                         <li class="active"><span>{{ i }} <span class="sr-only"> (current) </span></span></li>
                     {% else %}
-                        <li class="page-item"><a href="?page={{ i }}{% if search %}&search={{search}}{% endif %}" class="page-link">{{ i }} </a></li>
+                        <li class="page-item"><a href="?page={{ i }}" class="page-link">{{ i }} </a></li>
                     {% endif %}
                 {% endfor %}
-                {% if order_items.has_next %}
-                    <li class="page-item"><a href="?page={{order_items.next_page_number}}{% if search %}&search={{search}}{% endif %}" class="page-link">&gt;</a></li>
+                {% if returns.has_next %}
+                    <li class="page-item"><a href="?page={{returns.next_page_number}}" class="page-link">&gt;</a></li>
                 {% else %}
                     <li class="page-item disabled"><a href="#" class="page-link">&gt;</a></li>
                 {% endif %}
@@ -124,21 +119,21 @@
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 </div>
                 <div class="modal-body">					
-                    <div class="form-group">
-                        <label>Order ID</label>
-                        <input type="text" class="form-control"  value="{{item.id}}"  disabled>
                         <input name="id" type="text" class="form-control"  value="{{item.id}}"  hidden>
-                    </div>
                     <div class="form-group">
                         <label>Product</label>
-                        <input type="name" class="form-control" value="{{item.order.product.product_id}}" disabled>
+                        <input type="text" class="form-control" value="{{item.order.product.product_id}}" disabled>
                     </div>
                     <div class="form-group">
-                        <label>Requested Date</label>
+                        <label>Request Date</label>
                         <input type="text" class="form-control" value="{{item.request_date}}" disabled>
                     </div>
+                    <span>Reason </span>
                     <div class="form-group">
-                        <label for="category">Status</label>       
+                        <textarea name="reason" id="reason" cols="44" rows="4" disabled>{{item.reason}} </textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="category"><b>Status</b></label>       
                         <select class="form-control" id="status" name="status" required>
                             <option value="return accepted"> Accept Return Request</option>
                             <option value="return denied"> Deny Return Request</option>
@@ -170,23 +165,17 @@
                 </div>
                 <div class="modal-body">					
                     <div class="form-group">
-                        <label>Order ID</label>
-                        <input type="text" class="form-control"  value="{{item.order.id}}"  disabled>
-                    </div>
-                    <div class="form-group">
                         <label>Product</label>
                         <input type="text" class="form-control" value="{{item.order.product.product_id}}" disabled>
                     </div>
                     <div class="form-group">
-                        <label>Ordered Date</label>
-                        <input type="text" class="form-control" value="{{item.order.order_id.order_date}}" disabled>
+                        <label>Requets Date</label>
+                        <input type="text" class="form-control" value="{{item.request_date}}" disabled>
                     </div>
                     <div class="form-group">
                         <label for="category">Delivery Date : {{ item.return_date }}</label>       
                         <input type="date" class="form-control" value="{{ item.return_date|date:'Y-m-d' }}" name="date" required>
-                        
                     </div>
-                    
                 </div>
                 <div class="modal-footer">
                     <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">

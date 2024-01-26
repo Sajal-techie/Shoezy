@@ -1,127 +1,132 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sales Report</title>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sales Report</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
-  <style>
-    * {
-
-      font-family: 'Lato', sans-serif;
-    }
-
-    body {
-      padding: 20px;
-      background: #f5f5f5;
-    }
-
-    .flatTable {
-      width: 100%;
-      min-width: 700px;
-      border-collapse: collapse;
-      font-weight: bold;
-      color: #333;
-      margin-top: 20px;
-    }
-
-    .flatTable tr {
-      height: 50px;
-      background: #fff;
-      border-bottom: #ddd 1px solid;
-    }
-
-    .flatTable td {
-      box-sizing: border-box;
-      padding: 10px;
-      text-align: center;
-    }
-
-    .titleTr {
-      height: 70px;
-      color: #333;
-      background: #e0e0e0;
-      border: 0px solid;
-    }
-
-    .titleTd {
-      font-size: 24px;
-      color: #333;
-    }
-
-    .headingTr {
-      height: 40px;
-      background: #ddd;
-      color: #333;
-      font-size: 12px;
-    }
-
-    .dataTr:nth-child(even) {
-      background-color: #f9f9f9;
-    }
-
-    .dataTr td {
-      text-align: center;
-    }
-
-    img {
-      max-width: 100%;
-      height: auto;
-    }
-  </style>
-</head>
-<body>
-  <table class="flatTable">
-    <tr class="titleTr">
-      <td class="titleTd" colspan='11'>SALES REPORT</td>
-      <td > <a id="hide2" href="/admhome/" style="text-decoration: none;"><i class="fa-solid fa-house-user fa-lg" style="color: #00aeff;"></i> Home</a></td>
-    </tr>
-    <tr class="headingTr">
-      <td>Order ID</td>
-      <td>Product Name</td>
-      <td>Image</td>
-      <td>User</td>
-      <td>Address</td>
-      <td>Price x Quantity</td>
-      <td>Total</td>
-      <td>Size</td>
-      <td>Payment Mode</td>
-      <td>Ordered Date</td>
-      <td>Delivered Date</td>
-      <td>Status</td>
-    </tr>
-    {% for order in orders %}
-      <tr class="dataTr">
-        <td>{{ order.id }}</td>
-        <td>{{ order.product.product_id.brand }} {{ order.product.product_id.name }}</td>
-        <td><img src="{{ order.product.product_id.image1.url }}" alt="image"  style="width: 70px; height: 80px; "></td>
-        <td>{{ order.user1 }}</td>
-        <td style="word-wrap: break-word; max-width:130px">{{ order.address1.state }},{{ order.address1.district }} <br>
-          {{ order.address1.house }},{{ order.address1.town }}, {{ order.address1.pincode }} <br> {{ order.address1.number }}
+    <style>
+      * {
+        font-family: 'Lato', sans-serif;
+      }
+      
+      body {
+        padding: 20px;
+        background: #f5f5f5;
+      }
+      
+      .flatTable {
+        width: 100%;
+        min-width: 700px;
+        border-collapse: collapse;
+        font-weight: bold;
+        color: #333;
+        margin-top: 20px;
+      }
+      
+      .flatTable tr {
+        height: 50px;
+        background: #fff;
+        border-bottom: #ddd 1px solid;
+      }
+      
+      .flatTable td {
+        box-sizing: border-box;
+        padding: 10px;
+        text-align: center;
+      }
+      
+      .titleTr {
+        height: 70px;
+        color: #333;
+        background: #e0e0e0;
+        border: 0px solid;
+      }
+      
+      .titleTd {
+        font-size: 24px;
+        color: #333;
+      }
+      
+      .headingTr {
+        height: 40px;
+        background: #ddd;
+        color: #333;
+        font-size: 12px;
+      }
+      
+      .dataTr:nth-child(even) {
+        background-color: #f9f9f9;
+      }
+      
+      .dataTr td {
+        text-align: center;
+      }
+      
+      img {
+        max-width: 100%;
+        height: auto;
+      }
+    </style>
+  </head>
+  <body>
+    <table class="flatTable">
+      <tr class="titleTr">
+        <td class="titleTd" colspan="11">SALES REPORT</td>
+        <td>
+          <a id="hide2" href="/admhome/" style="text-decoration: none;"><i class="fa-solid fa-house-user fa-lg" style="color: #00aeff;"></i> Home</a>
         </td>
-        <td>{{ order.product.product_id.selling_price }} x {{ order.quantity }}</td>
-        <td>₹{{ order.amount }}</td>
-        <td>{{ order.size }}</td>
-        <td>{{ order.order_id.payment_mode }}</td>
-        <td>{{ order.order_id.order_date }}</td>
-        <td>{{ order.delivery_date }}</td> 
-        <td>{{ order.status }}</td>
       </tr>
-    {% endfor %}
-        
-  </table>
-  <div style="padding-top: 10px;"  id="hidediv"><a href="/admhome/" style="background-color: red; color: white; padding: 10px; " ><i class="fa-solid fa-arrow-left fa-lg" style="color: #ffffff;"></i> Back</a>          
-    <div class="text-center"><a href=""class="btn btn-danger text-decoration-none" onclick="downloadInvoice()">download sales PDF</a>
-    <button class="btn btn-success" id="downloadExcelButton">Download Sales Excel</button>
+      <tr class="headingTr">
+        <td>Order ID</td>
+        <td>Product Name</td>
+        <td>Image</td>
+        <td>User</td>
+        <td>Address</td>
+        <td>Price x Quantity</td>
+        <td>Total</td>
+        <td>Size</td>
+        <td>Payment Mode</td>
+        <td>Ordered Date</td>
+        <td>Delivered Date</td>
+        <td>Status</td>
+      </tr>
+      {% for order in orders %}
+        <tr class="dataTr">
+          <td>{{ order.id }}</td>
+          <td>{{ order.product.product_id.brand }} {{ order.product.product_id.name }}</td>
+          <td>
+            <img src="{{ order.product.product_id.image1.url }}" alt="image" style="width: 70px; height: 80px; " />
+          </td>
+          <td>{{ order.user1 }}</td>
+          <td style="word-wrap: break-word; max-width:130px">
+            {{ order.address1.state }},{{ order.address1.district }} <br />
+            {{ order.address1.house }},{{ order.address1.town }}, {{ order.address1.pincode }} <br /> {{ order.address1.number }}
+          </td>
+          <td>{{ order.product.product_id.selling_price }} x {{ order.quantity }}</td>
+          <td>₹{{ order.amount }}</td>
+          <td>{{ order.size }}</td>
+          <td>{{ order.order_id.payment_mode }}</td>
+          <td>{{ order.order_id.order_date }}</td>
+          <td>{{ order.delivery_date }}</td>
+          <td>{{ order.status }}</td>
+        </tr>
+      {% endfor %}
+    </table>
+    <div style="padding-top: 10px;" id="hidediv">
+      <a href="/admhome/" style="background-color: red; color: white; padding: 10px; "><i class="fa-solid fa-arrow-left fa-lg" style="color: #ffffff;"></i> Back</a>
+      <div class="text-center">
+        <a href="" class="btn btn-danger text-decoration-none" onclick="downloadInvoice()">download sales PDF</a>
+        <button class="btn btn-success" id="downloadExcelButton">Download Sales Excel</button>
+      </div>
     </div>
-  </div>
- <!-- <div class="text-center "><a href="" class="text-danger "> Download </a></div> -->
- <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.5/xlsx.full.min.js"></script>
+    <!-- <div class="text-center "><a href="" class="text-danger "> Download </a></div> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.5/xlsx.full.min.js"></script>
 
-  <script src="https://kit.fontawesome.com/412a20d28b.js" crossorigin="anonymous"></script>
-  <script>
+    <script src="https://kit.fontawesome.com/412a20d28b.js" crossorigin="anonymous"></script>
+    <script>
     function downloadInvoice() 
 	{     
         hideDownloadButton()
@@ -183,6 +188,5 @@
     
     document.getElementById("downloadExcelButton").addEventListener("click", downloadExcel);
 </script>
-</body>
+  </body>
 </html>
-    

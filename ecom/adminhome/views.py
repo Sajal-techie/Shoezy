@@ -262,6 +262,7 @@ def block_user(request, id):
     block = Customuser.objects.get(id=id)
     if not block.is_blocked:
         block.is_blocked = True
+        messages.success(request, F" Blocked {block} Successfully ")
         block.save()
         return redirect("admusers")
     return redirect("admusers")
@@ -271,6 +272,7 @@ def unblock_user(request, id):
     unblock = Customuser.objects.get(id=id)
     if unblock.is_blocked:
         unblock.is_blocked = False
+        messages.success(request, F" Unblocked {unblock} Successfully ")
         unblock.save()
         return redirect("admusers")
     return redirect("admusers")

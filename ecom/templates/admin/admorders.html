@@ -1,96 +1,113 @@
-{% include "admin/adminbase.html" %}
+{% include 'admin/adminbase.html' %}
 {% load static %}
 <head>
-    <link rel="stylesheet" href="{% static 'css/styletable.css' %}">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    
+  <link rel="stylesheet" href="{% static 'css/styletable.css' %}" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 {% block content1 %}
-<div class="container tbd1">
+  <div class="container tbd1">
     <div class="table-wrapper">
-        <div class="table-title">
-            <div class="row">
-                <div class="col-sm-12 text-center">
-                    <h2>Order <b>Management</b></h2>
-                </div>
-            </div>
-        </div>
-        <div class="row input-group mb-4 mt-4">
-            <form action="/admorders/">
-            <input type="search" name="search" class="form-control rounded offset-1 col-lg-8 col-sm-4 " placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
-            <button type="submit" class="btn btn-outline-primary btn-primary col-lg-2 col-sm-3 " >search</button>
-            </form>
+      <div class="table-title">
+        <div class="row">
+          <div class="col-sm-12 text-center">
+            <h2>Order <b>Management</b></h2>
           </div>
-                {% if messages %}
-                    {% for message in messages %}
-                        <div class="text-center">
-                            <h3 class=" text-danger"> {{ message }} </h3>
-                        </div>
-                        
-                    {% endfor %}
-                {% endif %}
-        <table class="table table-striped table-hover ms-3">
-            <thead>
-                <tr>
-                    <th>Order No.</th>
-                    <th>User Name</th>
-                    <th>Address</th>
-                    <th>Order Date</th>
-                    <th>Coupon Used</th>
-                    <th>Total paid</th>
-                    <th>Payment Method</th>
-                    <th>view details</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for item in order_items  %}
-                <tr>
-                    <td>{{item.id }} </td>
-                    <td> {{item.user.first_name}} {{item.user.last_name}} </td>
-                    <td style=" word-wrap: break-word; max-width:130px"> {{item.address.state}},{{item.address.district}} <br>
-                        {{item.address.house}},{{item.address.town}}, PIN: {{item.address.pincode}} <br> {{item.address.number}}
-                    </td>
-                    <td> {{item.order_date}}  </td>
-                    <td> {% if item.coupon_applied %} Yes <br> ₹{{item.coupon_id.discount_amount}} {% else %} No {% endif %} </td>
-                    <td> ₹{{ item.total }} </td>
-                    <td >
-                            {{item.payment_mode}}
-                    </td>
-                    <td> <a href="/admorderitems/{{item.id}}" class="btn btn-dark text-white"> view details </a> </td>
-                </tr>
-                {% endfor %}
-                
-            </tbody>
-        </table>
-       <div class="clearfix">
-            <div class="hint-text"><b>{{order_items}} </b> </div>
-            {% if order_items.has_other_pages %}
-            <ul class="pagination">
-                {% if order_items.has_previous %}
-                    <li class="page-item"><a href="?page={{order_items.previous_page_number}}{% if search %}&search={{search}}{% endif %}" class="page-link">&lt;</a></li>
+        </div>
+      </div>
+      <div class="row input-group mb-4 mt-4">
+        <form action="/admorders/">
+          <input type="search" name="search" class="form-control rounded offset-1 col-lg-8 col-sm-4" placeholder="Username or Payment mode" aria-label="Search" aria-describedby="search-addon" />
+          <button type="submit" class="btn btn-outline-primary btn-primary col-lg-2 col-sm-3">search</button>
+        </form>
+      </div>
+      {% if messages %}
+        {% for message in messages %}
+          <div class="text-center">
+            <h3 class="text-danger">{{ message }}</h3>
+          </div>
+        {% endfor %}
+      {% endif %}
+      <table class="table table-striped table-hover ms-3">
+        <thead>
+          <tr>
+            <th>Order No.</th>
+            <th>User Name</th>
+            <th>Address</th>
+            <th>Order Date</th>
+            <th>Coupon Used</th>
+            <th>Total paid</th>
+            <th>Payment Method</th>
+            <th>view details</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in order_items %}
+            <tr>
+              <td>{{ item.id }}</td>
+              <td>{{ item.user.first_name }} {{ item.user.last_name }}</td>
+              <td style=" word-wrap: break-word; max-width:130px">
+                {{ item.address.state }},{{ item.address.district }} <br />
+                {{ item.address.house }},{{ item.address.town }}, PIN: {{ item.address.pincode }} <br /> {{ item.address.number }}
+              </td>
+              <td>{{ item.order_date }}</td>
+              <td>
+                {% if item.coupon_applied %}
+                  Yes <br /> ₹{{ item.coupon_id.discount_amount }}
                 {% else %}
-                    <li class="page-item disabled"><a href="#">&lt;</a></li>
+                  No
                 {% endif %}
-                {% for i in order_items.paginator.page_range %}
-                    {% if order_items.number == i %}
-                        <li class="active"><span>{{ i }} <span class="sr-only"> (current) </span></span></li>
-                    {% else %}
-                        <li class="page-item"><a href="?page={{ i }}{% if search %}&search={{search}}{% endif %}" class="page-link">{{ i }} </a></li>
-                    {% endif %}
-                {% endfor %}
-                {% if order_items.has_next %}
-                    <li class="page-item"><a href="?page={{order_items.next_page_number}}{% if search %}&search={{search}}{% endif %}" class="page-link">&gt;</a></li>
-                {% else %}
-                    <li class="page-item disabled"><a href="#" class="page-link">&gt;</a></li>
-                {% endif %}
-            </ul>
+              </td>
+              <td>₹{{ item.total }}</td>
+              <td>{{ item.payment_mode }}</td>
+              <td>
+                <a href="/admorderitems/{{ item.id }}" class="btn btn-dark text-white">view details</a>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      <div class="clearfix">
+          {% if order_items.has_other_pages %}
+          <div class="hint-text">
+            <b>{{ order_items }}</b>
+          </div>
+          <ul class="pagination">
+            {% if order_items.has_previous %}
+              <li class="page-item">
+                <a href="?page={{ order_items.previous_page_number }}{% if search %}{{ search }}{% endif %}" class="page-link">&lt;</a>
+              </li>
+            {% else %}
+              <li class="page-item disabled">
+                <a href="#">&lt;</a>
+              </li>
             {% endif %}
-        </div> 
+            {% for i in order_items.paginator.page_range %}
+              {% if order_items.number == i %}
+                <li class="active">
+                  <span>{{ i }} <span class="sr-only">(current)</span></span>
+                </li>
+              {% else %}
+                <li class="page-item">
+                  <a href="?page={{ i }}{% if search %}{{ search }}{% endif %}" class="page-link">{{ i }}</a>
+                </li>
+              {% endif %}
+            {% endfor %}
+            {% if order_items.has_next %}
+              <li class="page-item">
+                <a href="?page={{ order_items.next_page_number }}{% if search %}{{ search }}{% endif %}" class="page-link">&gt;</a>
+              </li>
+            {% else %}
+              <li class="page-item disabled">
+                <a href="#" class="page-link">&gt;</a>
+              </li>
+            {% endif %}
+          </ul>
+        {% endif %}
+      </div>
     </div>
-</div>
-{% endblock content1 %}
+  </div>
+{% endblock %}
