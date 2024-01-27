@@ -16,6 +16,7 @@
 </head>
 {% block content1 %}
   <div class="container tbd1">
+    <!-- link to brand Offer -->
     <div class="text-center" style="font-size: 20px;">
       Go to
       <a href="/view_brand_offers/"><b>Brand Offer Management</b></a>
@@ -77,6 +78,7 @@
           {% endfor %}
         </tbody>
       </table>
+      <!-- Pagination Start -->
       <div class="clearfix">
         {% if offers.has_other_pages %}
           <div class="hint-text">
@@ -115,6 +117,7 @@
           </ul>
         {% endif %}
       </div>
+      <!-- Pagination End -->
     </div>
   </div>
 

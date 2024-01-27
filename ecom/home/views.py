@@ -108,12 +108,24 @@ def register(request):
             email = request.POST["email"]
             password = request.POST["password"]
             confpassword = request.POST["password1"]
-            ref_code = request.POST.get("referralCode", None)
-
+            ref_code = request.POST.get("referralCode", "")
+            
             if Customuser.objects.filter(email=email).exists():
                 messages.error(request, "Email already exists you can login ")
                 return redirect("login")
 
+            if not fname.strip():
+                messages.error(request, "Enter valid first Name")
+                return redirect("register")
+            
+            if not lname.strip():
+                messages.error(request, "Enter valid first Name")
+                return redirect("register")
+            
+            if not password.strip() :
+                messages.error(request, "Enter valid Password")
+                return redirect("register")
+            
             if len(password) < 6 and len(confpassword) < 6:
                 messages.error(
                     request, " Password length too short minimum 6 chararcters"
@@ -125,31 +137,34 @@ def register(request):
                 return redirect("register")
 
             user = Customuser(
-                first_name=fname, last_name=lname, email=email, password=password
+                first_name=fname.strip(), last_name=lname.strip(), email=email, password=password.strip()
             )
             wallet = Wallet(user_id=user, amount=0)
-            if ref_code is not None and len(ref_code.strip()) == 8:
-                try:
-                    refered_user = Customuser.objects.get(referal_code=ref_code.strip())
-                except Exception as e:
-                    print(e)
-                    refered_user = None
-                if refered_user is not None:
-                    # 100 rupees for new customer
-                    wallet.amount = 100
-                    refer_wallet = Wallet.objects.get(user_id=refered_user)
-                    # 500 rupees for existing customer
-                    refer_wallet.amount = refer_wallet.amount + 500
-                    refer_wallet.save()
+            if ref_code.strip():
+                if len(ref_code.strip()) == 8:
+                    try:
+                        refered_user = Customuser.objects.get(referal_code=ref_code.strip())
+                    except Exception as e:
+                        print(e)
+                        refered_user = None
+                    if refered_user is not None:
+                        # 100 rupees for new customer
+                        wallet.amount = 100
+                        refer_wallet = Wallet.objects.get(user_id=refered_user)
+                        # 500 rupees for existing customer
+                        refer_wallet.amount = refer_wallet.amount + 500
+                        refer_wallet.save()
+                    else:
+                        messages.error(request, "Enter a valid Referal code !")
+                        return redirect("register")
+                
                 else:
-                    messages.error(request, "Enter a valid Referal code !")
+                    messages.error(request, "Enter a valid Referal code")
                     return redirect("register")
-            else:
-                messages.error(request, "Enter a valid Referal code")
-                return redirect("register")
 
             user.save()
             wallet.save()
+            messages.success(request, "Registered successfully now Verify")
             return redirect("verifyreg", id=user.id)
 
     except Exception as e:

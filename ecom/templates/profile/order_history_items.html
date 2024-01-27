@@ -29,8 +29,9 @@
       }
       
       .order-card img {
-        width: 300px;
-        height: 300px;
+        padding-left: 60px;
+        width: 290px;
+        height: 220px;
       }
       
       .order-details {
@@ -68,22 +69,72 @@
       }
       
       .status-delivered {
-        background-color: #5cb85c; /* Green */
+        background-color: #5cb85c; 
         color: #fff;
       }
       
       .status-processing {
-        background-color: #f0ad4e; /* Yellow */
+        background-color: #f0ad4e; 
         color: #fff;
       }
       .status-cancelled {
-        background-color: #ff1717; /* red */
+        background-color:rgb(146, 11, 11); 
         color: #fff;
+      }
+      .status-denied{
+        background-color:   #ff2020;
+        color: white;
+      }
+      .coupon-address-container {
+        margin-bottom: 30px;
+      }
+
+      .coupon-info,
+      .delivery-address {
+        background-color: #f9f9f9;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+
+      .coupon-info h3,
+      .delivery-address h3 {
+        margin-top: 0;
+        margin-bottom: 15px;
+      }
+
+      .coupon-info p,
+      .delivery-address p {
+        margin: 0;
+        line-height: 1.6;
       }
     </style>
   </head>
   <body>
     <div class="container order-history">
+      <div class="coupon-address-container">
+        <div class="row">
+          <!-- Coupon information column -->
+          <div class="col-md-6">
+            <div class="coupon-info">
+              <h3>Coupon Information</h3>
+              <p>Coupon Amount: <strong> {% if order.coupon_applied %}  ₹{{ order.coupon_id.discount_amount }} {% else %} No coupon {% endif %} </strong></p>
+              <p>Total Order Amount:<strong>  ₹{{ order.total }}</strong> ({{order.payment_mode}})</p>
+            </div>
+          </div>
+          <!-- Delivery address column -->
+          <div class="col-md-6">
+            <div class="delivery-address">
+              <h3>Delivery Address</h3>
+              <p class="text-capitalize">House:<strong> {{ order.address.house }} ,
+                 {{ order.address.town }} , PIN:{{ order.address.pincode }}, 
+                  {{ order.address.district }}, {{ order.address.state }} </strong>
+              </p>
+              <p>Name:<strong> {{ order.address.name }} </strong> , Number: <strong> {{ order.address.number }}</strong></p>
+            </div>
+          </div>
+        </div>
+      </div>
       {% if messages %}
         {% for message in messages %}
           <div class="text-center">
@@ -107,27 +158,23 @@
           <div class="col-md-4">
             <div class="order-card detl">
               <div class="order-details">
-                <h3>Order ID: {{ item.id }}</h3>
+                <h5>Order ID: {{ item.id }}</h5>
                 <span>Product : {{ item.product.product_id.brand.brand_name }} {{ item.product.product_id.name }}</span>
                 <span>Size: {{ item.size }}</span>
                 <span>Price: ₹{{ item.product.product_id.selling_price }} x Quantity: {{ item.quantity }}</span>
-                <span>Total: ₹{{ item.amount }}</span>
-                <span>Order Date: {{ item.order_id.order_date }}</span>
-                {% if item.status != 'cancelled' %}
-                  <span>Delivery Date : {{ item.delivery_date }}</span>
-                {% else %}
-                  <span>Cancelled Date : {{ item.delivery_date }}</span>
-                {% endif %}
+                <span>Total: ₹{{ item.amount }} </span>
               </div>
             </div>
           </div>
           <div class="col-md-4">
             <div class="order-card detl">
               <div class="order-details">
-                <h3>Delivery Address</h3>
-                <span>{{ item.address1.country }}, {{ item.address1.state }}, {{ item.address1.district }}</span>
-                <span>House: {{ item.address1.house }}, {{ item.address1.town }} ,PIN:{{ item.address1.pincode }}</span>
-                <span>Number: {{ item.address1.number }} , {{ item.address1.name }}</span>
+                <span>Order Date: {{ item.order_id.order_date }}</span>
+                {% if item.status != 'cancelled' %}
+                  <span>Delivery Date : {{ item.delivery_date }}</span>
+                {% else %}
+                  <span>Cancelled Date : {{ item.delivery_date }}</span>
+                {% endif %}
                 {% if item.status == 'ordered' or item.status == 'shipped' or item.status == 'out for delivery' %}
                   <a href="/track_order/{{ item.id }}" class="text-white"><span class="status status-processing text-center">Track order</span></a>
                 {% elif item.status == 'delivered' %}
@@ -138,7 +185,7 @@
                 {% elif item.status == 'return accepted' %}
                   <a href="/track_order/{{ item.id }}" class="text-white"><span class="status status-delivered text-center">Return Accepted</span></a>
                 {% elif item.status == 'return denied' %}
-                  <a href="/track_order/{{ item.id }}" class="text-white"><span class="status status-cancelled text-center">Return Denied</span></a>
+                  <a href="/track_order/{{ item.id }}" class="text-white"><span class="status status-denied text-center">Return Denied</span></a>
                 {% elif item.status == 'cancelled' %}
                   <span class="status status-cancelled text-center">Cancelled</span>
                 {% endif %}

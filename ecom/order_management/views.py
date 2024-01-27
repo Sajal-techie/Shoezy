@@ -101,8 +101,9 @@ def update_status(request, id):
 
                     if wallet is not None:
                         wallet.amount = wallet.amount + rtn_amount
-                        messages.success(request, F"{orders.product.product_id.name} ({orders.product.size})  cancelled {rtn_amount} refunded to Users Wallet  ")
                         wallet.save()
+                        
+                        messages.success(request, F"{orders.product.product_id.name} ({orders.product.size})  cancelled {rtn_amount} refunded to Users Wallet  ")
                 else:
                     messages.success(request, F"{orders.product.product_id.name} ({orders.product.size}) Cancelled Successfully ")
             else:
@@ -155,7 +156,7 @@ class Return_management(View):
                 else:
                     # paginator
                     page = request.GET.get("page", 1)
-                    paginator = Paginator(returns, 3)
+                    paginator = Paginator(returns, 10)
                     try:
                         returns = paginator.page(page)
                     except PageNotAnInteger:
@@ -207,9 +208,9 @@ class Return_management(View):
                                     
                             if wallet is not None:
                                 wallet.amount = wallet.amount + rtn_amount
-                                messages.success(request, F"Return accepted {rtn_amount} refunded successfully to {order.user}")
                                 wallet.save()
-                            
+                                
+                                messages.success(request, F"Return accepted {rtn_amount} refunded successfully to {order.user}")
                         else:
                             messages.success(request,"Return Accepted successfully")
                     else:

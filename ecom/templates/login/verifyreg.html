@@ -15,7 +15,11 @@
         <!-- shwowing error message -->
         {% if messages %}
           {% for message in messages %}
-            <h4 class="text-center text-danger">{{ message }}</h4>
+          <h4 class=" {% if message.tags == 'success' %}
+                text-success {% else %}  text-danger
+                {% endif %} ">
+            {{ message }}
+            </h4>
           {% endfor %}
         {% endif %}
         <div class="d-flex flex-row mt-5 p-5 mx-5 text-center">

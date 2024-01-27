@@ -277,6 +277,7 @@ def order_history_items(request, id):
             context = {
                 "order_items": order_items,
                 "username": username,
+                "order": order,
             }
 
             return render(request, "profile/order_history_items.html", context)
@@ -298,6 +299,21 @@ def track_order(request, id):
                 order_items = OrderProducts.objects.get(id=id)
             except OrderProducts.DoesNotExist:
                 order_items = None
+            try:
+                full_order_items = Order.objects.get(id = order_items.order_id.id)
+            except Exception :
+                full_order_items = None
+                
+            if full_order_items is not None:
+                rtn_amount = order_items.amount
+
+                if full_order_items.coupon_applied and full_order_items.coupon_id:
+                    count = OrderProducts.objects.filter(
+                        order_id=full_order_items
+                                    ).count()
+                    deduc = int(full_order_items.coupon_id.discount_amount) // count
+                    rtn_amount = order_items.amount - deduc
+
             if (
                 order_items.status == "return request"
                 or order_items.status == "return accepted"
@@ -333,7 +349,6 @@ def track_order(request, id):
                     product=order_items.product.product_id, user=username
                 )
             except Exception as e:
-                print(e)
                 review = None
 
             context = {
@@ -342,6 +357,7 @@ def track_order(request, id):
                 "previous_steps": previous_steps,
                 "username": username,
                 "review": review,
+                "rtn_amount":rtn_amount
             }
             try:
                 return_item = Returns.objects.get(user=username, order=order_items)
@@ -368,8 +384,11 @@ def cancel_order(request, id):
                 current_order = None
 
             if request.method == "POST":
-                reason = request.POST["reason"]
-
+                reason = request.POST.get("reason", "")
+                if not reason.strip():
+                    messages.error(request, "Enter a valid reason ")
+                    return redirect("track_order", id)
+                
                 if current_order.status != "delivered":
                     current_order.status = "cancelled"
                     current_order.reason = reason
@@ -401,7 +420,12 @@ def cancel_order(request, id):
                         if wallet is not None:
                             wallet.amount = wallet.amount + rtn_amount
                             wallet.save()
-
+                            
+                            messages.success(request, F"Order id : {current_order.id} cancelled  ")
+                            messages.success(request, F"{rtn_amount} refunded to wallet ")
+                            
+                    else:
+                        messages.success(request, F" Order id: {current_order.id}  cancelled successfully ")
                     return redirect("order_history_items", current_order.order_id.id)
             return redirect("order_history_items", current_order.order_id.id)
 
@@ -471,6 +495,11 @@ def add_review(request, pid, oid):
                 review = request.POST["review"]
                 rating = request.POST["rating"]
                 review = str(review).strip()
+                
+                if int(rating) == 0:
+                    messages.error(request, "Enter valid rating (minimum 1 star)")
+                    return redirect("track_order", id=oid)
+                
                 if ProductReview.objects.filter(
                     product=product, user=username
                 ).exists():
@@ -502,14 +531,20 @@ def update_review(request, pid, oid):
                 product = None
                 print(e)
                 return redirect("track_order", oid)
+            
             if request.method == "POST":
                 reviews = request.POST["review"]
                 rating = request.POST["rating"]
                 reviews = str(reviews).strip()
+                
+                if int(rating) == 0:
+                    messages.error(request, "enter valid Rating (minimum 1 star) ") 
+                    return redirect("track_order", id=oid)
                 try:
                     review = ProductReview.objects.get(product=product, user=username)
                 except Exception as e:
                     review = None
+                
                 if review is not None:
                     review.review = reviews
                     review.rating = rating
@@ -529,19 +564,23 @@ def update_review(request, pid, oid):
 def return_request(request, id):
     try:
         if "users" in request.session:
-            print("hi")
             try:
                 order = OrderProducts.objects.get(id=id)
             except Exception as e:
                 print(e)
                 order = None
             if request.method == "POST":
-                reason = request.POST["reason"]
-                print(reason)
+                reason = request.POST.get("reason", "")
+                
+                if not reason.strip():
+                    messages.error(request, "enter a valid reason ")
+                    return redirect("track_order", id)
+                
                 if order is not None:
-                    Returns.objects.create(order=order, user=order.user1, reason=reason)
+                    Returns.objects.create(order=order, user=order.user1, reason=reason.strip())
                     order.status = "return request"
                     order.save()
+                    messages.success(request, "Requested for return ")
             return redirect("track_order", id)
     except Exception as e:
         print(e)

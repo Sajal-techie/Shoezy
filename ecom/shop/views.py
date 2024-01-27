@@ -174,7 +174,9 @@ def singleproduct(request, id):
         except ZeroDivisionError:
             avg_rating = 0
         order_count = OrderProducts.objects.filter(
-            product__product_id=sproduct, status="delivered"
+            Q(product__product_id=sproduct) & 
+                (Q (status="delivered") |Q(status="return denied") | 
+                Q(status="return request") | Q(status="return accepted"))
         ).count()
         context = {
             "product": products,

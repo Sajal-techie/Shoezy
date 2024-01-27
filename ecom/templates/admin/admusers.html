@@ -72,8 +72,8 @@
       </table>
 
       <div class="clearfix">
-        <div class="hint-text">{{ user_details }}</div>
         {% if user_details.has_other_pages %}
+        <div class="hint-text">{{ user_details }}</div>
           <ul class="pagination">
             {% if user_details.has_previous %}
               <li class="page-item">

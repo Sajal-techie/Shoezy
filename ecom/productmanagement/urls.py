@@ -11,5 +11,4 @@ urlpatterns = [
     path("delete_variant/<str:id>", views.delete_variant, name="delete_variant"),
     path("delete_product/<str:id>", views.delete_product, name="delete_product"),
     path("list_product/<str:id>", views.list_product, name="list_product"),
-    path("search_product/", views.search_product, name="search_product"),
 ]

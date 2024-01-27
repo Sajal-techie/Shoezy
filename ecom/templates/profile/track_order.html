@@ -237,7 +237,7 @@
                   <p class="title">
                     {{ order.product.product_id.brand }} <br /> {{ order.product.product_id.name }}
                   </p>Size : {{ order.size }} &nbsp; &nbsp; Quantity : {{ order.quantity }} &nbsp; &nbsp;
-                  <span class="text-muted">Price : ₹{{ order.amount }}</span>
+                  <span class="text-muted">Price : ₹{{ rtn_amount }}</span>
                 </figcaption>
               </figure>
 
@@ -251,7 +251,7 @@
                       <div class="modal-body">
                         <div class="form-group">
                           <label for="review">Review</label>
-                          <textarea class="form-control" id="review" name="review" rows="3" required>{{ review.review }}</textarea>
+                          <textarea class="form-control" id="review" name="review" rows="3" >{{ review.review }}</textarea>
                         </div>
                         <label>Rate here</label>
                         <div class="rating text-center" style="color: yellow;  font-size: 30px; ">
@@ -276,7 +276,7 @@
                       {% csrf_token %}
                       <div class="modal-body">
                         <div class="form-group">
-                          <textarea class="form-control" id="review" placeholder="write Your Review" name="review" rows="3" required autofocus></textarea>
+                          <textarea class="form-control" id="review" placeholder="write Your Review" name="review" rows="3" autofocus></textarea>
                         </div>
                         <label>Rate here</label>
                         <div class="rating text-center" style="color: yellow;  font-size: 30px; ">
@@ -333,6 +333,11 @@
                 <label for="cancellation_reason">Reason for cancellation:</label> <br />
                 <textarea name="reason" cols="55" rows="4" required></textarea>
               </div>
+              {% if order.order_id.payment_mode != 'Cash on delivery' %}
+              <div class="form-group text-dark">
+                <div>Estimated Refund Amount : ₹{{rtn_amount}} </div>
+              </div>
+              {% endif %}
               <button type="submit" class="btn btn-danger">Submit</button>
             </form>
           </div>

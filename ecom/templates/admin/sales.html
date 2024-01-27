@@ -122,7 +122,6 @@
         <button class="btn btn-success" id="downloadExcelButton">Download Sales Excel</button>
       </div>
     </div>
-    <!-- <div class="text-center "><a href="" class="text-danger "> Download </a></div> -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.5/xlsx.full.min.js"></script>
 
     <script src="https://kit.fontawesome.com/412a20d28b.js" crossorigin="anonymous"></script>
@@ -133,6 +132,7 @@
         window.print();
         showDownloadButton()
 
+        // Hide download button while downloading
         function hideDownloadButton() {
           const downloadButton = document.getElementById('hidediv');
           const homeButton = document.getElementById('hide2');
