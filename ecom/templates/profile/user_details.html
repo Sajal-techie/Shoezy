@@ -131,12 +131,13 @@
         </div>
         <span style="font-size: 30px; color: #006538;">Wallet balance: {{ wallet.amount }}</span> <br />
         <div class="border border-dark p-2">
-          <span style="font-size: 20px; color: #1d0056;">Referal Code = <b>{{ username.referal_code }}</b></span> <br />
+          <span style="font-size: 20px; color: #1d0056;">Referal Code = <b id="referralCode">{{ username.referal_code }}</b> 
+             <span id="copyButton" data-clipboard-target="#referralCode"class="btn btn-sm btn-secondary ms-2 custom-button">Copy</span>
+          </span> <br />
           Refer a friend and both of you win! You'll get ₹500 wallet cash for every new user you refer, and they'll get ₹100 just for using your code to sign up.
           <br />
         </div>
       </div>
-
       <!-- Address section -->
       <div class="address-list text-center border border-dark">
         <h2>Addresses</h2>
@@ -181,6 +182,7 @@
       </div>
     </div>
   {% endfor %}
+<script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.8/dist/clipboard.min.js"></script>
   <script>
     $(document).ready(function () {
       // Attach a click event to your delete button
@@ -196,5 +198,24 @@
     $(document).ready(function () {
       $('.toast').toast('show')
     })
+  </script>
+
+  <!--copy to clipboard -->
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      var clipboard = new ClipboardJS('#copyButton', {
+        target: function(trigger) {
+          return document.querySelector('#referralCode');
+        }
+      });
+  
+      clipboard.on('success', function(e) {
+        alert('{{ username.referal_code }} - Referal code copied to clipboard!');
+      });
+  
+      clipboard.on('error', function(e) {
+        alert('Failed to copy to clipboard. Please try again manually.');
+      });
+    });
   </script>
 {% endblock maincontent %}

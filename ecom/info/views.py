@@ -3,7 +3,7 @@ from home.models import Customuser
 from cart.models import *
 from django.core.mail import send_mail
 from django.contrib import messages
-
+from django.conf import settings
 # Create your views here.
 
 
@@ -16,7 +16,7 @@ def contact_us(request):
                 del request.session["users"]
             messages.error(request, "you are blocked ")
             return redirect("login")
-        return render(request, "contact.html", {"username": username.first_name})
+        return render(request, "contact.html")
 
     return render(request, "contact.html")
 
@@ -30,7 +30,7 @@ def about_us(request):
                 del request.session["users"]
             messages.error(request, "you are blocked ")
             return redirect("login")
-        return render(request, "about.html", {"username": username.first_name})
+        return render(request, "about.html")
 
     return render(request, "about.html")
 
@@ -38,18 +38,22 @@ def about_us(request):
 def terms(request):
     return render(request, "terms.html")
 
-
+# message us 
 def send_message(request):
-    pass
-    # if request.method == "POST":
-    #     name = request.POST['name']
-    #     email = request.POST['email']
-    #     to_email = [email]
-    #     subjects = request.POST['subject']
-    #     from_email = "shoezyofficials@gmail.com"
-    #     message = f"Thanks for contacting us {name} for {subjects}'\n' continue shopping "
-    #     subject = "Shoezy Customer support "
-    #     send_mail(subject,message,from_email,to_email)
-    #     return redirect('contact_us')
+    if request.method == "POST":
+        try:
+            name = request.POST['name']
+            email = request.POST['email']
+            to_email = [email]
+            subjects = request.POST['subject']
+            from_email = settings.EMAIL_HOST_USER
+            message = f"Thanks for contacting us '{name}' for '{subjects}' \nContinue shopping with US "
+            subject = "Shoezy Customer support "
+            send_mail(subject,message,from_email,to_email)
+            
+        except Exception as e:
+            print(e)
+            
+        return redirect('contact_us')
 
-    # return redirect('contact_us')
+    return redirect('contact_us')

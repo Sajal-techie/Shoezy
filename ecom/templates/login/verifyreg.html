@@ -15,7 +15,7 @@
         <!-- shwowing error message -->
         {% if messages %}
           {% for message in messages %}
-          <h4 class=" {% if message.tags == 'success' %}
+          <h4 class=" text-center {% if message.tags == 'success' %}
                 text-success {% else %}  text-danger
                 {% endif %} ">
             {{ message }}
@@ -43,7 +43,7 @@
       var s = remaining % 60
       m = m < 10 ? '0' + m : m
       s = s < 10 ? '0' + s : s
-      document.getElementById('countdown').innerHTML = `Time left: ${m} : ${s}`
+      document.getElementById('countdown').innerHTML = `Resend OTP : ${m} : ${s}`
       remaining -= 1
       if (remaining >= 0 && timerOn) {
         setTimeout(function () {

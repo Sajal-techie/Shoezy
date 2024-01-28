@@ -277,7 +277,7 @@
                                 <span class="{% if review.user == username %} text-right text-success {% else %} text-left {% endif %}  ">
                                   {{ review.user.first_name }} {{ review.user.last_name }}  {% if review.user == username %} (me) {% endif %}
                                 </span>
-                                <span class="text-right">{{ review.created_at|date:'F j, Y ' }}</span>
+                                <span class="text-right">{{ review.created_at }}</span>
                               </h4>
                               <p class="star">
                                 <span style="font-size: 25px; ">

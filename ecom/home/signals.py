@@ -3,7 +3,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from .models import Customuser
 import random
-
+from django.conf import settings
 
 def genotp():
     return str(random.randint(100000, 999999))
@@ -21,8 +21,8 @@ def send_otp(user):
     otp1 = int(otp1)
     user.otp = otp1
     user.save()
-    subject = "Welcome to shopzy this is for otp verification"
-    message = f"your otp is: {otp1}"
-    from_email = "shoezyofficials@gmail.com"
+    subject = "SHOEZY Email verification"
+    message = f"Your OTP for Account Verification is  :  {otp1} "
+    from_email = settings.EMAIL_HOST_USER
     to_email = [user.email]
     send_mail(subject, message, from_email, to_email)
