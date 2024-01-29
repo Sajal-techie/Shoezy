@@ -26,6 +26,8 @@ class Order(models.Model):
     coupon_id = models.ForeignKey(Coupen, on_delete=models.SET_NULL, null=True)
     og_amount = models.FloatField(null=True, blank=True)
 
+    def __str__(self) -> str:
+        return f"{self.user}'s Order {self.id}"
 
 class OrderProducts(models.Model):
     order_id = models.ForeignKey(
@@ -49,6 +51,8 @@ class OrderProducts(models.Model):
     delivery_date = models.DateField(null=True, blank=True)
     reason = models.TextField(null=True, blank=True)
 
+    def __str__(self) -> str:
+        return f"Order ID =  {self.id}"
 
 @receiver(pre_save, sender=OrderProducts)
 def update_delivery_date(sender, instance, **kwargs):
@@ -62,3 +66,6 @@ class Returns(models.Model):
     reason = models.TextField(null=True, blank=True)
     request_date = models.DateField(auto_now_add=True, null=True)
     return_date = models.DateField(null=True, blank=True)
+
+    def __str__(self) -> str:
+        return f" Order_id = {self.order.id} , return status = {self.order.status} " 

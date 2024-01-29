@@ -2,7 +2,6 @@ from django.db import models
 from home.models import Customuser
 from productmanagement.models import Product
 
-# Create your models here.
 
 
 class Address(models.Model):

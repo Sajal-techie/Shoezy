@@ -25,7 +25,7 @@
       color: #333;
     }
     img {
-      max-width: 300px !important;
+      max-width: 200px !important;
       height: auto;
       border-radius: 10px;
       box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
@@ -148,17 +148,17 @@
   </style>
 
   <main class="container">
-    <div class="section-container">
+    <div class="section-container text-center">
       <h3 class="attractive-text">Order ID #{{ order_item.id }}</h3>
       <p>Order Date: {{ order_item.order_id.order_date }}</p>
     </div>
 
     <!-- Product and Address Section -->
-    <div class="grid-container">
-      <div class="text-center">
+    <div class="row">
+      <div class="text-center col-md-3">
         <img src="{{ order_item.product.product_id.image1.url }}" alt="Product Image" class="img-fluid" />
       </div>
-      <div>
+      <div class="col-md-4">
         <h2 class="attractive-text">Product Details</h2>
         <p>
           <strong>Brand:</strong> {{ order_item.product.product_id.brand }}
@@ -173,16 +173,13 @@
           <strong>Color:</strong> {{ order_item.product.color }}
         </p>
         <p>
-          <strong>Price:</strong> ₹{{ order_item.product.product_id.selling_price }}
-        </p>
-        <p>
-          <strong>Quantity:</strong> {{ order_item.quantity }}
+          <strong>Price x Quantity: </strong>  ₹{{ order_item.amount }} x {{ order_item.quantity }}
         </p>
       </div>
-    </div>
+   
 
     <!-- Address Information Section -->
-    <div class="section-container">
+    <div class="col-md-4">
       <h2 class="attractive-text">Delivery Address</h2>
       <p>
         <strong>Name:</strong> {{ order_item.address1.name }}
@@ -201,22 +198,32 @@
         <strong>Pincode:</strong> {{ order_item.address1.pincode }}
       </p>
     </div>
-
+ </div>
     <!-- Order Details Content -->
-    <div class="order-details-section">
+    <div class="row text-center"> 
+    <div class="order-details-section col-md-6">
       <h2 class="attractive-text">Order Details</h2>
-      {% if order_item.status != 'cancelled' %}
-        <p class="order-status">
+      {% if order_item.status == 'cancelled' or order_item.status == 'return denied' %}
+        <p class=" cancelled-reason text-danger">
           <strong>Status:</strong> {{ order_item.status }}
         </p>
+      {% elif order_item.status == 'delivered' or order_item.status == 'return accepted' %}
+      <p class="order-status text-success">
+        <strong>Status:</strong> {{ order_item.status }}
+      </p>
       {% else %}
-        <p class="cancelled-reason">
+        <p class="text-warning ">
           <strong>Status:</strong> {{ order_item.status }}
         </p>
       {% endif %}
       <div class="total-amount">
-        {% if order_item.status != 'cancelled' %}
-          <h3>Delivery date</h3>
+        {% if order_item.status == 'cancelled' %}
+          <h3>Cancelled Date</h3>
+          <p>
+            <strong>{{ order_item.delivery_date }}</strong>
+          </p>
+        {% else %}
+        <h3>Delivery date</h3>
           <p>
             <strong>{{ order_item.delivery_date }}</strong>
           </p>
@@ -237,10 +244,16 @@
         </p>
       </div>
 
+    </div>
+
+      <!-- show return details   -->
+   
+    <div class="col-md-6 order-details-section">
+      
       {% if order_item.status == 'cancelled' %}
-        <div class="cancelled-section">
+        <div class="">
           <h3 class="cancelled-reason">Order Canceled</h3>
-          <h3>Cancellation Reason</h3>
+          <h3>Cancellation Details</h3>
           <p>
             <strong>Cancelled Date:</strong> {{ order_item.delivery_date }}
           </p>
@@ -249,7 +262,45 @@
           </p>
         </div>
       {% endif %}
+
+       {% if returns %}
+      <h2 class="attractive-text">Return Details</h2>
+      {% if order_item.status == 'return denied' %}
+        <p class=" text-danger ">
+          <strong>Status:</strong> {{ order_item.status }}
+        </p>
+      {% elif order_item.status ==  'return accepted' %}
+      <p class="order-status text-success ">
+        <strong>Status:</strong> {{ order_item.status }}
+      </p>
+      {% else %}
+        <p class="text-warning">
+          <strong>Status:</strong> {{ order_item.status }}
+        </p>
+      {% endif %}
+      <div class="total-amount">
+          <h3>Return Request date</h3>
+          <p>
+            <strong>{{ returns.request_date }}</strong>
+          </p>
+          <h3>Return date</h3>
+          <p>
+            <strong>{{ returns.return_date }}</strong>
+          </p>
+      </div>
+
+        <div class="cancelled-section">
+          <h3>Return Reason</h3>
+          <p>
+            <strong>Reason:</strong> {{ returns.reason }}
+          </p>
+        </div>
+    {% endif %}
     </div>
+
+   
+    </div>
+  </div>
 
     <div class="continue-shopping">
       <a href="/shop/" class="btn btn-primary"><i class="fas fa-shop"></i> Continue Shopping</a>

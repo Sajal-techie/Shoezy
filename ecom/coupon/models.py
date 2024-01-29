@@ -25,9 +25,14 @@ class BrandOffer(models.Model):
     is_active = models.BooleanField(default=True)
     created_at = models.DateField(auto_now_add=True)
 
+    def __str__(self) -> str:
+        return f"{self.brand.brand_name }  {self.offer_percentage}% offer"
 
 class ProductOffer(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, null=True)
     offer_percentage = models.FloatField(null=True, blank=True, default=0)
     is_active = models.BooleanField(default=True)
     created_at = models.DateField(auto_now_add=True)
+
+    def __str__(self) -> str:
+        return f"{self.product.name} {self.offer_percentage}% offer"

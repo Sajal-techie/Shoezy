@@ -65,6 +65,8 @@ class ProductImages(models.Model):
     images = models.ImageField(upload_to="media/images/")
     image_number = models.PositiveIntegerField(blank=True)
 
+    def __str__(self) -> str:
+        return f"{self.product.name}'s Image-{self.image_number}"
 
 @receiver(pre_save, sender=Product)
 def calc_discount_percentage(sender, instance, **kwargs):
@@ -82,3 +84,6 @@ class ProductVariant(models.Model):
     )
     stock = models.PositiveIntegerField(default=0, null=True, blank=True)
     color = models.CharField(max_length=20, null=True, blank=True, default="white")
+
+    def __str__(self) -> str:
+        return f" {self.product_id.brand.brand_name}  {self.product_id.name}-({self.size}) " 

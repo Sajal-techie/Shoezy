@@ -18,13 +18,17 @@ class Cart(models.Model):
         self.sub_total = self.quantity * float(price[0])
         super().save(*args, **kwargs)
 
+    def __str__(self) -> str:
+        return f"{self.user_id}'s Cart "
 
 class Wishlist(models.Model):
     user_id = models.ForeignKey(Customuser, on_delete=models.CASCADE, null=True)
     added_at = models.DateField(auto_now_add=True)
     product_id = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True)
 
-
+    def __str__(self) -> str:
+        return f"{self.user_id}'s Wishlist"
+    
 class Checkout(models.Model):
     user_id = models.ForeignKey(Customuser, on_delete=models.CASCADE, null=True)
     sub_total = models.DecimalField(
@@ -34,3 +38,6 @@ class Checkout(models.Model):
     coupon_active = models.BooleanField(default=False, null=True)
     payable_amount = models.DecimalField(decimal_places=2, max_digits=10, default=0)
     discount_amount = models.FloatField(null=True, default=0)
+
+    def __str__(self) -> str:
+        return f"{self.user_id}'s Checkout"

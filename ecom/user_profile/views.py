@@ -446,10 +446,16 @@ def view_order_details(request, id):
                 order = OrderProducts.objects.get(id=id)
             except OrderProducts.DoesNotExist:
                 order = None
+            
+            try:
+                returns = Returns.objects.get(order = order)
+            except Returns.DoesNotExist or Returns.MultipleObjectsReturned:
+                returns = None
 
             context = {
                 "username": username,
                 "order_item": order,
+                "returns":returns
             }
 
             return render(request, "profile/view_order_details.html", context)
