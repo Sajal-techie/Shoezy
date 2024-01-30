@@ -318,6 +318,11 @@ def razor_pay(request):
         }
         if request.method == "POST":
             adress1 = request.POST.get("address", None)
+            if adress1 is None:
+                messages.error(request, "Add a new Address")
+                data = {"redirect_url": "/checkout/", "error": True}
+                return JsonResponse(data)
+            
             payment = "Razorpay"
             adress = Address.objects.get(id=adress1)
             if checkout is not None:
@@ -396,6 +401,11 @@ def wallet_pay(request):
             checkout = None
         if request.method == "POST":
             adress1 = request.POST.get("address", None)
+            if adress1 is None:
+                messages.error(request, "Add a new Address")
+                data = {"redirect_url": "/checkout/", "error": True}
+                return JsonResponse(data)
+            
             payment = "Wallet"
             adress = Address.objects.get(id=adress1)
             try:
