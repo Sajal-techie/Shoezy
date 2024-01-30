@@ -24,9 +24,13 @@ $(document).ready(function (){
                                         csrfmiddlewaretoken:token
 
                                             },
-                                    success : function (data){
-                                        window.location.href = data.redirect_url  + data.order_id1;
-                                }
+                                            success: function(data) {
+                                                if (data.completed) {
+                                                    window.location.href = data.redirect_url + data.order_id1;
+                                                } else {
+                                                    window.location.href = data.redirect_url;
+                                                }
+                                            }
                             });
                         }
                         else{
