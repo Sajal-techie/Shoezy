@@ -145,6 +145,12 @@ def checkout(request):
         cart_items = Cart.objects.filter(user_id=username.id).select_related(
             "product__product_id"
         )
+        for i in cart_items:
+            if i.product.stock < i.quantity:
+                messages.error(request, f'{i.product.product_id.name}({i.product.size}) out of stock')
+                
+                return redirect('cart')
+            
         total = sum(i.sub_total for i in cart_items)
         wallet = Wallet.objects.get(user_id=username)
         try:
@@ -295,6 +301,22 @@ def apply_coupon(request):
         return JsonResponse({"error": "Invalid request"})
 
 
+def remove_coupon(request):
+    if "users" in request.session:
+        usm = request.session.get("users")
+        username = Customuser.objects.get(email=usm)
+        orders = Order.objects.filter(user=username)
+        checkouted = Checkout.objects.get(user_id=username)
+        if request.method == "POST":
+            if checkouted.coupon_active:
+                checkouted.coupon_active = False
+                checkouted.coupon = None
+                checkouted.discount_amount = 0
+                checkouted.save()
+        return JsonResponse(
+                        {"error": " Coupon removed "}
+                    )
+
 def razor_pay(request):
     if "users" in request.session:
         usm = request.session.get("users")
@@ -305,6 +327,11 @@ def razor_pay(request):
         cart_items = Cart.objects.filter(user_id=username.id).select_related(
             "product__product_id"
         )
+        for i in cart_items:
+            if i.product.stock < i.quantity:
+                messages.error(request, f'{i.product.product_id.name}({i.product.size}) out of stock')
+                return redirect('cart')
+            
         total = sum(i.sub_total for i in cart_items)
         try:
             checkout = Checkout.objects.get(user_id=username)
@@ -393,6 +420,11 @@ def wallet_pay(request):
         cart_items = Cart.objects.filter(user_id=username.id).select_related(
             "product__product_id"
         )
+        for i in cart_items:
+            if i.product.stock < i.quantity:
+                messages.error(request, f'{i.product.product_id.name}({i.product.size}) out of stock')
+                return redirect('cart')
+             
         total = sum(i.sub_total for i in cart_items)
         try:
             checkout = Checkout.objects.get(user_id=username)

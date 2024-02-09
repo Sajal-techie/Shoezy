@@ -68,8 +68,8 @@
                     <div class="cart-detail cart-total bg-light p-3 p-md-4">
                       <!-- coupon section Start -->
 
-                      <div class="form-row p-4">
-                        <div class="col-8 col-md-6">
+                      <div class="form-row p-4" id="coupon2">
+                        <div class="col-8 col-md-6 ">
                           <label for="coupon" class="sr-only">Apply Coupon:</label>
                           <input type="text" value="{{ checkout.coupon.code }}" class="form-control" id="coupon" name="coupon_code" placeholder="Enter coupon code" />
                         </div>
@@ -195,7 +195,7 @@
     <!-- apply coupon script -->
     <script>
       $(document).ready(function () {
-        $('.apply').click(function (e) {
+        $(document).on('click', '.apply', function (e) {
           e.preventDefault()
       
           var code = $('input[name="coupon_code"]').val()
@@ -229,5 +229,33 @@
         })
       })
     </script>
+
+    <!--Remove coupon-->
+    <script>
+      $(document).ready(function () {
+        $(document).on('click', '.remove', function (e) {
+          e.preventDefault()
+          var token = $('input[name=csrfmiddlewaretoken]').val()
+          $.ajax({
+            method: 'POST',
+            url: '/remove_coupon/',
+            data: {
+              csrfmiddlewaretoken: token
+            },
+      
+            success: function (data) {
+              if (data) {
+                document.getElementById('cmessage').innerText = data.error
+                document.getElementById('smessage').innerText = ''
+                $('#reload').load('/checkout/ #reload')
+                $('#changed').load('/checkout/ #changed')
+                $('#coupon2').load('/checkout/ #coupon2')
+              } 
+            }
+          })
+        })
+      })
+    </script>
+
   </body>
 {% endblock %}

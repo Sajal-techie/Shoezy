@@ -371,8 +371,11 @@
         var quantityMessage = " ";
 		const checkmsg = document.getElementById('checkboxMessage');
         {% for vari in productvariants %}
-            if ({{ vari.size }} == selectedSize && {{ vari.stock }} > 0) {
+            if ({{ vari.size }} == selectedSize && {{ vari.stock }} >= 0) {
 				checkmsg.textContent = ''
+        if ({{vari.stock}} == 0 ){
+          quantityMessage = "Out of Stock"
+        }
 				  if ({{vari.stock }} < 10 ){
                 quantityMessage = "Only " + {{ vari.stock }} + " left" ;
 			      }

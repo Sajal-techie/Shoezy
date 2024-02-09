@@ -14,4 +14,5 @@ urlpatterns = [
     path("add_to_wish/<str:id>/", views.add_to_wish, name="add_to_wish"),
     path("confirm/<str:id>", views.confirm, name="confirm"),
     path("apply_coupon/", views.apply_coupon, name="apply_coupon"),
+    path("remove_coupon/", views.remove_coupon, name="remove_coupon"),
 ]
