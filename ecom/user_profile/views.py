@@ -9,22 +9,12 @@ from cart.models import *
 from django.db.models import Q
 from django.utils import timezone
 from datetime import date, datetime
+from home.decorator import session_handler
 
-
-def view_profile(request):
+@session_handler
+def view_profile(request, username=None):
     try:
-        if "users" in request.session:
-            usm = request.session.get("users")
-            try:
-                username = Customuser.objects.get(email=usm)
-            except Customuser.DoesNotExist:
-                username = None
-
-            if username.is_blocked:
-                if "users" in request.session:
-                    del request.session["users"]
-                messages.error(request, "you are blocked ")
-                return redirect("login")
+        if username:
             try:
                 addressess = Address.objects.filter(
                     Q(user=username) & Q(is_available=True)
@@ -99,20 +89,14 @@ def edit_profile(request, id):
 
 
 # reset password from profile after logging in
+@session_handler
 @never_cache
 @cache_control(no_store=True, no_cache=True, must_revalidate=True, max_age=0)
-def reset_password(request):
+def reset_password(request, username=None):
     try:
-        if "users" in request.session:
-            usm = request.session.get("users")
-            try:
-                username = Customuser.objects.get(email=usm)
-            except Customuser.DoesNotExist:
-                username = None
+        if username:
 
-            context = {
-                "username": username,
-            }
+            context = {}
 
             if request.method == "POST":
                 old = request.POST["old_pass"]
@@ -144,15 +128,10 @@ def reset_password(request):
     return redirect("login")
 
 
-def add_address(request):
+@session_handler
+def add_address(request, username=None):
     try:
-        if "users" in request.session:
-            usm = request.session.get("users")
-            try:
-                username = Customuser.objects.get(email=usm)
-            except Customuser.DoesNotExist:
-                username = None
-
+        if username:
             if request.method == "POST":
                 try:
                     form = Adressform(request.POST)
@@ -232,16 +211,10 @@ def delete_address(request, id):
 
 
 # for showing order history (Order)
-def order_history(request):
+@session_handler
+def order_history(request, username=None):
     try:
-        if "users" in request.session:
-            usm = request.session.get("users")
-            username = Customuser.objects.get(email=usm)
-            if username.is_blocked:
-                if "users" in request.session:
-                    del request.session["users"]
-                messages.error(request, "you are blocked ")
-                return redirect("login")
+        if username:
             try:
                 order_items = Order.objects.filter(user=username).order_by("-id")
 
@@ -261,22 +234,15 @@ def order_history(request):
 
 
 # for shwowing order history products(OrderProducts)
-def order_history_items(request, id):
-    if "users" in request.session:
+@session_handler
+def order_history_items(request, id, username=None):
+    if username:
         try:
-            usm = request.session.get("users")
-            username = Customuser.objects.get(email=usm)
-            if username.is_blocked:
-                if "users" in request.session:
-                    del request.session["users"]
-                messages.error(request, "you are blocked ")
-                return redirect("login")
             order = Order.objects.get(id=id)
             order_items = OrderProducts.objects.filter(order_id=order)
 
             context = {
                 "order_items": order_items,
-                "username": username,
                 "order": order,
             }
 
@@ -285,16 +251,14 @@ def order_history_items(request, id):
         except Exception as e:
             print(e)
             return redirect("order_history")
-        return redirect("order_history")
     else:
         return redirect("login")
 
 
-def track_order(request, id):
+@session_handler
+def track_order(request, id, username=None):
     try:
-        if "users" in request.session:
-            usm = request.session.get("users")
-            username = Customuser.objects.get(email=usm)
+        if username:
             try:
                 order_items = OrderProducts.objects.get(id=id)
             except OrderProducts.DoesNotExist:
@@ -373,11 +337,10 @@ def track_order(request, id):
     return redirect("login")
 
 
-def cancel_order(request, id):
+@session_handler
+def cancel_order(request, id,username=None):
     try:
-        if "users" in request.session:
-            usm = request.session.get("users")
-            username = Customuser.objects.get(email=usm)
+        if username:
             try:
                 current_order = OrderProducts.objects.get(id=id)
             except OrderProducts.DoesNotExist:
@@ -437,11 +400,10 @@ def cancel_order(request, id):
 
 
 # for showing order details for single product
-def view_order_details(request, id):
+@session_handler
+def view_order_details(request, id, username=None):
     try:
-        if "users" in request.session:
-            usm = request.session.get("users")
-            username = Customuser.objects.get(email=usm)
+        if username:
             try:
                 order = OrderProducts.objects.get(id=id)
             except OrderProducts.DoesNotExist:
@@ -466,11 +428,10 @@ def view_order_details(request, id):
     return redirect("login")
 
 
-def order_invoice(request, id):
+@session_handler
+def order_invoice(request, id, username=None):
     try:
-        if "users" in request.session:
-            usm = request.session.get("users")
-            username = Customuser.objects.get(email=usm)
+        if username:
             try:
                 order_item = OrderProducts.objects.get(id=id)
             except Exception:
@@ -486,11 +447,10 @@ def order_invoice(request, id):
 
 
 # add review for delivered products
-def add_review(request, pid, oid):
+@session_handler
+def add_review(request, pid, oid, username=None):
     try:
-        if "users" in request.session:
-            usm = request.session.get("users")
-            username = Customuser.objects.get(email=usm)
+        if username:
             try:
                 product = Product.objects.get(id=pid)
             except Exception as e:
@@ -526,11 +486,10 @@ def add_review(request, pid, oid):
 
 
 # edit review
-def update_review(request, pid, oid):
+@session_handler
+def update_review(request, pid, oid, username=None):
     try:
-        if "users" in request.session:
-            usm = request.session.get("users")
-            username = Customuser.objects.get(email=usm)
+        if username:
             try:
                 product = Product.objects.get(id=pid)
             except Exception as e:
@@ -567,9 +526,10 @@ def update_review(request, pid, oid):
     return redirect("home")
 
 
-def return_request(request, id):
+@session_handler
+def return_request(request, id,username=None):
     try:
-        if "users" in request.session:
+        if username:
             try:
                 order = OrderProducts.objects.get(id=id)
             except Exception as e:

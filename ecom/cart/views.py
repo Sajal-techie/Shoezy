@@ -8,11 +8,11 @@ from user_profile.models import *
 from order_management.models import *
 from django.utils import timezone
 from django.db.models import F 
+from home.decorator import session_handler
 
-def cart(request):
-    if "users" in request.session:
-        usm = request.session.get("users")
-        username = Customuser.objects.get(email=usm)
+@session_handler
+def cart(request, username = None):
+    if username:
         if username.is_blocked:
             if "users" in request.session:
                 del request.session["users"]
@@ -34,21 +34,14 @@ def cart(request):
 
         if not username.is_blocked:
             return render(request, "cart/cart.html", context)
-        else:
-            if "users" in request.session:
-                del request.session["users"]
-            messages.error(request, "you are blocked ")
-
-            return redirect("login")
 
     messages.error(request, "you need to login")
     return redirect("login")
 
 
-def addto_cart(request, p_id):
-    if "users" in request.session:
-        usm = request.session.get("users")
-        user2 = Customuser.objects.get(email=usm)
+@session_handler
+def addto_cart(request, p_id, username=None):
+    if username:
         next_url = request.GET.get("next", None)
         if next_url is not None:
             product = Product.objects.get(id=p_id)
@@ -75,10 +68,10 @@ def addto_cart(request, p_id):
 
         if product_size.stock > 0:
             if not Cart.objects.filter(
-                user_id=user2, product=product_size, size=size
+                user_id=username, product=product_size, size=size
                     ).exists():
                 Cart.objects.create(
-                    user_id=user2, product=product_size, size=size, quantity=quantity
+                    user_id=username, product=product_size, size=size, quantity=quantity
                 )
                 
                 # removing from wishlist if added to cart
@@ -135,10 +128,9 @@ def remove_cart(request, id):
     return redirect("cart")
 
 
-def checkout(request):
-    if "users" in request.session:
-        usm = request.session.get("users")
-        username = Customuser.objects.get(email=usm)
+@session_handler
+def checkout(request, username=None):
+    if username:
         address = Address.objects.filter(user=username.id, is_available=True).order_by(
             "id"
         )
@@ -230,10 +222,9 @@ def checkout(request):
     return redirect("login")
 
 
-def apply_coupon(request):
-    if "users" in request.session:
-        usm = request.session.get("users")
-        username = Customuser.objects.get(email=usm)
+@session_handler
+def apply_coupon(request, username=None):
+    if username:
         orders = Order.objects.filter(user=username)
         checkouted = Checkout.objects.get(user_id=username)
         if request.method == "POST":
@@ -301,11 +292,9 @@ def apply_coupon(request):
         return JsonResponse({"error": "Invalid request"})
 
 
-def remove_coupon(request):
-    if "users" in request.session:
-        usm = request.session.get("users")
-        username = Customuser.objects.get(email=usm)
-        orders = Order.objects.filter(user=username)
+@session_handler
+def remove_coupon(request, username=None):
+    if username:
         checkouted = Checkout.objects.get(user_id=username)
         if request.method == "POST":
             if checkouted.coupon_active:
@@ -317,10 +306,9 @@ def remove_coupon(request):
                         {"error": " Coupon removed "}
                     )
 
-def razor_pay(request):
-    if "users" in request.session:
-        usm = request.session.get("users")
-        username = Customuser.objects.get(email=usm)
+@session_handler
+def razor_pay(request, username=None):
+    if username:
         address = Address.objects.filter(user=username.id, is_available=True).order_by(
             "id"
         )
@@ -337,12 +325,6 @@ def razor_pay(request):
             checkout = Checkout.objects.get(user_id=username)
         except Checkout.DoesNotExist or Checkout.MultipleObjectsReturned:
             checkout = None
-        context = {
-            "address": address,
-            "cart_items": cart_items,
-            "username": username,
-            "total": total,
-        }
         if request.method == "POST":
             adress1 = request.POST.get("address", None)
             if adress1 is None:
@@ -413,10 +395,9 @@ def razor_pay(request):
             return JsonResponse(data)
 
 
-def wallet_pay(request):
-    if "users" in request.session:
-        usm = request.session.get("users")
-        username = Customuser.objects.get(email=usm)
+@session_handler
+def wallet_pay(request, username=None):
+    if username:
         cart_items = Cart.objects.filter(user_id=username.id).select_related(
             "product__product_id"
         )
@@ -509,11 +490,9 @@ def wallet_pay(request):
             return JsonResponse(data)
 
 
-
-def confirm(request, id):
-    if "users" in request.session:
-        usm = request.session.get("users")
-        username = Customuser.objects.get(email=usm)
+@session_handler
+def confirm(request, id, username=None):
+    if username:
         orders = Order.objects.get(id=id)
         order_items = OrderProducts.objects.filter(order_id=id)
         context = {
@@ -526,10 +505,9 @@ def confirm(request, id):
     return redirect("login")
 
 
-def wishlist(request):
-    if "users" in request.session:
-        usm = request.session.get("users")
-        username = Customuser.objects.get(email=usm)
+@session_handler
+def wishlist(request, username=None):
+    if username:
         if username.is_blocked:
             if "users" in request.session:
                 del request.session["users"]
@@ -554,11 +532,9 @@ def wishlist(request):
         return render(request, "cart/wishlist.html", context)
     return redirect("login")
 
-
-def add_to_wish(request, id):
-    if "users" in request.session:
-        usm = request.session.get("users")
-        username = Customuser.objects.get(email=usm)
+@session_handler
+def add_to_wish(request, id,username = None): 
+    if username: 
         products = Product.objects.get(id=id)
         if not Wishlist.objects.filter(product_id=products, user_id=username):
             wish = Wishlist.objects.create(product_id=products, user_id=username)
@@ -570,10 +546,9 @@ def add_to_wish(request, id):
     return redirect("login")
 
 
-def remove_wish(request, id):
-    if "users" in request.session:
-        usm = request.session.get("users")
-        username = Customuser.objects.get(email=usm)
+@session_handler
+def remove_wish(request, id,username=None):
+    if username:
         prod = Product.objects.get(id=id)
         wish = Wishlist.objects.get(product_id=prod, user_id=username)
         wish.delete()

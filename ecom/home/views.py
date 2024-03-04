@@ -8,10 +8,11 @@ from productmanagement.models import Product, ProductImages
 from categorymanagement.models import Brand
 from cart.models import *
 from user_profile.models import *
-
+from .decorator import session_handler
 
 @never_cache
-def home(request):
+@session_handler
+def home(request, username = None):
     try:
         products = Product.objects.filter(
             is_listed=True, brand_id__is_listed=True
@@ -22,48 +23,31 @@ def home(request):
             "product": products,
             "brand": brands,
         }
-        if "users" in request.session:
-            usm = request.session.get("users")
+        if username:
+            if username.otp: 
+                username.otp = None
+                username.save()
 
-            try:
-                username = Customuser.objects.get(email=usm)
-            except:
-                username = None
-
-            username.otp = None
-            username.save()
-
-            if not username.is_blocked:
-                wishlist1 = []
-                wishitems = Wishlist.objects.filter(user_id=username)
-                for j in wishitems:
-                    wishlist1.append(j.product_id.id)
-
-                return render(
+            wishlist1 = [j.product_id.id for j in Wishlist.objects.filter(user_id=username)]
+            return render(
                     request,
                     "home1.html",
                     {
-                        "username": username.first_name,
                         "product": products,
                         "brand": brands,
                         "wishlist1": wishlist1,
                     },
                 )
-            else:
-                # if users are blocked sessions are cleared and redirect to login
-                if "users" in request.session:
-                    del request.session["users"]
-                messages.error(request, "you are blocked ")
-                return redirect("login")
 
     except Exception as e:
         print(e)
     return render(request, "home1.html", context)
 
 
+@session_handler
 @never_cache
-def login(request):
-    if "users" in request.session:
+def login(request, username = None):
+    if username:
         return redirect("home")
     try:
         if request.method == "POST":
@@ -96,9 +80,10 @@ def login(request):
     return render(request, "login/login.html")
 
 
+@session_handler
 @never_cache
-def register(request):
-    if "users" in request.session:
+def register(request, username = None):
+    if username:
         return redirect("home")
 
     try:

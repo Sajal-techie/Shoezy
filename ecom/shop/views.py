@@ -11,9 +11,10 @@ from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from user_profile.models import ProductReview
 from django.db.models import Count, Sum
 from order_management.models import OrderProducts
+from home.decorator import session_handler
 
-
-def shop(request):
+@session_handler
+def shop(request, username = None):
     try:
         context = {}
         try:
@@ -130,13 +131,7 @@ def shop(request):
         except Exception as e:
             print(e)
 
-        if "users" in request.session:
-            usm = request.session.get("users")
-            try:
-                username = Customuser.objects.get(email=usm)
-            except Customuser.DoesNotExist:
-                username = None
-
+        if username:
             context["username"] = username
             wishlist1 = []
             wishitems = Wishlist.objects.filter(user_id=username)
@@ -156,8 +151,8 @@ def shop(request):
 
     return render(request, "shop/shop.html", context)
 
-
-def singleproduct(request, id):
+@session_handler
+def singleproduct(request, id, username = None):
     try:
         products = Product.objects.filter(id=id)
         sproduct = Product.objects.get(id=id)
@@ -190,9 +185,7 @@ def singleproduct(request, id):
             "order_count": order_count,
             'prodsize':prodsize,
         }
-        if "users" in request.session:
-            usm = request.session.get("users")
-            username = Customuser.objects.get(email=usm)
+        if username:
             if username.is_blocked:
                 if "users" in request.session:
                     del request.session["users"]
@@ -200,16 +193,10 @@ def singleproduct(request, id):
                 return redirect("login")
             is_in_wish = check_wishlist(username, id)
             context["is_in_wish"] = is_in_wish
-            context["username"] = username
 
             if not username.is_blocked:
                 return render(request, "shop/singleproduct.html", context)
-            else:
-                if "users" in request.session:
-                    del request.session["users"]
-                messages.error(request, "you are blocked ")
 
-                return redirect("login")
         return render(request, "shop/singleproduct.html", context)
     except Exception as e:
         print(e)

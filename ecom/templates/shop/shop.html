@@ -29,6 +29,30 @@
     <!-- sort by section end -->
 
     <div class="container">
+        {% if messages %}
+        <div aria-live="polite" aria-atomic="true" style="position: fixed; top: 50%; right: 3%; min-height: 200px; min-width: 200px; z-index: 9999;">
+          {% for message in messages %}
+            <div class="toast border {% if message.tags == 'success' %}
+            border-success {% else %}border-danger
+              {% endif %}"
+              role="alert"
+              aria-live="assertive"
+              aria-atomic="true"
+              data-delay="5000"
+              style="margin-top: 10px;">
+              <div class="toast-header">
+                <strong class="mr-auto {% if message.tags == 'success' %}
+              text-success{% else %}text-danger
+                  {% endif %}   text-capitalize">
+                  {{ message.tags }}
+                </strong>
+                <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              </div>
+              <div class="toast-body">{{ message }}</div>
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
         <div class="row">
             <div class="col-md-8 col-lg-10 order-md-last ">
 
@@ -410,5 +434,11 @@
         document.getElementById('filterForm').submit(); 
     });
 </script>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 
+<script>
+  $(document).ready(function () {
+    $('.toast').toast('show');
+  });
+  </script>
 {% endblock maincontent %}
