@@ -3,13 +3,14 @@ black==23.12.1
 click==8.1.7
 colorama==0.4.6
 Django==5.0
+gunicorn==23.0.0
 mypy-extensions==1.0.0
 packaging==23.2
 pathspec==0.12.1
 Pillow==10.1.0
 platformdirs==4.1.0
-psycopg2==2.9.9
-python-decouple==3.8
+psycopg2-binary==2.9.9
+python-dotenv==1.0.1
 sqlparse==0.4.4
 tzdata==2023.3
 whitenoise==6.6.0
